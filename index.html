@@ -7,7 +7,7 @@ title: yokoboy's blog
 {% for post in paginator.posts %}
  <div class="post">
   {% if post.contentimg %}
-    <img class="container postimg" src="{{ site.contentImgPath }}{{ post.contentimg }}" alt="文章内容图">
+    <img class="container postimg" src="{{ site.contentImgPath }}{{ post.contentimg }}" alt="文章内容图test">
   {% endif %}
   <h1 class="posttitle"><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
   <h4 class="postabstract">{{ post.content  || split:'<!--break-->' | first }}  </h4>
