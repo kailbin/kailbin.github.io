@@ -1,0 +1,22 @@
+ 
+ <div id="guestbook" class="post">
+        {% if site.openDuoShuo && site.openDuoShuo==true %}
+        <div class="ds-thread" data-thread-key="com.yokoboy.guestbook" data-title="hehe" data-url="http://yokoboy.com/guestbook.html"></div>
+        
+        <script type="text/javascript">
+            var duoshuoQuery = {short_name: "yokoboy"};
+            (function () {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';
+                ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0]
+                        || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+        </script>
+		{% else %}
+			<p style="text-align:center;color:#aaa;">Comments is Closed! </p>
+		{% endif %}
+        
+</div>

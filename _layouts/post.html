@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% include header-common.html %}
+	
+	{% include header-heightlight.html %}
+	
+	<link href="{{ site.rp }}css/post.css" rel="stylesheet" type="text/css"/>
+
+</head>
+<body>
+
+{% include nav.html %}
+
+<div id="posts" class="container">
+  <div class="post">
+    {% if page.contentimg %}
+		<img class="container postimg" src="{{ site.contentImgPath }}{{ page.contentimg }}" alt="文章内容图">
+	{% endif %}
+	<h1 class="posttitle">{{ page.title }}</h1>
+	<div class="postcontent">
+	{{ content }}
+	</div>
+  <p class="label"><span>{{ page.date | date:"%Y-%m-%d" }}</span></p>
+ </div>
+ 
+	{% include duoshuo.html %}
+	
+</div>
+
+{% include pagebar-post.html %}
+		
+{% include footer.html %}
+
+</body>
+
+{% include parallax.js.html %}
+
+</html>

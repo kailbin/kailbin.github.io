@@ -1,0 +1,22 @@
+@media (max-width: 800px) {
+    /*内容*/
+    #posts {
+        margin: 0px auto;
+    }
+
+    .post {
+        margin: 0px auto;
+        border-bottom: 1px dashed #ddd;
+
+        border-radius: 0px;
+        box-shadow: none;
+    }
+
+    .post:hover {
+        box-shadow: none;
+    }
+
+    .post .postimg {
+        border-radius: 0px;
+    }
+}

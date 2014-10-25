@@ -1,0 +1,55 @@
+.post .postimg {
+    margin-bottom: -76px;
+}
+
+.post .posttitle {
+    text-align: center;
+    position: relative;
+    background: rgba(255, 255, 255, .4);
+}
+
+.postcontent {
+    padding: 15px 30px;
+    min-height: 200px;
+}
+
+.postcontent, .postcontent p, .postcontent div {
+    font-family: Tahoma, Helvetica, Arial, '宋体', sans-serif;
+    color: #666;
+    font-size: 13px;
+    margin: 20px 0px;
+    text-indent: 30px;
+    line-height: 22px;
+}
+
+#guestbook {
+    padding: 40px;
+}
+
+.post .postimg {
+    margin-bottom: -76px;
+}
+
+.post .posttitle {
+    text-align: center;
+    position: relative;
+    background: rgba(255, 255, 255, .4);
+}
+
+.postcontent {
+    padding: 15px 30px;
+    min-height: 260px;
+}
+
+.postcontent, .postcontent p, .postcontent div {
+    font-family: Tahoma, Helvetica, Arial, '宋体', sans-serif;
+    color: #666;
+    font-size: 13px;
+    margin: 20px 0px;
+    text-indent: 30px;
+    line-height: 22px;
+}
+
+#guestbook {
+    padding: 40px;
+}

@@ -1,0 +1,91 @@
+
+        #links {
+            margin: 100px auto;
+        }
+
+        #links .link {
+            float: left;
+            width: 320px;
+            height: 130px;
+            margin-bottom: 40px;
+            cursor: pointer;
+
+            background: #ffffff;
+            background: rgba(255, 255, 255, .95);
+            border-radius: 5px;
+            box-shadow: 0px 1px 4px rgba(200, 200, 200, .6);
+            transition: box-shadow 1s;
+        }
+
+        #links .link:hover {
+            box-shadow: 0px 1px 30px rgba(200, 200, 200, 1);
+        }
+
+        #links .odd {
+            margin-left: 40px;
+        }
+
+        #links .link .friend-head {
+            height: 130px;
+            width: 130px;
+            float: left;
+            margin-left: 10px;
+        }
+
+        #links .link .friend-head img {
+            height: 96px;
+            width: 96px;
+            margin: 15px;
+            padding: 2px;
+            border-radius: 50px;
+            background: #ffffff;
+            box-shadow: 1px 1px 16px rgba(100, 100, 100, .3);
+        }
+
+        #links .link .friend-info {
+            float: left;
+            padding: 25px 15px;
+        }
+
+        #links .link .friend-info .frined-link {
+            height: 40px;
+            line-height: 40px;
+            font-size: 26px;
+            font-weight: bold;
+
+            text-shadow: 1px 1px 4px rgba(200, 200, 200, .5);
+        }
+
+        #links .link .friend-info .intro {
+            font-weight: lighter;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        @media (max-width: 800px) {
+            #links {
+                margin: 0px;
+            }
+
+            #links .link {
+                width: 100%;
+                margin: 0px;
+                background: #fff;
+
+                border-bottom: 1px dashed #ddd;;
+                border-radius: 0px;
+                box-shadow: none;
+            }
+
+            #links .link:hover {
+                box-shadow: none;
+            }
+
+            #links .odd {
+                margin-left: 0px;
+            }
+
+            #links .link .friend-head {
+                margin-left: 40px;
+            }
+        }
