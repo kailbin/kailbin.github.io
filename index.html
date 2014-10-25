@@ -1,1 +1,17 @@
-bb ok1
+---
+layout: posts
+title: yokoboy's blog
+---
+
+<div id="posts" class="container">
+{% for post in paginator.posts %}
+ <div class="post">
+  {% if post.contentimg %}
+    <img class="container postimg" src="{{ site.contentImgPath }}{{ post.contentimg }}" alt="文章内容图">
+  {% endif %}
+  <h1 class="posttitle"><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+  <h4 class="postabstract">{{ post.content  || split:'<!--break-->' | first }}  </h4>
+  <p class="label"><span>{{ post.date | date:"%Y-%m-%d" }}</span></p>
+ </div>
+{% endfor %}
+</div>
