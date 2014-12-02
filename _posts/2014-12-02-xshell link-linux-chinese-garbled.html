@@ -1,0 +1,64 @@
+---
+layout: post
+title: XShell 链接 Linux 中文乱码
+
+paginate_path: blog/page:num
+
+contentimg: 2014-07-11-post-template1.jpg
+
+---
+
+<p>
+该问题表现为，在Xshell链接Ubuntu的时候，如果Xshell语言设置为 UTF-8，那么提示信息正常，
+ll 日期乱码，如果设置为GBK，提示信息乱码，日期正常，一下为在网上查找到方案，测试之后一切正常。
+</p>
+
+<!--break-->
+
+
+<code style="overflow-x:auto;" class="shell">
+	vim /var/lib/locales/supported.d/local
+</code>
+
+在其中增加：
+
+<code style="overflow-x:auto;" class="Java">
+en_US.UTF-8 UTF-8
+zh_CN.UTF-8 UTF-8
+</code>
+
+然后：
+
+<code style="overflow-x:auto;" class="shell">
+locale-gen
+</code>
+
+然后，再修改：
+
+<code style="overflow-x:auto;" class="shell">
+vi /etc/default/locale
+</code>
+
+这里应该是很重要的一步：
+
+<code style="overflow-x:auto;" class="Java">
+LANG="zh_CN.UTF-8"
+LANGUAGE="zh_CN:zh"
+LC_NUMERIC="zh_CN.UTF-8"
+LC_TIME="zh_CN.UTF-8"
+LC_MONETARY="zh_CN"
+LC_PAPER="zh_CN"
+LC_NAME="zh_CN"
+LC_ADDRESS="zh_CN"
+LC_TELEPHONE="zh_CN"
+LC_MEASUREMENT="zh_CN"
+LC_IDENTIFICATION="zh_CN"
+</code>
+
+因为之前错误时，仍能显示“月”字，而数字无法显示，所以在LC_NUMBERIC="zh_CN"要改成"zh_CN.UTF-8"
+
+下面的LC_TIME也改一下。其它的用不着的就懒得去改了。
+
+保存，重启。
+
+ls -l显示，正常了。
