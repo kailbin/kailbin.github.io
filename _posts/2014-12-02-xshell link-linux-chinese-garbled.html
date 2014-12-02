@@ -4,8 +4,6 @@ title: XShell 链接 Linux 中文乱码
 
 paginate_path: blog/page:num
 
-contentimg: 2014-07-11-post-template1.jpg
-
 ---
 
 <p>
@@ -22,26 +20,28 @@ ll 日期乱码，如果设置为GBK，提示信息乱码，日期正常，一�
 
 在其中增加：
 
-<code style="overflow-x:auto;" class="Java">
+<p>
+<pre><code style="overflow-x:auto;" class="Java">
 en_US.UTF-8 UTF-8
 zh_CN.UTF-8 UTF-8
-</code>
-
+</code></pre>
+</p>
+<p>
 然后：
-
-<code style="overflow-x:auto;" class="shell">
+</p>
+<pre><code style="overflow-x:auto;" class="shell">
 locale-gen
-</code>
-
+</code></pre>
+<p>
 然后，再修改：
-
-<code style="overflow-x:auto;" class="shell">
+</p>
+<pre><code style="overflow-x:auto;" class="shell">
 vi /etc/default/locale
-</code>
+</code></pre>
 
 这里应该是很重要的一步：
 
-<code style="overflow-x:auto;" class="Java">
+<pre><code style="overflow-x:auto;" class="Java">
 LANG="zh_CN.UTF-8"
 LANGUAGE="zh_CN:zh"
 LC_NUMERIC="zh_CN.UTF-8"
@@ -53,7 +53,7 @@ LC_ADDRESS="zh_CN"
 LC_TELEPHONE="zh_CN"
 LC_MEASUREMENT="zh_CN"
 LC_IDENTIFICATION="zh_CN"
-</code>
+</code></pre>
 
 因为之前错误时，仍能显示“月”字，而数字无法显示，所以在LC_NUMBERIC="zh_CN"要改成"zh_CN.UTF-8"
 
@@ -61,4 +61,4 @@ LC_IDENTIFICATION="zh_CN"
 
 保存，重启。
 
-ls -l显示，正常了。
+<b>ls -l</b> 显示，正常了。
