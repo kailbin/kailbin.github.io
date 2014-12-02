@@ -13,52 +13,56 @@ ll 日期乱码，如果设置为GBK，提示信息乱码，日期正常，一�
 
 <!--break-->
 
+<pre>
+	<code style="overflow-x:auto;" class="Java">
+		vim /var/lib/locales/supported.d/local
+	</code>
+</pre>
+<p>
+	我的内容如下
+</p>
 
-<code style="overflow-x:auto;" class="shell">
-	vim /var/lib/locales/supported.d/local
-</code>
+<pre>
+	<code style="overflow-x:auto;" class="Java">
+		en_US.UTF-8 UTF-8
+		zh_CN.UTF-8 UTF-8
+		zh_CN.GBK GBK
+		zh_CN GB2312
+	</code>
+</pre>
 
-在其中增加：
+<pre>
+	<code style="overflow-x:auto;" class="Java">
+		locale-gen
+	</code>
+</pre>
+
+<pre>
+	<code style="overflow-x:auto;" class="Java">
+		vi /etc/default/locale
+	</code>
+</pre>
 
 <p>
-<pre><code style="overflow-x:auto;" class="Java">
-en_US.UTF-8 UTF-8
-zh_CN.UTF-8 UTF-8
-</code></pre>
+	这一步很重要，内容如下：
 </p>
-<p>
-然后：
-</p>
-<pre><code style="overflow-x:auto;" class="shell">
-locale-gen
-</code></pre>
-<p>
-然后，再修改：
-</p>
-<pre><code style="overflow-x:auto;" class="shell">
-vi /etc/default/locale
-</code></pre>
 
-这里应该是很重要的一步：
+<pre>
+	<code style="overflow-x:auto;" class="Java">
+		LANG="zh_CN.UTF-8"
+		LANGUAGE="zh_CN:zh"
+		LC_NUMERIC="zh_CN.UTF-8"
+		LC_TIME="zh_CN.UTF-8"
+		LC_MONETARY="zh_CN"
+		LC_PAPER="zh_CN"
+		LC_NAME="zh_CN"
+		LC_ADDRESS="zh_CN"
+		LC_TELEPHONE="zh_CN"
+		LC_MEASUREMENT="zh_CN"
+		LC_IDENTIFICATION="zh_CN"
+	</code>
+</pre>
 
-<pre><code style="overflow-x:auto;" class="Java">
-LANG="zh_CN.UTF-8"
-LANGUAGE="zh_CN:zh"
-LC_NUMERIC="zh_CN.UTF-8"
-LC_TIME="zh_CN.UTF-8"
-LC_MONETARY="zh_CN"
-LC_PAPER="zh_CN"
-LC_NAME="zh_CN"
-LC_ADDRESS="zh_CN"
-LC_TELEPHONE="zh_CN"
-LC_MEASUREMENT="zh_CN"
-LC_IDENTIFICATION="zh_CN"
-</code></pre>
+<p>保存，重启。</p>
 
-因为之前错误时，仍能显示“月”字，而数字无法显示，所以在LC_NUMBERIC="zh_CN"要改成"zh_CN.UTF-8"
-
-下面的LC_TIME也改一下。其它的用不着的就懒得去改了。
-
-保存，重启。
-
-<b>ls -l</b> 显示，正常了。
+<p><b>ls -l</b> 显示，正常了。<p>
