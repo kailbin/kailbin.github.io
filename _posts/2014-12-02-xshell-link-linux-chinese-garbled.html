@@ -13,31 +13,43 @@ ll 日期乱码，如果设置为GBK，提示信息乱码，日期正常，一�
 
 <!--break-->
 
-<pre><code style="overflow-x:auto;" class="Java">vim /var/lib/locales/supported.d/local</code></pre>
+<pre>
+<code style="overflow-x:auto;" class="Java">
+vim /var/lib/locales/supported.d/local
+</code>
+</pre>
 <p>
 	我的内容如下
 </p>
 
-<pre><code style="overflow-x:auto;" class="Java">en_US.UTF-8 UTF-8
+<pre>
+<code style="overflow-x:auto;" class="Java">
+en_US.UTF-8 UTF-8
 zh_CN.UTF-8 UTF-8
 zh_CN.GBK GBK
 zh_CN GB2312
 </code>
 </pre>
 
-<pre><code style="overflow-x:auto;" class="Java">locale-gen
-	</code>
+<pre>
+<code style="overflow-x:auto;" class="Java">
+locale-gen
+</code>
 </pre>
 
-<pre><code style="overflow-x:auto;" class="Java">vi /etc/default/locale
-	</code>
+<pre>
+<code style="overflow-x:auto;" class="Java">
+vi /etc/default/locale
+</code>
 </pre>
 
 <p>
 	这一步很重要，内容如下：
 </p>
 
-<pre><code style="overflow-x:auto;" class="Java">LANG="zh_CN.UTF-8"
+<pre>
+<code style="overflow-x:auto;" class="Java">
+LANG="zh_CN.UTF-8"
 LANGUAGE="zh_CN:zh"
 LC_NUMERIC="zh_CN.UTF-8"
 LC_TIME="zh_CN.UTF-8"
@@ -48,7 +60,7 @@ LC_ADDRESS="zh_CN"
 LC_TELEPHONE="zh_CN"
 LC_MEASUREMENT="zh_CN"
 LC_IDENTIFICATION="zh_CN"
-	</code>
+</code>
 </pre>
 
 <p>保存，重启。</p>
