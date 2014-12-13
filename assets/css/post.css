@@ -39,7 +39,6 @@
 .postcontent {
     padding: 15px 30px;
     min-height: 260px;
-    overflow: auto;
 }
 
 .postcontent, .postcontent p, .postcontent div {
@@ -49,6 +48,7 @@
     margin: 20px 0px;
     text-indent: 30px;
     line-height: 22px;
+    overflow: auto;
 }
 
 #guestbook {
