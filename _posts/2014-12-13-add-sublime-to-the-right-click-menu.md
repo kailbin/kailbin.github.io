@@ -25,9 +25,9 @@ OK! 此时右键一个文件的时候就会在右键菜单中显示 sublime3，�
 
 相关截图：
 
-<img src="{{ site.contentImgPath }}2014-12-13-sublime-regedit1.jpg">
+<img src="{{ site.contentImgPath }}2014-12-13-sublime-regedit1.jpg" style="width:800px" >
 
-<img src="{{ site.contentImgPath }}2014-12-13-sublime-regedit2.jpg">
+<img src="{{ site.contentImgPath }}2014-12-13-sublime-regedit2.jpg" style="width:800px" >
 
 
 

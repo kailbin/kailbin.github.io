@@ -39,6 +39,7 @@
 .postcontent {
     padding: 15px 30px;
     min-height: 260px;
+    overflow: auto;
 }
 
 .postcontent, .postcontent p, .postcontent div {
