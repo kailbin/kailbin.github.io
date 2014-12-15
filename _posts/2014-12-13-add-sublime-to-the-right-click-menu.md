@@ -16,8 +16,8 @@ contentimg: 2014-12-13-contentImages.jpg
 
 1. 打开注册表， Windows键 + R → 运行 → regedit
 2. 在 HKEY_CLASSSES_ROOT→ * → Shell 下面新建项命名为 sublime3
-3. 在新建字符串值 命名为Icon，值为 “sublime text 所在路径*,0*″，例如 *sublime_home*\sublime_text.exe*,0*
-4. 在 sublime3 ，下面新建项command ,在默认中输入值为 *sublime_home*\sublime_text.exe* %1*  
+3. 在新建字符串值 命名为Icon，值为 “sublime text 所在路径*,0*″，例如 <b>sublime_home</b>\sublime_text.exe<b>,0</b>
+4. 在 sublime3 ，下面新建项command ,在默认中输入值为 <b>sublime_home</b>\sublime_text.exe<b> %1</b>
 
 OK! 此时右键一个文件的时候就会在右键菜单中显示 sublime3，而且是带图标的。
 
