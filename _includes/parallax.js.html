@@ -2,7 +2,7 @@
     (function () {
         var navElement = document.getElementById("nav");
         window.onscroll = function () {
-            document.body.style.backgroundPosition = 'center ' + (document.body.scrollTop | document.documentElement.scrollTop) / (document.body.scrollHeight) * 100 + "%";
+            document.body.style.backgroundPosition = 'left ' + (document.body.scrollTop | document.documentElement.scrollTop) / (document.body.scrollHeight) * 100 + "%";
             navElement.style.top = "-" + (document.body.scrollTop | document.documentElement.scrollTop) / (document.body.scrollHeight) * 50 + "%"
         }
 

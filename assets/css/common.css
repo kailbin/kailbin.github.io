@@ -34,9 +34,9 @@ a {
 
 body {
     background-image: url("../images/bgblack.jpg");
-    background-position: left; 0%;
+    background-position: left top;
     background-attachment: fixed;
-
+    background-repeat: no-repeat;
 }
 
 .container {
