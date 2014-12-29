@@ -5,3 +5,5 @@ rp: /blog/assets/
 contentImgPath: /blog/assets/cimg/
 openDuoShuo: false
 
+jquery: http://libs.useso.com/js/jquery/1.11.0/jquery.min.js
+

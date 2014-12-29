@@ -1,0 +1,112 @@
+---
+layout: post
+title: 简单选项卡 JQuery插件
+
+paginate_path: blog/page:num
+
+---
+
+<p>
+</p>
+
+<!--break-->
+<p>js:</p>
+<pre>
+	<code style="overflow-x:auto;" class="js">
+/**
+ * {
+ *      tabTitle:'#tabTitle', //选项卡
+ *      tabBody:'#tabBody',   // 选项卡体
+ *      event:'click'         // 选项卡事件
+ * }
+ */
+$.fn.simpleTabs = function (o) {
+    o = o || {};
+    var tabTitle = o.tabTitle || "#tabTitle";
+    var tabBody = o.tabBody || "#tabBody";
+    var event = o.event || "click";
+
+    var $this = $(this);
+    var $tabTitle = $this.find(tabTitle);
+    var $tabBody = $this.find(tabBody);
+
+    $tabBody.find("li").hide().first().show();
+    $tabTitle.find("li").first().addClass("selected").end().bind(event, function () {
+        $(this).addClass("selected").siblings("li").removeClass("selected");
+        var index = $tabTitle.find("li").index(this);
+        $tabBody.children().eq(index).show().siblings().hide();
+    });
+};
+	</code>
+</pre>
+<p>html:</p>
+<pre>
+	<code style="overflow-x:auto;" class="html">
+<div id="warp">
+ <ul id="tabTitle">
+  <li>tab1</li>
+  <li>tab2</li>
+  <li>tab3</li>
+ </ul>
+ <ul id="tabContent">
+  <li>tab1</li>
+  <li>tab2</li>
+  <li>tab3</li>
+ </ul>
+</div>
+	</code>
+</pre>
+<p>调用:</p>
+<pre>
+	<code style="overflow-x:auto;" class="html">
+<script>
+	$("#warp").simpleTabs({event:'mouseover'})
+</script>
+	</code>
+</pre>
+
+
+
+<div style="width：500px;margin:0 auto;padding:30px;border:1px #eee solid;">
+	<p>效果如下:</p>
+	<div id="warp">
+		<ul id="tabTitle">
+			<li>tab1</li>
+			<li>tab2</li>
+			<li>tab3</li>
+		</ul>
+		<ul id="tabContent">
+			<li>tab1</li>
+			<li>tab2</li>
+			<li>tab3</li>
+		</ul>
+	</div>
+	<script src="{{ site.jquery }}"></script>
+	<script>
+		$.fn.simpleTabs = function (o) {
+			o = o || {};
+			var tabTitle = o.tabTitle || "#tabTitle";
+			var tabBody = o.tabBody || "#tabBody";
+			var event = o.event || "click";
+
+			var $this = $(this);
+			var $tabTitle = $this.find(tabTitle);
+			var $tabBody = $this.find(tabBody);
+
+			$tabBody.find("li").hide().first().show();
+			$tabTitle.find("li").first().addClass("selected").end().bind(event, function () {
+				$(this).addClass("selected").siblings("li").removeClass("selected");
+				var index = $tabTitle.find("li").index(this);
+				$tabBody.children().eq(index).show().siblings().hide();
+			});
+		};
+	</script>
+	<script>
+		$("#warp").simpleTabs({event:'mouseover'})
+	</script>
+
+</div>
+
+
+
+
