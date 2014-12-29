@@ -41,14 +41,14 @@ $.fn.simpleTabs = function (o) {
 </pre>
 <p>html:</p>
 <pre>
-	<code style="overflow-x:auto;" class="js">
+	<code style="overflow-x:auto;" class="XML">
 <div id="warp">
  <ul id="tabTitle">
   <li>tab1</li>
   <li>tab2</li>
   <li>tab3</li>
  </ul>
- <ul id="tabContent">
+ <ul id="tabBody">
   <li>tab1</li>
   <li>tab2</li>
   <li>tab3</li>
@@ -68,12 +68,12 @@ $.fn.simpleTabs = function (o) {
 <div style="width：500px;margin:0 auto;padding:30px;border:1px #eee solid;">
 	<p>效果如下:</p>
 	<div id="warp2">
-		<ul id="tabTitle">
+		<ul id="tabTitle2">
 			<li>tab1</li>
 			<li>tab2</li>
 			<li>tab3</li>
 		</ul>
-		<ul id="tabContent">
+		<ul id="tabBody2">
 			<li>tab1</li>
 			<li>tab2</li>
 			<li>tab3</li>
@@ -100,7 +100,7 @@ $.fn.simpleTabs = function (o) {
 		};
 	</script>
 	<script>
-		$("#warp").simpleTabs({event:'mouseover'})
+		$("#warp").simpleTabs({event:'mouseover',tabTitle:'#tabTitle2',tabBody:'#tabBody2'})
 	</script>
 
 </div>
