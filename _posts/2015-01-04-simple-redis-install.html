@@ -1,0 +1,81 @@
+---
+layout: post
+title: 入门级 Redis 安装
+
+paginate_path: blog/page:num
+contentimg: 2015-01-04-contentImg.jpg
+
+---
+
+<p>
+	刚刚接触Redis，完全是因为好奇，因为说的人太多了，所以今天抽时间大致了解了一下。
+</p>
+<p>
+	Redis很小巧，入门也很简单，基本上几个小时下来就能简单的使用。Redis是Key-Value内存数据库，数据基本上都在内从中，当然也可以持久话到硬盘中，
+	但是自我感觉安全性很低，所以可能很多人都把是Redis作为缓存服务来使用。
+</p>
+
+<!--break-->
+<p>下面是最基本的安装步骤，便于快速上手操作,操作环境在为Ubuntu。</p>
+
+<pre>
+	<code style="overflow-x:auto;" class="shell">
+# 下载 Redis , 中文网 http://www.redis.cn/download.html
+wget http://download.redis.io/releases/redis-2.8.19.tar.gz
+# 解压文件到当前目录
+tar -zxvf redis-2.8.19.tar.gz
+# 进入解压后的文件夹
+cd redis-2.8.19
+# 直接编译(在src目录下面为生成一些可执行文件，目前只需了解 redis-server 和 redis-cli)
+make
+# 安装(默认情况下，编译生成的可执行文件会被安装到/usr/local/bin/目录下面，which redis-cli 命令可以得知)
+sudo make install
+	</code>
+</pre>
+
+
+<p><b>启动Redis服务。</b></p>
+<p>输入redis-server即可启动服务，不加任何参数的情况使用的是默认的配置选项，<b>redis.conf</b>配置文件在解压文件的根目录下面，默认端口是6379。</p>
+<p>这次我们稍微把配置文件改一下：</p>
+<pre>
+	<code style="overflow-x:auto;" class="shell">
+# 新建redis目录
+mkdir /redis
+# 把配置文件拷贝到 /redis 目录下面
+cp ~/redis-2.8.19/redis.conf /redis/redis.conf 
+# 重命名文件为redis+端口号
+mv /redis/redis.conf  /redis/redis6379.conf
+# 修改 logfile "" --> logfile "./redis6379.log"
+# 修改 dbfilename dump.rdb --> dbfilename dump6379.rdb
+vim /redis/redis6379.conf
+# 启动 redis /redis/redis6379.conf
+redis-server /redis/redis6379.conf
+	</code>
+</pre>
+
+<p><b>连接redis服务器：</b></p>
+<pre>
+	<code style="overflow-x:auto;" class="shell">
+# 直接输入 redis-cli 与下面效果相同
+redis-cli -h 127.0.0.1 -p 6379
+# 输入 ping 返回 PONG 即可
+127.0.0.1:6379> ping
+PONG
+	</code>
+</pre>
+
+<p><b>关闭redis服务器：</b></p>
+<pre>
+	<code style="overflow-x:auto;" class="shell">
+# redis-cli shutdown 或 打开之后输入 shutdown
+127.0.0.1:6379> shutdown
+	</code>
+</pre>
+
+<p><b>相关参考：</b></p>
+<p>	测试编译 make test 出错：<a href="http://blog.csdn.net/luyee2010/article/details/18766911" target="_blank">http://blog.csdn.net/luyee2010/article/details/18766911</a></p>
+<p>Linux安装Redis详解：<a href="http://www.oschina.net/question/12_18065" target="_blank">http://www.oschina.net/question/12_18065</a></p></p>
+<p>Redis中文站：<a href="http://www.redis.cn/" target="_blank">http://www.redis.cn/</a></p>
+<p>Redis图形化工具：<a href="http://redisdesktop.com/download" target="_blank">http://redisdesktop.com/download</a></p>
+
+	
