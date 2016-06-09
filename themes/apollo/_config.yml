@@ -2,8 +2,7 @@ menu:
     Home: /
     Blog: /blog
     Archive: /blog/archives/
-    # Weibo: http://weibo.com/sunchongsheng
-    GitHub: https://github.com/yokoboy
+    OSC: https://git.oschina.net/yokoboy
     Rss: /blog/atom.xml
 
 favicon: /blog/favicon.png
