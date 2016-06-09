@@ -7,7 +7,7 @@ title: Mr.Kail's Blog
 subtitle:
 description:
 author: Mr.Kail
-language: cn
+language: zh-CN
 timezone:
 
 # URL
@@ -65,6 +65,7 @@ pagination_dir: page
 ## Themes: https://hexo.io/themes/
 # theme: even
 theme: apollo
+# theme: light
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
