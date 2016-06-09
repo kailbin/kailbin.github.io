@@ -100,7 +100,6 @@
         <li><a href="#blog_683371">firebird——gsec命令</a></li>
         <li><a href="#blog_683370">MySQL JDBC URL中几个重要参数说明</a></li>
         <li><a href="#blog_683369">firebird——isql命令</a></li>
-        <li><a href="#blog_683368">commons-cli 入门</a></li>
         <li><a href="#blog_683366">JDK 1.5 新特性</a></li>
         <li><a href="#blog_683365">log4j——入门初识</a></li>
         <li><a href="#blog_683364">scrollLeft,scrollTop,滚动代码的总结</a></li>
@@ -2350,59 +2349,6 @@ gsec -user sysdba -password masterkey -delete joe</span></pre>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
                 <p>&nbsp;参考资料：<a href="http://blog.sina.com.cn/s/blog_4ba5666e010122x1.html" rel="nofollow">http://blog.sina.com.cn/s/blog_4ba5666e010122x1.html</a><span><br></span></p>
-                <p>&nbsp;</p>
-            </div>
-        </div>
-        <div class='blog'>
-            <h2><a href="#top" class='top'>回到顶部</a><a name="blog_683368" href="http://my.oschina.net/yokoboy/blog/683368">commons-cli 入门</a></h2>
-            <div class='outline'>
-                <div class='date'>时间：2016-05-28 18:50:59</div>
-                <div class='catalog'>分类：日常记录</div>
-            </div>
-            <div class='content'>
-                <p>&nbsp;</p>
-                <p>引入jar包：commons-cli</p>
-                <p>官网：<a href="http://commons.apache.org/proper/commons-cli/" rel="nofollow">http://commons.apache.org/proper/commons-cli/</a></p>
-                <p>简介： &nbsp;cli用来处理程序启动时命令行传入的参数。<span>如果你仅仅只有一到两个参数需要处理，那么使用它有点多余，但是，如果你需要从命令行中捕获大多数应用程序的设置参数，那么使用CLI是恰到好处的。</span></p>
-                <p>&nbsp;</p>
-                <p>程序：</p>
-                <div class="cnblogs_code">
-                    <pre><span style="color: #0000ff;">import</span><span style="color: #000000;"> org.apache.commons.cli.BasicParser;
-</span><span style="color: #0000ff;">import</span><span style="color: #000000;"> org.apache.commons.cli.CommandLine;
-</span><span style="color: #0000ff;">import</span><span style="color: #000000;"> org.apache.commons.cli.HelpFormatter;
-</span><span style="color: #0000ff;">import</span><span style="color: #000000;"> org.apache.commons.cli.Options;
-</span><span style="color: #0000ff;">import</span><span style="color: #000000;"> org.apache.commons.cli.ParseException;
-
-</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> HelloWorld {
-
-    </span><span style="color: #008000;">/**</span><span style="color: #008000;">
-     * </span><span style="color: #808080;">@author</span><span style="color: #008000;"> yokoboy
-     * </span><span style="color: #808080;">@throws</span><span style="color: #008000;"> ParseException
-     * @date 2013-5-7
-     </span><span style="color: #008000;">*/</span>
-                        <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">void</span>                        main(String[] args) <span style="color: #0000ff;">throws</span><span style="color: #000000;"> ParseException {
-        </span><span style="color: #008000;">//</span><span style="color: #008000;"> 在使用CLI之前需要创建一个Options对象，该对象相当于一个容器，另外还有Option对象，
-        </span><span style="color: #008000;">//</span><span style="color: #008000;"> 每个Option对象相对于命令行中的一个参数。</span> Options
-                        opts = <span style="color: #0000ff;">new</span><span style="color: #000000;"> Options();
-        </span><span style="color: #008000;">//</span><span style="color: #008000;"> 通过利用这个Options，你可以使用addOption()方法定义你的应用程序可接受的命令行参数，
-        </span><span style="color: #008000;">//</span><span style="color: #008000;"> 每次都为一个option调用一次这个方法，看下面例示：</span> opts.addOption("h",
-                        <span style="color: #0000ff;">false</span>, "打印帮助。"<span style="color: #000000;">);
-        opts.addOption(</span>"th", <span style="color: #0000ff;">true</span>, "线程个数，int值。"<span style="color: #000000;">);
-        opts.addOption(</span>"tn", <span style="color: #0000ff;">true</span>, "数据库表名。"<span style="color: #000000;">);
-        </span><span style="color: #008000;">//</span><span style="color: #008000;"> 一旦你定义了类的参数，创建一个CommandLineParser，并分析已传送到主方法中的组。</span>                        BasicParser parser = <span style="color: #0000ff;">new</span><span style="color: #000000;"> BasicParser();
-        CommandLine cl </span>=<span style="color: #000000;"> parser.parse(opts, args);
-        </span><span style="color: #008000;">//</span><span style="color: #008000;"> 等到所有的参数都被解析以后，你可以开始检查返回的命令行，这些命令行中，提供用户的参数和值已被
-        </span><span style="color: #008000;">//</span><span style="color: #008000;"> 语法分析程序详细检查过了</span>
-                        <span style="color: #0000ff;">if</span> (cl.hasOption('h'<span style="color: #000000;">)) {
-            HelpFormatter hf </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> HelpFormatter();
-            hf.printHelp(</span>"OptionsTip"<span style="color: #000000;">, opts);
-        } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
-            System.out.println(cl.getOptionValue(</span>"th"<span style="color: #000000;">));
-            System.out.println(cl.getOptionValue(</span>"tn"<span style="color: #000000;">));
-        }
-    }
-}</span></pre>
-                </div>
                 <p>&nbsp;</p>
             </div>
         </div>
