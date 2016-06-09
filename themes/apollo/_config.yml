@@ -5,8 +5,8 @@ menu:
     OSC: https://git.oschina.net/yokoboy
     Rss: /blog/atom.xml
 
-favicon: /blog/favicon.png
-logo: /blog/favicon.png
+favicon: /blog/images/favicon.png
+logo: /blog/images/favicon.png
 
 # Comment
 # e.g disqus: seansun
