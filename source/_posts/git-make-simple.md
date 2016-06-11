@@ -191,8 +191,7 @@ $ git log --graph --oneline
 
 
 
-#### 参考
 
-猴子都能懂的GIT：[http://backlogtool.com/git-guide/cn/](http://backlogtool.com/git-guide/cn/)
+> 猴子都能懂的GIT：[http://backlogtool.com/git-guide/cn/](http://backlogtool.com/git-guide/cn/)
 
 

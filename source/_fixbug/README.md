@@ -1,0 +1,1 @@
+cp source/_fixbug/atom.xml node_modules/hexo-generator-feed/atom.xml
