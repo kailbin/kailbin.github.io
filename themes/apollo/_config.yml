@@ -2,7 +2,7 @@ menu:
     首页: /
     归档: /archives/
     留言板: /guestbook.html
-    简历: /resume.html
+    # 简历: /resume.html
     OSC: https://git.oschina.net/yokoboy
     Rss: /atom.xml
 

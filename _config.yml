@@ -72,5 +72,5 @@ theme: apollo
 deploy:
   type: git
   repo: https://git.oschina.net/yokoboy/yokoboy.git
-  branch: gh-pages
+  branch: osc-pages
   message: 
