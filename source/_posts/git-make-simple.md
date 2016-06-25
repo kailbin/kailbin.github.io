@@ -105,14 +105,22 @@ $ git log --graph --oneline
 - 删除    
 `$ git remote remove <name>`
 
+
+- 修改URL   
+`$ git remote set-url  <name> <newurl>`
+
 - 添加    
 `$ git remote add  <name> <url>`
 
 - 重命名   
 `$ git remote rename <old> <new>`
 
-- 修改URL 
-`$ git remote set-url  <name> <newurl>`
+- 把本地分支推送到其他项目分支  
+    1. 新增一个远程项目地址 `$ git remote add  <other-origin> <url>`
+    2. 把本地分支推送到另一个项目的远程分支  
+        `$ git push <other-origin> <local-branch-nam>:<other-branch-name>`
+
+
 
 ### 分支
 
@@ -137,8 +145,11 @@ $ git log --graph --oneline
 - 合并分支  
 `$ git merge <commit>`
 
-- 删除分支  
+- 删除本地分支  
 `$ git branch -d <branchname>`
+
+- 删除远程分支  
+`$ git push origin :<branchname>`
 
 - 修改分支  
 `$ git branch -m <oldbranch> <newbranch>`
