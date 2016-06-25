@@ -3,9 +3,9 @@ date: 2016-03-01
 desc: 董亚苹的个人简历,产品经理
 ---
 
-### <center>董亚苹<center>
-<center>求职意向：**产品经理**(上海)<center>
-<center>**电话：**15890024260 &nbsp;&nbsp; **邮箱：**1727294800@qq.com  &nbsp;&nbsp; **学校：**中原工学院 &nbsp;&nbsp; **专业：** 软件工程<center>
+### <center>董亚苹</center>
+<center>求职意向：**产品经理**(上海)</center>
+<center>**电话：**15890024260 &nbsp;&nbsp; **邮箱：**1727294800@qq.com  &nbsp;&nbsp; **学校：**中原工学院 &nbsp;&nbsp; **专业：** 软件工程</center>
 
 
 
