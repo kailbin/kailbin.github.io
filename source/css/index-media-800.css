@@ -1,0 +1,22 @@
+@media (max-width: 1200px) {
+    body {
+        background-size: auto;
+    }
+}
+
+@media (max-width: 800px) {
+    #nav .items {
+        display: block;
+        padding: 0px;
+    }
+
+    #nav .items .item {
+        display: block;
+        padding: 0px;
+    }
+
+    #nav .items .item a {
+        display: block;
+
+    }
+}

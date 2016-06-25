@@ -1,0 +1,6 @@
+User-agent: *
+
+Allow: /
+
+Sitemap: http://yokoboy.oschina.io/blog/atom.xml
+Sitemap: http://yokoboy.oschina.io/blog/sitemap.xml

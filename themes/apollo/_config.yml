@@ -1,12 +1,13 @@
 menu:
-    Home: /
-    Blog: /blog
-    Archive: /blog/archives/
+    首页: /
+    归档: /archives/
+    留言板: /guestbook.html
+    简历: /resume.html
     OSC: https://git.oschina.net/yokoboy
-    Rss: /blog/atom.xml
+    Rss: /atom.xml
 
-favicon: /blog/images/favicon.png
-logo: /blog/images/favicon.png
+favicon: /images/favicon.png
+logo: /images/favicon.png
 
 # Comment
 # e.g disqus: seansun
