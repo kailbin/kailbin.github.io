@@ -118,7 +118,7 @@ $ git log --graph --oneline
 - 把本地分支推送到其他项目分支  
     1. 新增一个远程项目地址 `$ git remote add  <other-origin> <url>`
     2. 把本地分支推送到另一个项目的远程分支  
-        `$ git push <other-origin> <local-branch-nam>:<other-branch-name>`
+        `$ git push <other-origin> <local-branch-name>:<other-branch-name>`
 
 
 
