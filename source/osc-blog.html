@@ -120,7 +120,6 @@
         <li><a href="#blog_611852">mycli</a></li>
         <li><a href="#blog_539747">RabbitMQ 安装</a></li>
         <li><a href="#blog_508855">Zookeeper 安装</a></li>
-        <li><a href="#blog_499838">MySQL 便携安装(win)</a></li>
         <li><a href="#blog_489667">PHP + Nginx</a></li>
         <li><a href="#blog_489662">Java类中静态内容的初始化顺序</a></li>
         <li><a href="#blog_480158">Ubuntu Desktop 系统配置</a></li>
@@ -4573,36 +4572,6 @@ Sheet sheet = workbook.createSheet();
                 <h4>启动</h4>
                 <pre class="brush:shell;toolbar: true; auto-links: false;">./bin/zkServer.sh&nbsp;start</pre>
                 <p>单机安装基本上就做了一件事，修改配置文件中的数据保存路径，甚至这一步可以了忽略。<strong>直接启动即可。</strong></p>
-                <p><br></p>
-                <p><br></p>
-            </div>
-        </div>
-        <div class='blog'>
-            <h2><a href="#top" class='top'>回到顶部</a><a name="blog_499838" href="http://my.oschina.net/yokoboy/blog/499838">MySQL 便携安装(win)</a></h2>
-            <div class='outline'>
-                <div class='date'>时间：2015-08-31 22:52:29</div>
-                <div class='catalog'>分类：日常记录</div>
-            </div>
-            <div class='content'>
-                <h2>my.ini</h2>
-                <p>一下配置仅供参考，mysql文件目录下为会有配置文件的参考，选择需要的重命名成my.ini 即可。<br></p>
-                <pre class="brush:shell;toolbar: true; auto-links: false;">[client] password&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1723 port&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3306
-                    socket&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;/tmp/mysql.sock [mysqld] basedir&nbsp;=&nbsp;D:/DataBase/MySQL/mysql-5.5-x64
-                    datadir&nbsp;=&nbsp;D:/DataBase/MySQL/MySQLData character-set-server&nbsp;=&nbsp;utf8 port&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3306
-                    socket&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;/tmp/mysql.sock skip-external-locking key_buffer_size&nbsp;=&nbsp;16M
-                    max_allowed_packet&nbsp;=&nbsp;1M table_open_cache&nbsp;=&nbsp;64 sort_buffer_size&nbsp;=&nbsp;512K net_buffer_length&nbsp;=&nbsp;8K
-                    read_buffer_size&nbsp;=&nbsp;256K read_rnd_buffer_size&nbsp;=&nbsp;512K myisam_sort_buffer_size&nbsp;=&nbsp;8M
-                </pre>
-                <h2>安装服务</h2>
-                <pre class="brush:shell;toolbar: true; auto-links: false;">mysqld&nbsp;--install&nbsp;MySQL&nbsp;--defaults-file="D:/DataBase/MySQL/mysql-5.5-x64/my.ini"</pre>
-                <p>卸载服务</p>
-                <pre class="brush:shell;toolbar: true; auto-links: false;">mysqld&nbsp;--remove</pre>
-                <h2>启动服务</h2>
-                <pre class="brush:shell;toolbar: true; auto-links: false;">net&nbsp;start&nbsp;mysql</pre>
-                <p>关闭服务<br></p>
-                <pre class="brush:shell;toolbar: true; auto-links: false;">net&nbsp;stop&nbsp;mysql</pre>
-                <h2>连接<br></h2>
-                <pre class="brush:shell;toolbar: true; auto-links: false;">mysql&nbsp;-uroot&nbsp;-p</pre>
                 <p><br></p>
                 <p><br></p>
             </div>
