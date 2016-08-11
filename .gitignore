@@ -1,10 +1,10 @@
 .DS_Store
 Thumbs.db
 db.json
+package.json
 *.log
 node_modules/
 public/
 .idea/
 .idea*/
 .deploy*/
-package.json
