@@ -1,15 +1,15 @@
 ---
 
 title: 设计模式 - 目录
-date: 2016-8-28
+date: 2016-8-24
 
 ---
 
 
 - 创建型模式
-    1. [工厂方法模式](01-factory-method.html)
-    2. [抽象工厂模式](02-abstract-factory.html)
-    3. [单例模式](03-singleton.html)
+    1. [工厂方法模式](../2016-08-25-design-pattern/01-factory-method.html)
+    2. [抽象工厂模式](../2016-08-26-design-pattern/02-abstract-factory.html)
+    3. [单例模式](../2016-08-27-design-pattern/03-singleton.html)
     4. 建造者模式
     5. 原型模式。
 
