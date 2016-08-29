@@ -71,6 +71,6 @@ theme: apollo
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://git.oschina.net/yokoboy/yokoboy.git
+  repo: https://ykb553%40163.com@git.oschina.net/yokoboy/yokoboy.git
   branch: osc-pages
   message: 
