@@ -23,17 +23,17 @@ date: 2016-8-24
     12. [享元模式](../2016-08-29-design-pattern/12-flyweight.html)
 
 - 行为型模式
-    13. 策略模式
-    14. 模板方法模式
-    15. 观察者模式
-    16. 迭代子模式
-    17. 责任链模式
-    18. 命令模式
-    19. 备忘录模式
-    20. 状态模式
-    21. 访问者模式
-    22. 中介者模式
-    23. 解释器模式
+    13. [策略模式](../2016-08-30-design-pattern/13-strategy.html)
+    14. [模板方法模式](../2016-08-30-design-pattern/14-template-method.html)
+    15. [观察者模式](../2016-08-30-design-pattern/15-observer.html)
+    16. [迭代器模式](../2016-08-30-design-pattern/16-iterator.html)
+    17. [责任链模式](../2016-08-30-design-pattern/17-chain-of-responsibility.html)
+    18. [命令模式](../2016-08-30-design-pattern/18-command.html)
+    19. [备忘录模式](../2016-08-30-design-pattern/19-memento.html)
+    20. [状态模式](../2016-08-30-design-pattern/20-state.html)
+    21. [访问者模式](../2016-08-30-design-pattern/21-visitor.html)
+    22. [中介者模式](../2016-08-30-design-pattern/22-mediator.html)
+    23. [解释器模式](../2016-08-30-design-pattern/23-interpreter.html)
 
 
 
