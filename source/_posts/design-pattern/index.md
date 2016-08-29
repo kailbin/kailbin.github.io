@@ -10,8 +10,8 @@ date: 2016-8-24
     1. [工厂方法模式](../2016-08-25-design-pattern/01-factory-method.html)
     2. [抽象工厂模式](../2016-08-26-design-pattern/02-abstract-factory.html)
     3. [单例模式](../2016-08-27-design-pattern/03-singleton.html)
-    4. 建造者模式
-    5. 原型模式。
+    4. [建造者模式](../2016-08-28-design-pattern/04-builder.html)
+    5. [原型模式](../2016-08-28-design-pattern/05-prototype.html)
 
 - 结构型模式
     6. 适配器模式
