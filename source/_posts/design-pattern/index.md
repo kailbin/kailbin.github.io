@@ -14,13 +14,13 @@ date: 2016-8-24
     5. [原型模式](../2016-08-28-design-pattern/05-prototype.html)
 
 - 结构型模式
-    6. 适配器模式
-    7. 装饰器模式
-    8. 代理模式
-    9. 外观模式
-    10. 桥接模式
-    11. 组合模式
-    12. 享元模式
+    6. [适配器模式](../2016-08-29-design-pattern/06-adapter.html)
+    7. [装饰器模式](../2016-08-29-design-pattern/07-decorator.html)
+    8. [代理模式](../2016-08-29-design-pattern/08-proxy.html)
+    9. [外观模式](../2016-08-29-design-pattern/09-facade.html)
+    10. [桥接模式](../2016-08-29-design-pattern/10-bridge.html)
+    11. [组合模式](../2016-08-29-design-pattern/11-composite.html)
+    12. [享元模式](../2016-08-29-design-pattern/12-flyweight.html)
 
 - 行为型模式
     13. 策略模式
