@@ -37,10 +37,18 @@ cherry-pick比较好的使用场景是在`一个分支上想要另一个分支�
 ### 撤销修改
 
 `$ git checkout -- <file>` 撤销对工作区修改  
-
 `$ git reset HEAD -- <file>` 这个命令仅改变暂存区，并不改变工作区，这意味着`在无任何其他操作的情况下，工作区中的实际文件同该命令运行之前无任何变化`   
 
 
+
+
+
+### 暂存
+
+`$ git stash`  备份当前的工作区的内容，将当前的工作区内容保存到Git栈中  
+`$ git stash pop`  从Git栈中读取最近一次保存的内容，恢复工作区的相关内容  
+`$ git stash list`  显示Git栈内的所有备份  
+`$ git stash clear`  清空Git栈  
 
 
 
@@ -74,9 +82,6 @@ cherry-pick比较好的使用场景是在`一个分支上想要另一个分支�
 ### git rebese
 
 
-
-
-### git stash
 
 
 
@@ -119,7 +124,7 @@ e836a60 HEAD@{2}: commit message
 
 
 
-
+<!--
 9. 检查丢失的提交
 
 尽管reflog是一种检查丢失提交的方法，大型的库里却不太实用。这个时候，应该用fsck（文件系统检查）命令。
@@ -132,3 +137,4 @@ git fsck --lost-found
 
 git fsck跟reflog命令相比有一个优点。假设你删除了一个远程分支，然后clone了这个库。用fsck命令你可以找到并且恢复这个删除的远程分支。
 
+-->
