@@ -81,6 +81,18 @@ $ git log --graph --oneline
 - 删除所有暂存的操作  
 `$ git stash clear`  
 
+- 查看文件每一行的作者  
+`$ git blame <filename>`
+
+- 查看文件每几行的作者  
+    - 某一行  
+    `$ git blame -L <n1,n1> <filename>`
+ 
+    - 某一行到最后一行  
+    `$ git blame -L <n> <filename>`
+
+    - 某几行  
+    `$ git blame -L <n3,n5> <filename>`
 
 ### 远程操作
 
