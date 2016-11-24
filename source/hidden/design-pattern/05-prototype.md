@@ -88,7 +88,7 @@ class SerializableObject implements Serializable {
 
 
 
-> [设计模式 - 目录](../2016-08-24-design-pattern/index.html)
+> [设计模式 - 目录](/post/2016-08-24-design-pattern.html)
 
 ↓ 
 

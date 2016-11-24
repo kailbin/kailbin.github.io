@@ -47,7 +47,7 @@ public class Test {
 因此，是选择工厂模式还是建造者模式，依实际情况而定。
 
 
-> [设计模式 - 目录](../2016-08-24-design-pattern/index.html)
+> [设计模式 - 目录](/post/2016-08-24-design-pattern.html)
 
 ↓ 
 

@@ -100,7 +100,7 @@ after proxy!
 
 
 
-> [设计模式 - 目录](../2016-08-24-design-pattern/index.html)
+> [设计模式 - 目录](/post/2016-08-24-design-pattern.html)
 > [装饰模式](07-decorator.html)
 
 ↓ 

@@ -74,7 +74,7 @@ after decorator!
 缺点：产生过多相似的对象，不易排错！
 
 
-> [设计模式 - 目录](../2016-08-24-design-pattern/index.html)
+> [设计模式 - 目录](/post/2016-08-24-design-pattern.html)
 > [代理模式](08-proxy.html)
 
 ↓ 

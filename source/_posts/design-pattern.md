@@ -1,39 +1,39 @@
 ---
 
-title: 设计模式 - 目录
+title: 设计模式
 date: 2016-8-24
 
 ---
 
 
 - 创建型模式
-    1. [工厂方法模式](../2016-08-25-design-pattern/01-factory-method.html)
-    2. [抽象工厂模式](../2016-08-26-design-pattern/02-abstract-factory.html)
-    3. [单例模式](../2016-08-27-design-pattern/03-singleton.html)
-    4. [建造者模式](../2016-08-28-design-pattern/04-builder.html)
-    5. [原型模式](../2016-08-28-design-pattern/05-prototype.html)
+    1. [工厂方法模式](/hidden/design-pattern/01-factory-method.html)
+    2. [抽象工厂模式](/hidden/design-pattern/02-abstract-factory.html)
+    3. [单例模式](/hidden/design-pattern/03-singleton.html)
+    4. [建造者模式](/hidden/design-pattern/04-builder.html)
+    5. [原型模式](/hidden/design-pattern/05-prototype.html)
 
 - 结构型模式
-    6. [适配器模式](../2016-08-29-design-pattern/06-adapter.html)
-    7. [装饰器模式](../2016-08-29-design-pattern/07-decorator.html)
-    8. [代理模式](../2016-08-29-design-pattern/08-proxy.html)
-    9. [外观模式](../2016-08-29-design-pattern/09-facade.html)
-    10. [桥接模式](../2016-08-29-design-pattern/10-bridge.html)
-    11. [组合模式](../2016-08-29-design-pattern/11-composite.html)
-    12. [享元模式](../2016-08-29-design-pattern/12-flyweight.html)
+    6. [适配器模式](/hidden/design-pattern/06-adapter.html)
+    7. [装饰器模式](/hidden/design-pattern/07-decorator.html)
+    8. [代理模式](/hidden/design-pattern/08-proxy.html)
+    9. [外观模式](/hidden/design-pattern/09-facade.html)
+    10. [桥接模式](/hidden/design-pattern/10-bridge.html)
+    11. [组合模式](/hidden/design-pattern/11-composite.html)
+    12. [享元模式](/hidden/design-pattern/12-flyweight.html)
 
 - 行为型模式
-    13. [策略模式](../2016-08-30-design-pattern/13-strategy.html)
-    14. [模板方法模式](../2016-08-30-design-pattern/14-template-method.html)
-    15. [观察者模式](../2016-08-30-design-pattern/15-observer.html)
-    16. [迭代器模式](../2016-08-30-design-pattern/16-iterator.html)
-    17. [责任链模式](../2016-08-30-design-pattern/17-chain-of-responsibility.html)
-    18. [命令模式](../2016-08-30-design-pattern/18-command.html)
-    19. [备忘录模式](../2016-08-30-design-pattern/19-memento.html)
-    20. [状态模式](../2016-08-30-design-pattern/20-state.html)
-    21. [访问者模式](../2016-08-30-design-pattern/21-visitor.html)
-    22. [中介者模式](../2016-08-30-design-pattern/22-mediator.html)
-    23. [解释器模式](../2016-08-30-design-pattern/23-interpreter.html)
+    13. [策略模式](/hidden/design-pattern/13-strategy.html)
+    14. [模板方法模式](/hidden/design-pattern/14-template-method.html)
+    15. [观察者模式](/hidden/design-pattern/15-observer.html)
+    16. [迭代器模式](/hidden/design-pattern/16-iterator.html)
+    17. [责任链模式](/hidden/design-pattern/17-chain-of-responsibility.html)
+    18. [命令模式](/hidden/design-pattern/18-command.html)
+    19. [备忘录模式](/hidden/design-pattern/19-memento.html)
+    20. [状态模式](/hidden/design-pattern/20-state.html)
+    21. [访问者模式](/hidden/design-pattern/21-visitor.html)
+    22. [中介者模式](/hidden/design-pattern/22-mediator.html)
+    23. [解释器模式](/hidden/design-pattern/23-interpreter.html)
 
 
 

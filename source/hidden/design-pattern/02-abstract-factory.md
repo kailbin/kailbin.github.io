@@ -92,7 +92,7 @@ public class Test {
 > [FactoryBean](http://www.cnblogs.com/chenying99/archive/2012/09/23/2698878.html)
 
 
-> [设计模式 - 目录](../2016-08-24-design-pattern/index.html)
+> [设计模式 - 目录](/post/2016-08-24-design-pattern.html)
 
 ↓ 
 
