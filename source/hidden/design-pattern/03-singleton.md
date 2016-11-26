@@ -5,7 +5,7 @@ date: 2016-8-27
 
 ---
 
-> [设计模式 - 目录](../2016-08-24-design-pattern/index.html)
+> [设计模式 - 目录](/post/2016-08-24-design-pattern/index.html)
 
 
 
@@ -218,7 +218,7 @@ public class SingletonTest {
 
 
 
-> [设计模式 - 目录](../2016-08-24-design-pattern/index.html)
+> [设计模式 - 目录](/post/2016-08-24-design-pattern/index.html)
 
 > [影子实例](http://www.ibm.com/developerworks/cn/java/l-singleton/#N10063)
 
