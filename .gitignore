@@ -8,4 +8,4 @@ public/
 .idea/
 .idea*/
 .deploy*/
-/*.iml
+*.iml
