@@ -28,6 +28,7 @@ desc: Linux 源码安装方式
 
     
     
+> [Git 源码方式安装](/post/2016-09-15-git-source-install.html)
 > [Nginx 编译 安装笔记](/post/2016-06-25-nginx-install-in-linux.html)
 
 
