@@ -101,6 +101,7 @@ Basic commands:
 /var/cache/apt/archives                   # 已经下载到的软件包都放在这里
 ```
 
+> Ubuntu镜像使用帮助 [http://mirrors.163.com/.help/ubuntu.html](http://mirrors.163.com/.help/ubuntu.html)
 
 
 ### aptitude 
@@ -166,3 +167,4 @@ See the apt-cache(8) and apt.conf(5) manual pages for more information.
 
 > [Apt和dpkg快速参考](http://wiki.ubuntu.org.cn/Apt%E5%92%8Cdpkg%E5%BF%AB%E9%80%9F%E5%8F%82%E8%80%83)    
 > [ubuntu 源码编译,dpkg,apt 安装原理 及简单使用](http://www.jianshu.com/p/45fa3d6b2e8d )  
+> [关于Ubuntu下apt的一些用法及和yum的比较](http://blog.csdn.net/mbxc816/article/details/7473906)
