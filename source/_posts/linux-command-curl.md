@@ -16,16 +16,70 @@ desc: curl 命令常见用法
 <!--more-->
 
 ### 设置请求方式 （GET、POST、PUT、DELETE …）
-```base
+```bash
 curl -X POST http://baidu.com
 curl -X PUT http://baidu.com
 curl -X DELETE http://baidu.com
 
-
+# GET 方式
+curl -G http://baidu.com
+# POST 提交数据
+curl -d "param1=value1&param2=value2" http://baidu.com
+# PUT 
+curl -X PUT -d "param1=value1&param2=value2" http://baidu.com
 ```
 
+
+### 模拟请求
+```bash
+# 设置 referer
+curl http://baidu.com --referer http://yokoboy.oschina.io 
+curl http://baidu.com -e http://yokoboy.oschina.io 
+# 设置 cookie
+curl http://baidu.com --cookie "user=root;pass=123456"
+# 设置 user-agent
+curl http://baidu.com --user-agent "Mozilla/5.0" 
+curl http://baidu.com -A "Mozilla/5.0"
+```
+
+以上参数都可以使用 `-H` 代替
+
+```bash
+curl 'http://baidu.com' -H 'Referer: http://yokoboy.oschina.io' -H 'Cookie: user=root;pass=123456' -H 'User-Agent: Mozilla/5.0'
+```
+
+
+### 下载
+
+```bash
+curl http://baidu.com > baidu.html
+curl -o baidu.html http://baidu.com
+curl -O https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/logo_white.png
+```
+
+`-o` 指定保存文件名  
+`-O` 保留原文件名  
+
+
+
+### 静默方式
+
+```bash
+# 默认会输出进度信息
+curl  http://baidu.com >> /dev/null
+```
+      % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                     Dload  Upload   Total   Spent    Left  Speed
+    100    81  100    81    0     0    307      0 --:--:-- --:--:-- --:--:--   306
+    
+加上 `-s` 或者 `--silent` 之后则什么都不输出，例如获得源码的时候并不希望输出进行信息
+```bash
+is_open=$(curl -s http://baidu.com)
+```
+
+
 ### 查看请求详细信息
-```base
+```bash
 curl -v http://baidu.com
 ```
 
@@ -58,7 +112,7 @@ curl -v http://baidu.com
     
 
 ### 查看响应头（Response）
-```base
+```bash
 curl -I http://baidu.com
 ```
 
@@ -74,12 +128,22 @@ curl -I http://baidu.com
     Connection: Keep-Alive
     Content-Type: text/html
     
-### 
+```bash
+# 输出响应头和源码
+curl -i http://baidu.com
+```
+
+### 其他
+| 参数                   | 描述                          |
+|:------------------------|:-------------------------------|
+| -c / --cookie-jar &lt;file&gt; | 操作结束后把cookie写入到这个文件中|
+| -T / --upload-file &lt;file&gt; | 上传文件                      |
+| -x / --proxy &lt;host[:port]&gt; | 在给定的端口上使用HTTP代理     |
 
 
-> 参考： [Linux命令大全 » 网络管理 » curl ](http://man.linuxde.net/curl)
-https://curl.haxx.se/docs/httpscripting.html
-http://www.cnblogs.com/gbyukg/p/3326825.html
-http://outofmemory.cn/code-snippet/3306/curl-head-request
-https://linux.cn/article-4957-1.html
-http://www.lenky.info/archives/2012/07/1841?utm_source=tuicool&utm_medium=referral
+> 参考：   
+> [Linux命令大全 » 网络管理 » curl ](http://man.linuxde.net/curl)  
+> [Using curl to automate HTTP jobs](https://curl.haxx.se/docs/httpscripting.html)  
+
+  
+> [Linux命令大全 » 网络管理 » wget](http://man.linuxde.net/wget)
