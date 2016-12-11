@@ -151,7 +151,7 @@ mvn com.kail.maven.plugin:hello-maven-plugin:1.0-SNAPSHOT:print -Dmaven.sayHello
     [INFO] Hello Kail
     ……
 
-##### 简写形式
+##### 简写形式（目标前缀）
 
 ```bash
 mvn hello:print 
