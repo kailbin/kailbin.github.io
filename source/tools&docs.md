@@ -9,3 +9,5 @@
 [极客学院 wiki](http://wiki.jikexueyuan.com/)
 
 [kafka中文教程](http://orchome.com/kafka/index)
+
+[free-programming-books](https://github.com/vhf/free-programming-books/blob/master/free-programming-books-zh.md)
