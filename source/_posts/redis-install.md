@@ -22,7 +22,7 @@ make
 
 <!--more-->
 
-如果 `cd src && make install` 的话，默认安装在 `/usr/local/bin` 下面(`find / -name grep redis`or`find / -path '/mnt/*' -prune -o -print | grep redis`)
+如果 `cd src && make install` 的话，默认安装在 `/usr/local/bin` 下面(`find / -name redis`or`find / -path '/mnt/*' -prune -o -print | grep redis`)
 
 配置文件在 `redis-3.2.6` 下面。
 
