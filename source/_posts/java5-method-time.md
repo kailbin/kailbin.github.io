@@ -5,7 +5,7 @@ desc: Java 方法执行超时时间,concurrent,ExecutorService,Future,Executors
 ---
 
 
-##### 执行时间超过超时时间
+##### 执行时间超时
 
 ```java
   
