@@ -141,7 +141,7 @@ switch (lastChar) {
 ``` java
 cache.get("key"); // 该方法会有一个显式的 `ExecutionException` 异常
   
-cache.getUnchecked("key"); // 如果创建 `LoadingCache` 的时候，`CacheLoader.load` 没有抛出一个显式的异常，可以用该方法
+cache.getUnchecked("key"); //该方法不需要捕获异常， 如果创建 `LoadingCache` 的时候，`CacheLoader.load` 没有抛出一个显式的异常，可以用该方法
   
 // 类似于
 // String value = map.get("key");
