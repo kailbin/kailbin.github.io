@@ -69,7 +69,7 @@ org.apache.zookeeper.server.auth.DigestAuthenticationProvider admin:admin
 vim ./bin/zkServer.sh
 ```
 
-**`:/nohup` 找到启动的地方，大概在109行(`:set nu)左右，新增启动参数**
+**`:/nohup` 找到启动的地方，大概在109行(`:set nu`)左右，新增启动参数**
 ``` vim
 nohup "$JAVA" "-Dzookeeper.log.dir=${ZOO_LOG_DIR}" "-Dzookeeper.root.logger=${ZOO_LOG4J_PROP}" \
 "-Dzookeeper.DigestAuthenticationProvider.superDigest=admin:x1nq8J5GOJVPY6zgzhtTtA9izLc=" \
