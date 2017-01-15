@@ -766,6 +766,17 @@ footer .copyright a:hover {
     font-size: 16px;
 }
 
+.post-block .post-info a.post-seo-from {
+    float: right;
+    padding: 3px 6px;
+
+    font-weight: bold;
+    font-size: 12px;
+    color: white;
+
+    background-color: #42b983;
+    border-radius: 5px;
+}
 pre {
     overflow-y: hidden;
 }

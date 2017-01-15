@@ -2,6 +2,9 @@ mixin postInfo(item)
     .post-info
         //if item.showDate == true
         != full_date(item.date, 'll')
+        if is_post()
+            a.post-seo-from(href=config.url + url_for(item.path) title=item.title) 原文地址
+
         if item.from && (is_home() || is_post())
             a.post-from(href=item.from target="_blank" title=item.from) 翻译 · 原文地址
 
