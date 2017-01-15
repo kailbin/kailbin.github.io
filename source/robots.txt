@@ -1,5 +1,0 @@
-User-agent: *
-
-
-Sitemap: http://blog.kail.xyz/atom.xml
-Sitemap: http://blog.kail.xyz/sitemap.xml
