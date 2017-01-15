@@ -63,14 +63,12 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-# theme: even
 theme: apollo
-# theme: light
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  -type: git
-   repo: https://ykb553%40163.com@git.coding.net/yokoboy/yokoboy.git
-   branch: coding-pages
-   message:
+  type: git
+  repo: https://ykb553%40163.com@git.coding.net/yokoboy/yokoboy.git
+  branch: coding-pages
+  message:
