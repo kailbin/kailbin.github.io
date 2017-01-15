@@ -1,5 +1,5 @@
 User-agent: *
 
 
-Sitemap: http://yokoboy.oschina.io/atom.xml
-Sitemap: http://yokoboy.oschina.io/sitemap.xml
+Sitemap: http://blog.kail.xyz/atom.xml
+Sitemap: http://blog.kail.xyz/sitemap.xml

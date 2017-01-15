@@ -33,8 +33,8 @@ curl -X PUT -d "param1=value1&param2=value2" http://baidu.com
 ### 模拟请求
 ```bash
 # 设置 referer
-curl http://baidu.com --referer http://yokoboy.oschina.io 
-curl http://baidu.com -e http://yokoboy.oschina.io 
+curl http://baidu.com --referer http://blog.kail.xyz 
+curl http://baidu.com -e http://blog.kail.xyz 
 # 设置 cookie
 curl http://baidu.com --cookie "user=root;pass=123456"
 # 设置 user-agent
@@ -45,7 +45,7 @@ curl http://baidu.com -A "Mozilla/5.0"
 以上参数都可以使用 `-H` 代替
 
 ```bash
-curl 'http://baidu.com' -H 'Referer: http://yokoboy.oschina.io' -H 'Cookie: user=root;pass=123456' -H 'User-Agent: Mozilla/5.0'
+curl 'http://baidu.com' -H 'Referer: http://blog.kail.xyz' -H 'Cookie: user=root;pass=123456' -H 'User-Agent: Mozilla/5.0'
 ```
 
 

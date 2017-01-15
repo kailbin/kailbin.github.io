@@ -12,7 +12,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yokoboy.oschina.io
+url: http://blog.kail.xyz
 root: /
 permalink: post/:year-:month-:day-:title.html
 permalink_defaults:
@@ -70,7 +70,7 @@ theme: apollo
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: git
-  repo: https://ykb553%40163.com@git.oschina.net/yokoboy/yokoboy.git
-  branch: osc-pages
-  message: 
+  -type: git
+   repo: https://ykb553%40163.com@git.coding.net/yokoboy/yokoboy.git
+   branch: coding-pages
+   message:
