@@ -2,7 +2,7 @@
 
 title: 手写 maven 插件
 date: 2016-12-11
-desc: 手写 Maven 插件，第一个Maven插件，Maven插件入门
+desc: 手写 Maven 插件,第一个Maven插件,Maven插件入门
 ---
 
 本文主要通过编写一个插件来加深对`maven插件机制` `生命周期` `插件目标` `插件解析机制` 等概念的理解，插件本身并没有实际功能，只是输出一句 `Hello World`。

@@ -1,7 +1,7 @@
 ---
 title: Guava Cache
 date: 2017-01-02 00:00:00
-desc: Guava Cache;Guava 缓存
+desc: Guava Cache,Guava 缓存
 ---
 Guava Cache 可以是实现以下功能
 

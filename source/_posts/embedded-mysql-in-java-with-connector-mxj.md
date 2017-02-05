@@ -2,7 +2,7 @@
 
 title: 使用 MySQL Connector/MXJ 在 Java 中嵌入 MySQL 进行测试
 date: 2017-02-05
-desc: MySQL Connector/MXJ;嵌入 MySQL;测试
+desc: MySQL Connector/MXJ,嵌入 MySQL,测试
 
 ---
 

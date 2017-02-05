@@ -36,7 +36,6 @@ date: 2016-8-24
     23. [解释器模式](/hidden/design-pattern/23-interpreter.html)
 
 
-
 ### 设计模式的六大原则
 
 ##### 开闭原则（Open Close Principle）

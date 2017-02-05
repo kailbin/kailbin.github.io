@@ -1,7 +1,7 @@
 ---
 title: ZooKeeper ACL 权限控制
 date: 2017-01-04 00:00:00
-desc: ZooKeeper;ACL;权限控制
+desc: ZooKeeper,ACL,权限控制
 ---
 
 ZooKeeper ACL 的权限控制信息由三部分组成：`scheme:id:permission`， 分别是 **权限模式**、**权限对象** 和 **权限**。
