@@ -73,8 +73,8 @@ deploy:
     branch: coding-pages
     message:
 
-  - type: git
-    repo: https://ykb553%40163.com@git.oschina.net/yokoboy/yokoboy.git
-    branch: coding-pages
-    message:
+#  - type: git
+#    repo: https://ykb553%40163.com@git.oschina.net/yokoboy/yokoboy.git
+#    branch: coding-pages
+#    message:
 
