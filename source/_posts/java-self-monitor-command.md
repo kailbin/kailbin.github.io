@@ -1,6 +1,6 @@
 ---
 title: Java 内建"监控"工具
-date: 2000-02-7
+date: 2017-02-07
 desc: java,jps,jstat,jstatd,jmc,远程监控,Java进程
 ---
 
