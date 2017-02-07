@@ -1,11 +1,10 @@
-package fileCan;
-
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.WatchEvent.Kind;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 class WatchRecursiveRafaelNadal {
 
@@ -31,6 +30,12 @@ class WatchRecursiveRafaelNadal {
                 if (exc != null) {
                     exc.printStackTrace();
                 }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                System.out.println("失败" + file);
                 return FileVisitResult.CONTINUE;
             }
         };
@@ -102,7 +107,7 @@ public class a {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        final Path path = Paths.get("D:/Java");
+        final Path path = Paths.get("D:/");
         WatchRecursiveRafaelNadal watch = new WatchRecursiveRafaelNadal();
 
         watch.watchRNDir(path);
