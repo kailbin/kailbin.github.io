@@ -199,7 +199,7 @@ $ jinfo -flag MaxHeapSize 56227
 
 
 
-# jmap: 打印Java进程的 堆、核心文件、远程调试服务 信息
+# jmap
 
 
 `jmap` 可以输出 Java 进程 内存中对象的工具，64位机上使用需要加上`-J-d64`参数。jmap 一般和 `jhat` 或者 `MAT`  配合使用，以图像的形式直观的展示当前内存是否有问题。
@@ -384,7 +384,24 @@ Heap dump file created
 
 
 
-# jhat: 分析 Java 堆`heap` 的工具
+# jhat
+
+`jhat` 可以对 dump 出来的堆信息进行处理，以 html 页面的形式展示出来。
+
+执行 `jhat /tmp/123.hprof`即可，默认端口是 `7000`，访问 `http://localhost:7000` 即可查看结果。
+
+通过 `-port` 指定端口。
+
+有时候文件过大的时候可能会出错，可以通过`-J-Xmx1024m`修改JVM最大可用内存。
+
+其他参数详请查看官方文档。
+
+#### 参考
+
+> [jhat](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jhat.html)官方文档
+>
+> [ jhat中的OQL（对象查询语言](http://blog.csdn.net/gtuu0123/article/details/6039592)
+
 
 
 
@@ -401,3 +418,5 @@ Heap dump file created
 >[JDK Tools and Utilities](http://docs.oracle.com/javase/8/docs/technotes/tools/)
 >
 >[Java Platform, Standard Edition (Java SE) 8](http://docs.oracle.com/javase/8/)
+>
+>[JDK命令](http://blog.csdn.net/gtuu0123/article/category/822015)
