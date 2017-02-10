@@ -1,6 +1,6 @@
 ---
 title: Java 内建"故障排除"工具 — jcmd、jinfo、jhat、jmap、jsadebugd、jstack
-date: 2000-02-10
+date: 2017-02-10
 desc: jcmd,jinfo,jhat,jmap,jsadebugd,jstack
 ---
 
@@ -8,11 +8,11 @@ jcmd: 向 JVM 发送诊断命令
 
 jinfo: 获得 JVM 配置信息
 
-jmap: 打印Java进程的 堆、核心文件、远程调试服务 信息
+jmap: 主要用于打印Java进程的 堆 信息
 
-jhat: 分析 Java 堆`heap` 的工具
+jhat: 方便析 Java 堆 的工具
 
-jstack: 打印Java进程的 栈、核心文件、远程调试服务 信息
+jstack: 主要用于打印Java进程的 栈 信息
 
 jsadebugd: 依附到一个Java进程或核心文件，担当一个调试服务器的作用
 
@@ -242,7 +242,7 @@ $ jinfo -flag MaxHeapSize 56227
 #### 例子
 
 
-**jmap -histo <pid>**
+**jmap -histo `<pid>`**
 
 打印每个Java类、对象数量、内存大小(单位：字节)、完全限定的类名。
 
@@ -283,7 +283,7 @@ Total        188585       28109352
 > *[*  数组，如[I表示int[]
 > *[L+类名* 其他对象
 
-**jmap -heap <pid>**
+**jmap -heap `<pid>`**
 
 查看进程堆内存使用情况，包括使用的GC算法、堆配置参数和各代中堆内存使用情况
 
@@ -348,7 +348,7 @@ $ jstat -gc 56227
 10752.0 10752.0  0.0    0.0   66048.0   8435.4   70144.0     3846.3   33280.0 17449.5      5    0.046   4      0.193    0.239
 ```
 
-**jmap -dump:format=b,file=<dumpFileName> <pid>**
+**jmap -dump:format=b,file=`<dumpFileName>`  `<pid>`**
 
 用jmap把进程内存使用情况dump到文件中
 ``` bash
@@ -406,9 +406,71 @@ Heap dump file created
 
 
 
-# jstack: 打印Java进程的 栈、核心文件、远程调试服务 信息
+# jstack
 
-# jsadebugd: 依附到一个Java进程或核心文件，担当一个调试服务器的作用
+`jstack` 可以打印出 线程的状态、调用栈、锁资源 等信息。 可以用于分析死锁、性能瓶颈等问题。用法相对简单但非常有用。
+
+#### 参数
+
+```` bash
+-F          当 jstack [-l] <pid> 无相应的时候可以使用该参数强制dump
+
+-l          打印关于锁的附加信息,例如属于java.util.concurrent的ownable synchronizers列表
+
+-m          打印 java 和 native 代码的所有栈信息
+
+-h|-help    打印帮助信息
+````
+
+#### 参考
+
+> [jstack](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jstack.html)官方文档
+>
+> [JAVA线程dump的分析 --- jstack pid](http://www.blogjava.net/jzone/articles/303979.html)
+
+
+
+
+
+
+# jsadebugd
+
+`jsadebugd`依附到一个Java进程，开启一个rmi服务，担当一个调试服务器的作用，可供 `jinfo`、`jmap`、`jstack` 命令拉取远程机器上的信息。
+
+#### 开启服务
+
+``` bash
+$ jsadebugd 71069
+Attaching to process ID 71069 and starting RMI services, please wait...
+Debugger attached and RMI services started.
+```
+开启之后可以通过 `Ctrl + C` 关闭停止
+
+#### 远程连接
+
+``` bash
+$ jinfo localhost
+  
+Attaching to remote server localhost, please wait...
+Debugger attached successfully.
+Server compiler detected.
+JVM version is 24.75-b04
+Java System Properties:
+  
+idea.version = =2016.3.3
+java.runtime.name = Java(TM) SE Runtime Environment
+java.vm.version = 24.75-b04
+  
+......
+
+```
+`jmap`、`jstack` 类似。
+
+
+#### 参考
+> [jsadebugd](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jsadebugd.html)官方文档
+
+
 
 
 # 参考
