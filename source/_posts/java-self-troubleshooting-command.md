@@ -1,21 +1,15 @@
 ---
-title: Java 内建"故障排除"工具 — jcmd、jinfo、jhat、jmap、jsadebugd、jstack
+title: Java 内建"故障排除"工具 — jcmd、jinfo、jmap、jhat、jstack、jsadebugd
 date: 2017-02-10
 desc: jcmd,jinfo,jhat,jmap,jsadebugd,jstack
 ---
 
 jcmd: 向 JVM 发送诊断命令
-
 jinfo: 获得 JVM 配置信息
-
 jmap: 主要用于打印Java进程的 堆 信息
-
 jhat: 方便析 Java 堆 的工具
-
 jstack: 主要用于打印Java进程的 栈 信息
-
 jsadebugd: 依附到一个Java进程或核心文件，担当一个调试服务器的作用
-
 
 以上几个只有 `jcmd` 没有被官方说明为 `Experimental`(实验性的)。
 
