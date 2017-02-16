@@ -144,7 +144,7 @@ PUBSUB NUMSUB it.*
 </dependency>
 ```
 
-```java
+``` java
 Jedis jedis = new Jedis();
   
 JedisPubSub jedisPubSub = new JedisPubSub() {
