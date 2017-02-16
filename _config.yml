@@ -6,7 +6,7 @@
 title: Mr.Kail's Blog
 subtitle:
 description: Mr.Kail's Blog
-author: Mr.Kail
+author: Kail
 language: zh-CN
 timezone:
 
@@ -64,6 +64,7 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: apollo
+#theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
