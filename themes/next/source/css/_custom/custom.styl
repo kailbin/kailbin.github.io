@@ -1,1 +1,115 @@
 // Custom styles.
+
+$c-green-main = #42b983;
+$c-green-light = #54FFB7;
+$fw-normal = lighter;
+$fw-bold = normal;
+
+// 全局
+.main-inner {
+  width: 800px;
+}
+
+::selection {
+  background: $c-green-main;
+  color: $selection-color;
+}
+
+body {
+  font-weight: $fw-normal;
+  text-shadow: .5px .5px 0.5px rgba(165, 165, 165, 0.27);
+}
+
+b, strong {
+  font-weight: $fw-bold;
+}
+
+// 代码的颜色
+code {
+  color: $c-green-main;
+  font-weight: $fw-normal;
+}
+
+// 引用竖线颜色
+blockquote {
+  border-left-color: $c-green-main;
+}
+
+// 列表页标题
+.posts-expand .post-title {
+  font-size: 20px;
+  font-weight: $fw-bold;
+}
+
+.posts-expand .post-title, .posts-expand .post-meta {
+  text-align: center;
+}
+
+.posts-expand .post-title-link::before {
+  background-color: $c-green-main;
+}
+
+// 列表文章间距
+.posts-expand .post {
+  margin-top: 50px;
+}
+
+// 列表页文章分割先线
+.post-eof {
+//background: $green-main;
+  display: block;
+  margin: 40px auto 0px;
+  width: 4%;
+}
+
+// 列表页阅读更多按钮
+.post-more-link .btn {
+  display: none;
+}
+
+.post-toc .nav .active > a, .post-toc .nav .active-current > a {
+  color: $c-green-main;
+  border-bottom-color: $c-green-main;
+}
+
+.post-toc .nav .active > a:hover {
+  color: $c-green-light;
+}
+
+.sidebar-nav .sidebar-nav-active {
+  color: $c-green-main;
+  border-bottom-color: $c-green-main;
+}
+
+.sidebar-nav .sidebar-nav-active:hover {
+  color: $c-green-light;
+}
+
+// 分页器居中
+.pagination {
+  text-align: center;
+}
+
+// 右下角功能按钮
+.sidebar-toggle {
+  background: transparent;
+}
+
+.page-post-detail .sidebar-toggle-line, .sidebar-toggle-line {
+  background: $c-green-main;
+}
+
+.back-to-top {
+  color: $c-green-main;
+  background: transparent;
+}
+
+// 页脚
+.footer-inner {
+  text-align: center;
+  font-weight: $fw-normal;
+  font-size: smaller;
+}
+
+
+
