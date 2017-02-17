@@ -162,7 +162,7 @@ toc:
   enable: true
 
   # Automatically add list number to toc.
-  number: true
+  number: false
 
 
 # Creative Commons 4.0 International License.
@@ -266,7 +266,7 @@ mathjax:
 #baidu_analytics:
 
 # Duoshuo ShortName
-#duoshuo_shortname:
+duoshuo_shortname: yokoboy
 
 # Disqus
 #disqus_shortname:
@@ -287,7 +287,7 @@ mathjax:
 #add_this_id:
 
 # Share
-#duoshuo_share: true
+# duoshuo_share: true
 
 # Google Webmaster tools verification setting
 # See: https://www.google.com/webmasters/
@@ -298,7 +298,7 @@ mathjax:
 #google_analytics:
 
 # CNZZ count
-#cnzz_siteid:
+cnzz_siteid: 1259496109
 
 # Application Insights
 # See https://azure.microsoft.com/en-us/services/application-insights/
@@ -341,7 +341,7 @@ leancloud_visitors:
   app_key: #<app_key>
 
 # Show PV/UV of the website/page with busuanzi.
-# Get more information on http://ibruce.info/2015/04/04/busuanzi/
+# Get more information on
 busuanzi_count:
   # count values only if the other configs are false
   enable: false
@@ -364,7 +364,7 @@ busuanzi_count:
 
 
 # Enable baidu push so that the blog will push the url to baidu automatically which is very helpful for SEO
-baidu_push: false
+baidu_push: true
 
 # Google Calendar
 # Share your recent schedule to others via calendar page
