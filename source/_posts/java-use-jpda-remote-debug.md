@@ -3,7 +3,7 @@ title: Java JPDA 远程调试
 date: 2017-02-17
 desc: JPDA,远程调试,IDEA,Tomcat,Resin
 
-tags: [JPDA,debug]
+tags: [JPDA,debug,jcmd,jps,jinfo]
 
 ---
 
