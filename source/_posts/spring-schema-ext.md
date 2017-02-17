@@ -2,6 +2,9 @@
 title: Spring Schema 扩展
 date: 2017-02-11
 desc: spring标签,scheme,AbstractSingleBeanDefinitionParser,NamespaceHandlerSupport
+
+tags: [Spring]
+
 ---
 
 Spring提供了可扩展Schema的支持，一般情况下，扩展Spring标签的意义并不大，但是对第三方工具来说，开发自己的标签供开发人员使用还是很有必要的。

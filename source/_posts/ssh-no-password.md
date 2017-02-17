@@ -4,6 +4,8 @@ title: ssh 免密码登录
 date: 2016-6-11 23:00:04
 desc: git 常用命令
 
+tags: [git,ssh]
+
 ---
 
 如果没有安装ssh，先进行安装

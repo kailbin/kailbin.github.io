@@ -4,6 +4,7 @@ title: Git 恢复和还原
 date: 2016-09-10
 desc: git 恢复和还原
 
+tags: [git]
 ---
 
 ### 删除未被跟踪的文件

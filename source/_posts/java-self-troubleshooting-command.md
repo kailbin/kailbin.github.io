@@ -2,6 +2,9 @@
 title: Java 内建"故障排除"工具 — jcmd、jinfo、jmap、jhat、jstack、jsadebugd
 date: 2017-02-10
 desc: jcmd,jinfo,jhat,jmap,jsadebugd,jstack
+
+tags: [Java,jcmd,jinfo,jhat,jmap,jstack,debug]
+
 ---
 
 jcmd: 向 JVM 发送诊断命令

@@ -4,6 +4,8 @@ title: Nginx 编译 安装笔记
 date: 2016-06-25
 desc: Nginx 安装
 
+tags: [Nginx,软件安装]
+
 ---
 
 #### 准备

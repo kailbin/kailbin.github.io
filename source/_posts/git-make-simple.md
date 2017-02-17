@@ -4,6 +4,8 @@ title: git 常用命令
 date: 2016-6-10
 desc: git 常用命令
 
+tags: [git,常用命令]
+
 ---
 
 ### 全局设置

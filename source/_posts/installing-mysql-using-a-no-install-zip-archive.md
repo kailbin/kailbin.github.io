@@ -4,6 +4,8 @@ title: 解压版MySQL 安装
 date: 2016-07-09 21:59:59
 desc: 解压版MySQL 安装
 
+tags: [软件安装,MySQL]
+
 ---
 
 ### 下载

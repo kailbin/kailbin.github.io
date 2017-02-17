@@ -1,7 +1,10 @@
 ---
 title: 阻塞/非阻塞、同步/异步、并发/并行 概念
 date: 2017-01-01 00:00:00
-desc: 阻塞,非阻塞,blocking,non blocking,同步,异步,synchronous,asynchronous,并行;并发,concurrent,parallel,
+desc: 阻塞,非阻塞,blocking,non blocking,同步,异步,synchronous,asynchronous,并行;并发,concurrent,parallel
+
+tags: [概念]
+
 ---
 - `阻塞/非阻塞` ：关键词 `循环`、`检查`，用于描述 程序在等待调用结果（消息，返回值）时的**状态**
 - `同步/异步` ：关键词 `通知`，用于描述 程序在调用之后是否为立即响应，然后接收任务完成后的**通知**

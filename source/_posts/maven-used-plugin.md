@@ -5,6 +5,8 @@ title: maven 常用插件
 date: 2015-08-17 22:53:06
 desc: maven 常用插件
 
+tags: [Maven]
+
 ---
 
 ### maven-clean-plugin

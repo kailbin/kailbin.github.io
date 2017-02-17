@@ -2,6 +2,9 @@
 title: Java 内建"监控"工具 — jps、jstat、jstatd
 date: 2017-02-07
 desc: java,jps,jstat,jstatd,jmc,远程监控,Java进程
+
+tags: [Java,jps,jstat,jstatd,debug] 
+
 ---
 
 jps: 列出当前系统的Java进程

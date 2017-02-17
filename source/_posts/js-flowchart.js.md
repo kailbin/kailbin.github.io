@@ -4,6 +4,8 @@ title: flowchart.js 绘制流程图
 date: 2016-12-17
 desc: flowchart.js 绘制流程图,Markdown 流程图
 
+tags: [js]
+
 ---
 
 通过文本绘制简单的SVG流程图

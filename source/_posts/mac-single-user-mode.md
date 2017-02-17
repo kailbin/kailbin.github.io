@@ -2,6 +2,9 @@
 title: Mac 单用户模式(Single User Mode)获得root权限
 date: 2017-02-16
 desc: mac,单用户模式,Single User Mode
+
+tags: [MAC]
+
 ---
 
 最近在用 CleanMyMac 的时候把一些系统文件给删掉了，主要还是用 Windows 上的软件管理工具用习惯了，卸载软件有了洁癖。

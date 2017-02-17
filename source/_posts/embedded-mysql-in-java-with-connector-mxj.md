@@ -4,6 +4,7 @@ title: 使用 MySQL Connector/MXJ 在 Java 中嵌入 MySQL 进行测试
 date: 2017-02-05
 desc: MySQL Connector/MXJ,嵌入 MySQL,测试
 
+tags: [MySQL,测试]
 ---
 
 MySQL Connector/MXJ 是一个可以通过 Java API 启动或者关闭嵌入式MySQL的工具。 

@@ -4,6 +4,8 @@ title: Java SPI
 date: 2016-12-13
 desc: Java SPI
 
+tags: [Java,SPI]
+
 ---
 
 SPI的全名为Service Provider Interface，是针对厂商或者插件的，在`java.util.ServiceLoader`的文档里有比较详细的介绍。
