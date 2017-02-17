@@ -57,9 +57,11 @@ blockquote {
 // 列表页文章分割先线
 .post-eof {
 //background: $green-main;
-  display: block;
+  display: block !important;
   margin: 40px auto 0px;
-  width: 4%;
+  width: 80% !important;
+  background: #eee !important;
+  box-shadow : 1px -1px 2px #eee;
 }
 
 // 列表页阅读更多按钮
@@ -88,6 +90,20 @@ blockquote {
 // 分页器居中
 .pagination {
   text-align: center;
+  border-top: none;
+}
+
+.pagination .page-number.current {
+  background: $c-green-main;
+  border-top-color: $c-green-main;
+}
+
+.pagination > a:hover {
+  background: #eee;
+}
+
+.pagination .prev, .pagination .next, .pagination .page-number {
+  border-top: none;
 }
 
 // 右下角功能按钮
