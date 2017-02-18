@@ -10,7 +10,7 @@ tags: [Redis,软件安装]
 
 
 
-### 快速安装
+# 快速安装
 
 下面是最基本的安装步骤，便于快速上手操作,操作环境在为 windows bash
 
@@ -28,7 +28,7 @@ make
 
 配置文件在 `redis-3.2.6` 下面。
 
-##### 启动
+# 启动
 ```bash
 # 启动服务
 src/redis-server redis.conf
@@ -40,17 +40,16 @@ src/redis-cli             # or `redis-cli -h 127.0.0.1 -p 6379`
 shutdown                  # or `Ctrl + C`
 ```
 
-### 集群安装
-// TODO
 
 
-> #### 参考
+> # 参考
 >
 > [Redis官网](https://redis.io/download)
 >
 > [Redis中文网](http://www.redis.cn/download.html)
 >
->#### 工具
+
+# 工具
 >
 > [jedis github wiki](https://github.com/xetorthio/jedis/wiki)
 >

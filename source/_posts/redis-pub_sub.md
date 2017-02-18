@@ -12,16 +12,16 @@ tags: [Redis]
 
 <!--more-->
 
-### 命令概述
+# 命令概述
 
-#### SUBSCRIBE & PSUBSCRIBE
+## SUBSCRIBE & PSUBSCRIBE
 
 订阅给定的一个或多个频道的信息，不同之处在于 `PSUBSCRIBE` 可以模式（模糊）订阅，比如 it* 匹配所有以 it 开头( it.news、it.blog、……)的频道。
 
 SUBSCRIBE  channel_1 [channel_2 ...]
 PSUBSCRIBE pattern_1 [pattern_2 ...]
 
-#### PUBLISH
+## PUBLISH
 
 将信息 message 发送到指定的频道(channel)
 
@@ -33,7 +33,7 @@ O(N+M)，其中 N 是频道 channel 的订阅者数量，而 M 则是使用模�
 接收到信息 message 的订阅者数量。
 
 
-##### UNSUBSCRIBE & PUNSUBSCRIBE
+## UNSUBSCRIBE & PUNSUBSCRIBE
 
 `UNSUBSCRIBE [channel [channel ...]]` or `PUNSUBSCRIBE [pattern [pattern ...]]`
 
@@ -42,7 +42,7 @@ O(N+M)，其中 N 是频道 channel 的订阅者数量，而 M 则是使用模�
 
 如果没有注定参数，那么客户端订阅的所有 模式/频道 都会被退订。在这种情况下，命令会返回一个信息，告知客户端所有被退订的 模式/频道。
 
-##### PUBSUB
+## PUBSUB
 
 `PUBSUB` 由三个子命令组成(`CHANNELS`/`NUMSUB`/`NUMPAT`)，需要配合使用。
 
@@ -68,11 +68,11 @@ PUBSUB NUMSUB it.*
 **NUMPAT：** 查看有多少种订阅模式
 
 
-### 发布/订阅模式的结构
+# 发布/订阅模式的结构
 
 结构用json表示
 
-##### SUBSCRIBE 
+## SUBSCRIBE 
 
 ```json
 {
@@ -85,7 +85,7 @@ PUBSUB NUMSUB it.*
 `PUBLISH` 的时候，找到对应的键，遍历其值，发送消息即可。即是上面介绍 `PUBLISH` 时间复杂度中的`N`。
 
 
-##### PSUBSCRIBE
+## PSUBSCRIBE
 
 ```json
 [
@@ -134,9 +134,9 @@ PUBSUB NUMSUB it.*
 > [订阅发布机制](http://wiki.jikexueyuan.com/project/redis/subscribe-to-release-mechanism.html)
 > [黄健宏 Github](https://github.com/huangz1990)
 
-### 客户端的使用
+# 客户端的使用
 
-##### Jedis
+## Jedis
 
 ```xml
 <dependency>
@@ -185,8 +185,9 @@ PUBLISH hello asd
     onUnsubscribe::hello: subscribedChannels:1          # onPUnsubscribe
     onUnsubscribe::sub.*: subscribedChannels:0          # onPUnsubscribe
 
+# 参考
 > [Pub/Sub（发布/订阅）](http://doc.redisfans.com/pub_sub/index.html)
 >
 > [Redis 设计与实现](http://redisbook.com/index.html)
->
+
 

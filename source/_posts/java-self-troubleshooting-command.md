@@ -24,12 +24,12 @@ jcmd 是JDK 7 之后推出的一个多功能工具，拥有 `jmap` 的大部分�
 
 
 
-#### 列出 Java 进程
+## 列出 Java 进程
 
 直接执行 `jcmd` 即可列出java进行，效果与 `jcmd -l` 、 `jps -ml` 的效果是一样的
 
 
-#### 打印出 java 进行支持的命令
+## 打印出 java 进行支持的命令
 
 `jcmd 0 help` ： 打印出所有java进程支持的命令
 `jcmd <pid> help` ： 打印出执行java进程支持的命令
@@ -63,7 +63,7 @@ For more information about a specific command use 'help <command>'.
 
 **不同环境、不同进程 所可用的命令会不太一样**
 
-#### 获取可用命令的帮助
+## 获取可用命令的帮助
 
 `jcmd <pid> help command `
 
@@ -85,7 +85,7 @@ Options: (options must be specified using the <key> or <key>=<value> syntax)
 	-all : [optional] Dump all objects, including unreachable objects (BOOLEAN, false)
 ```
 
-#### 使用 jcmd 支持的命令
+## 使用 jcmd 支持的命令
 
 `jcmd <pid> command `
 
@@ -111,24 +111,24 @@ Launcher Type: SUN_STANDARD
 ```
 
 
-#### 部分命令功能
+## 部分命令功能
 
-| 命令 |  | 英文解释 |
-|----:|:----|:----|
-|GC.heap_dump           |  | Generate a HPROF format dump of the Java heap.|
-|Thread.print           |  | Print all threads with stacktraces.|
+| 命令 |  英文解释 |
+|----:|:----|
+|GC.heap_dump             | Generate a HPROF format dump of the Java heap.|
+|Thread.print             | Print all threads with stacktraces.|
 |||
-|GC.run                 |  | all java.lang.System.gc().|
-|GC.class_histogram     |  | Provide statistics about the Java heap usage.|
-|GC.run_finalization    |  | Call java.lang.System.runFinalization().|
+|GC.run                   | all java.lang.System.gc().|
+|GC.class_histogram       | Provide statistics about the Java heap usage.|
+|GC.run_finalization      | Call java.lang.System.runFinalization().|
 |||
-|VM.uptime              |  | Print VM uptime.|
-|VM.system_properties   |  | Print system properties.|
-|VM.command_line        |  | Print the command line used to start this VM instance.|
-|VM.flags               |  | Print VM flag options and their current values.|
-|VM.version             |  | Print JVM version information.|
+|VM.uptime                | Print VM uptime.|
+|VM.system_properties     | Print system properties.|
+|VM.command_line          | Print the command line used to start this VM instance.|
+|VM.flags                 | Print VM flag options and their current values.|
+|VM.version               | Print JVM version information.|
 
-#### 参考
+## 参考
 
 > 官方文档 [jcmd](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jcmd.html)
 
@@ -141,7 +141,7 @@ Launcher Type: SUN_STANDARD
 
 `jinfo` 可以打印或者修改 Java进程 的配置信息。配置信息包括 Java 系统属性 和 JVM flags（ Java system properties and Java Virtual Machine (JVM) command-line flags）。
 
-#### 查看帮助
+## 查看帮助
 
 `jinfo`、`jinfo -h`、`jinfo -help` 三种方法都可以打印出帮助信息。
 
@@ -166,7 +166,7 @@ where <option> is one of:
 
 ```
 
-#### 系统配置
+## 系统配置
 
 `jinfo <pid> `
  
@@ -174,7 +174,7 @@ where <option> is one of:
 
 `jinfo <pid> | grep java.version`
 
-#### command-line flags
+## command-line flags
 
 **获取**
 ``` bash
@@ -188,7 +188,7 @@ $ jinfo -flag MaxHeapSize 56227
 -XX:MaxHeapSize=805306368
 ```
 
-#### 参考
+## 参考
 
 > 官方文档 [jinfo](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jinfo.html)
 
@@ -201,7 +201,7 @@ $ jinfo -flag MaxHeapSize 56227
 
 `jmap` 可以输出 Java 进程 内存中对象的工具，64位机上使用需要加上`-J-d64`参数。jmap 一般和 `jhat` 或者 `MAT`  配合使用，以图像的形式直观的展示当前内存是否有问题。
 
-#### 参数说明
+## 参数说明
 ``` bash
 -dump:[live,]format=b,file=<filename>
     以hprof二进制格式转储Java堆到指定filename的文件中。
@@ -236,7 +236,7 @@ $ jinfo -flag MaxHeapSize 56227
 
 
 
-#### 例子
+## 例子
 
 
 **jmap -histo `<pid>`**
@@ -366,7 +366,7 @@ Heap dump file created
 
 
 
-#### 参考
+## 参考
 
 > [jmap](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jmap.html)官方文档
 >
@@ -393,7 +393,7 @@ Heap dump file created
 
 其他参数详请查看官方文档。
 
-#### 参考
+## 参考
 
 > [jhat](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jhat.html)官方文档
 >
@@ -407,7 +407,7 @@ Heap dump file created
 
 `jstack` 可以打印出 线程的状态、调用栈、锁资源 等信息。 可以用于分析死锁、性能瓶颈等问题。用法相对简单但非常有用。
 
-#### 参数
+## 参数
 
 ```` bash
 -F          当 jstack [-l] <pid> 无相应的时候可以使用该参数强制dump
@@ -419,7 +419,7 @@ Heap dump file created
 -h|-help    打印帮助信息
 ````
 
-#### 参考
+## 参考
 
 > [jstack](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jstack.html)官方文档
 >
@@ -434,16 +434,16 @@ Heap dump file created
 
 `jsadebugd`依附到一个Java进程，开启一个rmi服务，担当一个调试服务器的作用，可供 `jinfo`、`jmap`、`jstack` 命令拉取远程机器上的信息。
 
-#### 开启服务
+## 开启服务
 
 ``` bash
-$ jsadebugd 71069
-Attaching to process ID 71069 and starting RMI services, please wait...
+$ jsadebugd <pid>
+Attaching to process ID <pid> and starting RMI services, please wait...
 Debugger attached and RMI services started.
 ```
 开启之后可以通过 `Ctrl + C` 关闭停止
 
-#### 远程连接
+## 远程连接
 
 ``` bash
 $ jinfo localhost
@@ -464,7 +464,7 @@ java.vm.version = 24.75-b04
 `jmap`、`jstack` 类似。
 
 
-#### 参考
+## 参考
 > [jsadebugd](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jsadebugd.html)官方文档
 
 

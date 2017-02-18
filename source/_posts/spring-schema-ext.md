@@ -15,7 +15,7 @@ Spring提供了可扩展Schema的支持，一般情况下，扩展Spring标签�
 
 <!--more-->
 
-### 依赖
+# 依赖
 
 ``` xml
 <dependency>
@@ -25,7 +25,7 @@ Spring提供了可扩展Schema的支持，一般情况下，扩展Spring标签�
 </dependency>
 ```
 
-### 从 `NamespaceHandlerSupport` 入手
+# 从 `NamespaceHandlerSupport` 入手
 
 可以通过 IDE 查看 `NamespaceHandlerSupport` 的继承关系，常见的如 `TxNamespaceHandler`、`MvcNamespaceHandler`、`AopNamespaceHandler` 等都是该类的子类。
 
@@ -65,7 +65,7 @@ public class PojoNamespaceHandler extends NamespaceHandlerSupport {
 
 ```
 
-### 实现 PojoBeanParser
+# 实现 PojoBeanParser
 
 
 ``` java
@@ -108,7 +108,7 @@ public class PojoBeanParser extends AbstractSingleBeanDefinitionParser {
 
 ```
 
-##### MySelfVO 对象如下
+## MySelfVO 对象如下
 
 ``` java
 package xyz.kail.blog.example;
@@ -129,13 +129,13 @@ public class MySelfVO {
 
 ```
 
-### 编写 Scheme
+# 编写 Scheme
 
 XML Schema 的作用是定义 XML 文档的合法构建模块，是W3C标准。
 
 通俗来讲就是定义了一个XML文件应该有哪些元素、一个元素可以有哪些属性、属性必须是什么值、属性的类型等。
 
-#### META-INF/kail-pojo.xsd 文件
+## META-INF/kail-pojo.xsd 文件
 ``` xml
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -158,19 +158,19 @@ XML Schema 的作用是定义 XML 文档的合法构建模块，是W3C标准。
 该xsd 定义了一个 pojo 元素，包含 `id`、`username`、`birthday`三个属性，`id`是必填的，`username`是字符串类型的，`birthday`是日期类型的。
 编写完 scheme 文件后，还需要在 `META-INF` 目录下写入 `spring.handlers`和`spring.schemas`两个文件，指明标签的实现和 scheme 文件位置，格式如下：
 
-#### META-INF/spring.handlers
+## META-INF/spring.handlers
 ``` 
 http\://blog.kail.xyz/schema/kail=xyz.kail.blog.example.PojoNamespaceHandler
 ```
 
-#### META-INF/spring.schemas
+## META-INF/spring.schemas
 ``` 
 http\://blog.kail.xyz/schema/kail/kail-pojo.xsd=META-INF/kail-pojo.xsd
 ```
 
-### 测试
+# 测试
 
-#### 添加依赖
+## 添加依赖
 
 ``` xml
 <dependency>
@@ -186,7 +186,7 @@ http\://blog.kail.xyz/schema/kail/kail-pojo.xsd=META-INF/kail-pojo.xsd
 </dependency>
 ```
 
-#### 测试类
+## 测试类
 
 ``` java
 import org.junit.Test;
@@ -224,7 +224,7 @@ public class PojoNSTest {
 
 ```
 
-#### applicationContext.xml 文件
+## applicationContext.xml 文件
 ``` xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -256,7 +256,7 @@ public class PojoNSTest {
 </beans>
 ```
 
-### PS
+# PS
 
 本文讲的比较简单，复杂用法可以查看官方文档[42. Extensible XML authoring](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/xml-custom.html)，Scheme 语法可以查看 [w3c.cn Schema 教程](http://www.w3school.com.cn/schema/index.asp).
 

@@ -16,7 +16,7 @@ tags: [js]
 <!--more-->
 
 
-### 表达式
+# 表达式
 
 <textarea id="code" style="box-shadow: 0px 0px 10px #42b983 inset;width: 100%;padding: 10px; " rows="4"></textarea>
 
@@ -24,12 +24,12 @@ tags: [js]
 
 <br/>
 
-### 结果
+# 结果
 <div id="diagram" style="width: 100% ;border: 1px solid #42b983 ;padding: 10px; margin: 20px 0px"></div>
 
-### 拷贝一下代码到文本框中，点击运行查看效果
+# 拷贝一下代码到文本框中，点击运行查看效果
 
-##### 官方示例1
+## 官方示例1
 ```code
 st=>start: Start:>http://www.google.com[blank]
 e=>end:>http://www.google.com
@@ -44,7 +44,7 @@ cond(yes)->io->e
 cond(no)->sub1(right)->op1
 ```
 
-##### 官方示例2
+## 官方示例2
 ```code
 st=>start: Start|past:>http://www.google.com[blank]
 e=>end: End|future:>http://www.google.com
@@ -63,7 +63,7 @@ c2(yes)->io->e
 c2(no)->op2->e
 ```
 
-##### 开源协议介绍
+## 开源协议介绍
 ```code
 begin=>start: 如何选择开源许可证？ :> http://www.ruanyifeng.com/blog/2011/05/how_to_choose_free_software_licenses.html[blank]
 
@@ -102,7 +102,7 @@ must_doc(no)->lgpl
 change_copy(yes)->mit
 ```
 
-### 本文中的代码
+# 本文中的代码
 ```html
 
 ### 表达式
@@ -147,7 +147,7 @@ change_copy(yes)->mit
 
 ```
 
-### flowchart.js 参数配置
+# flowchart.js 参数配置
 
 ```js
 diagram.drawSVG('diagram', 

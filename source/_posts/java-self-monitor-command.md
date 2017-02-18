@@ -24,7 +24,7 @@ jmc: 启动 Java Mission Controla 工具， 监控和管理正在运行的Java�
 
 `jps [-q] [-mlvV] [<hostid>]`    
 
-#### options
+## options
 ``` bash
 -help       帮助信息
 -q          只列出进程ID
@@ -35,12 +35,12 @@ jmc: 启动 Java Mission Controla 工具， 监控和管理正在运行的Java�
 -J          给jps命令传递JVM参数，例如：jps -J-Xms2m 分配了 2M 起始内存
 ```
 
-#### hostid
+## hostid
 
 可以进行远程监控，详请查看 ** [jstatd 例子](#jstatd)部分 **
 
 
-#### 官方文档
+## 官方文档
 
 jps - Java Virtual Machine Process Status Tool [JDK7](https://docs.oracle.com/javase/7/docs/technotes/tools/share/jps.html)/[JDK8]((http://docs.oracle.com/javase/8/docs/technotes/tools/windows/jps.html)
 
@@ -54,9 +54,9 @@ JDK7 和 JDK8 对 jps 的解释还是稍有不同的。
 
 
 
-# jstat 显示 JVM 统计信息
+# jstat 统计 JVM 信息
 
-### 一般参数
+## 一般参数
 
 ``` bash
 -help       显示帮助信息
@@ -80,7 +80,7 @@ $ jstat -options
 -printcompilation
 ```
 
-### 输出参数
+## 输出参数
 
 格式 ： `jstat -<option> [-t] [-h<lines>] <vmid> [<interval> [<count>]]`
 
@@ -91,7 +91,7 @@ $ jstat -options
 -h<lines>           没隔多少次输出一下统计表头
 ```
 
-### 例子
+## 例子
 
 ``` bash
 $ jstat -gc -t -h 4 20901 500 10
@@ -110,7 +110,7 @@ Timestamp        S0C    S1C    S0U    S1U      EC       EU        OC         OU 
          2003.2 10752.0 10752.0 8038.9  0.0   66048.0  45065.2   174592.0    627.8    21504.0 17411.2      2    0.039   1      0.029    0.069
 ```
 
-##### 解释
+## 解释
 ```
 -gc   ：JVM中堆的垃圾收集情况的统计
 -t    ：即第一列 Timestamp 这一列
@@ -168,7 +168,7 @@ printcompilation    HotSpot编译方法的统计
 
 jstatd 会开启一个 RMI 服务，供其他机器进行远程监控
 
-#### 参数
+## 参数
 
 ``` bash
 -nr     如果RMI注册中心没有找到，不会创建一个内部的RMI注册中心
@@ -177,7 +177,7 @@ jstatd 会开启一个 RMI 服务，供其他机器进行远程监控
 -J      传递JVM参数
 ```
 
-#### 例子
+## 例子
 
 **文件 `jstatd.all.policy`内容如下，给jstatd授予所有权限**
 ``` 
@@ -217,7 +217,7 @@ jstat -gcutil 11452@192.168.4.35:6789/rmiJstatsName 500 10
 jstatd -J-Djava.security.policy=jstatd.all.policy -J-Djava.rmi.server.logCalls=true
 ```
 
-### 详请查看以下文档
+## 详请查看以下文档
 
 > 官网 [jstatd](http://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstatd.html)
 >
