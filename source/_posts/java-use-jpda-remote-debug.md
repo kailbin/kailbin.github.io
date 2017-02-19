@@ -87,7 +87,8 @@ IDEA 比较人性化，各 JDK 版本的配置已经写好了，直接复制配�
     
 
 # 拓展阅读
-
+> [Java Platform Debugger Architecture (JPDA)](http://docs.oracle.com/javase/8/docs/technotes/guides/jpda/index.html)
+>
 > [深入 Java 调试体系: 第 1 部分，JPDA 体系概览](https://www.ibm.com/developerworks/cn/java/j-lo-jpda1/index.html)
 > 
 > [深入 Java 调试体系，第 2 部分: JVMTI 和 Agent 实现](https://www.ibm.com/developerworks/cn/java/j-lo-jpda2/index.html)
