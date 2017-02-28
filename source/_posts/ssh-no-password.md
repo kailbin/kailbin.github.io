@@ -15,7 +15,7 @@ sudo apt-get install ssh
 
 <!--more-->
 
-### 生成SSH公钥
+# 生成SSH公钥
 ``` shell
 $ ssh-keygen [-C "注释"] [-t rsa] [-P '']  
 ```
@@ -29,7 +29,7 @@ $ ssh-keygen [-C "注释"] [-t rsa] [-P '']
 一般情况下全部回车即可
 
 
-### 把生成的公钥复制到其它机器的`.ssh/authorzied_keys`文件中
+# 把生成的公钥复制到其它机器的`.ssh/authorzied_keys`文件中
 
 ``` shell
 # copy
@@ -60,14 +60,14 @@ $ cat .ssh/id_rsa.pub
 
 # git 其他免密码方式
 
-### 直接写到连接中
+## 直接写到连接中
 
 ``` git
 $ git remote set-url origin <https://username:password@url> 
 ```
 可以直接把用户名密码写到url中。**如果用户名密码包含`@`，需要写成`%40`**
 
-### git 全局配置
+## git 全局配置
 
 1. 在用户根目录下新建`.git-credentials`文件(`~/` OR `C:\Users\kail`)
 ```

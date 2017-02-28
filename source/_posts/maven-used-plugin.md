@@ -9,7 +9,7 @@ tags: [Maven]
 
 ---
 
-### maven-clean-plugin
+## maven-clean-plugin
 
 可以在构建的时候清理一些文件。
 
@@ -49,7 +49,7 @@ http://maven.apache.org/plugins/maven-clean-plugin/
 
 
 
-### maven-compiler-plugin
+## maven-compiler-plugin
 
 编译配置
 
@@ -73,14 +73,14 @@ http://maven.apache.org/plugins/maven-compiler-plugin/
 ```
                 
 
-### maven-install-plugin
+## maven-install-plugin
 
 把项目发布到本地仓库  
 http://maven.apache.org/plugins/maven-install-plugin/
 
 
 
-### maven-deploy-plugin
+## maven-deploy-plugin
 
 把项目发布到远程仓库
 
@@ -88,7 +88,7 @@ http://maven.apache.org/plugins/maven-install-plugin/
 http://maven.apache.org/plugins/maven-deploy-plugin/
 
 
-### maven-resources-plugin
+## maven-resources-plugin
 
 拷贝文件到指定目录，该插件共有三个目标：resources:resources、resources:testResources、resources:copy-resources，前两个目标主要是拷贝class，默认即可，不用配置，主要是第三个目标，用于拷贝配置文件。
 
@@ -132,7 +132,7 @@ http://maven.apache.org/plugins/maven-resources-plugin/
 ```
                 
 
-### maven-surefire-plugin
+## maven-surefire-plugin
 
 测试插件
 
@@ -154,7 +154,7 @@ http://maven.apache.org/surefire/maven-surefire-plugin/
 
 Packaging types/tools
 
-### maven-jar-plugin
+## maven-jar-plugin
 
 生成一个可执行jar包
 
@@ -198,7 +198,7 @@ http://maven.apache.org/plugins/maven-jar-plugin/
 </plugin>
 ```
 
-### maven-war-plugin
+## maven-war-plugin
 
 打war包，排除文件
 
@@ -220,7 +220,7 @@ http://maven.apache.org/plugins/maven-war-plugin/
 
 
 
-### maven-dependency-plugin
+## maven-dependency-plugin
 
 
 http://maven.apache.org/plugins/maven-dependency-plugin/
@@ -255,7 +255,7 @@ http://maven.apache.org/plugins/maven-dependency-plugin/
 
 
 
-### exec-maven-plugin
+## exec-maven-plugin
 
 运行 mvn exec:exec 执行主类
 
@@ -285,7 +285,7 @@ http://maven.apache.org/plugins/maven-dependency-plugin/
 
 
 
-### jetty-maven-plugin
+## jetty-maven-plugin
 
 使用Jetty 发布：mvn jetty:run
 
@@ -313,7 +313,7 @@ http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html
 
 
 
-## FAQ：
+## FAQ
 
 ### 如何执行源码中的一个main 方法？
 
