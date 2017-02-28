@@ -3,7 +3,7 @@ title: Java 内建"监控"工具 — jps、jstat、jstatd
 date: 2017-02-07
 desc: java,jps,jstat,jstatd,jmc,远程监控,Java进程
 
-tags: [Java,jps,jstat,jstatd,debug] 
+tags: [Java 内建命令,Java,jps,jstat,jstatd,debug] 
 
 ---
 
