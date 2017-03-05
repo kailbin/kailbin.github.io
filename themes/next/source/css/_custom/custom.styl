@@ -2,8 +2,8 @@
 
 $c-green-main = #42b983;
 $c-green-light = #54FFB7;
-$fw-normal = 200;
-$fw-bold = normal;
+$fw-normal = normal;
+$fw-bold = bold;
 
 // 全局
 .main-inner {
@@ -177,6 +177,15 @@ a:hover {
 body {
   background-color: #222;
   color: #888;
+}
+
+table > tbody > tr:nth-of-type(odd) {
+  background-color: #333;
+}
+
+table > tbody > tr:hover {
+  background-color: #444;
+  cursor: hand;
 }
 
 // 归档页面
