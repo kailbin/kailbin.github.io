@@ -84,10 +84,10 @@ public interface UserDAO {
     
     
     @SQL("update t_user set " +
-            " #if(null!=:u.userName && ''!=:u.userName){ and user_name=:u.userName, }" +
-            " #if(null!=:u.age){ and age=:u.age, }" +
-            " ID=ID " +
-            " where id=:u.id }" )
+            " #if(null!=:u.userName && ''!=:u.userName){ user_name=:u.userName, }" +
+            " #if(null!=:u.age){ age=:u.age, }" +
+            " id=id " +
+            " where id=:u.id " )
     Integer updateUser(@SQLParam("u") UserVO user);
     
 }
