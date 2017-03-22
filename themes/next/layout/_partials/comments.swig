@@ -4,6 +4,11 @@
       <div class="ds-thread" data-thread-key="{{ page.path }}"
            data-title="{{ page.title }}" data-url="{{ page.permalink }}">
       </div>
+    {% elseif theme.uyan %}
+      <!-- UY BEGIN -->
+      <div id="uyan_frame"></div>
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid={{ theme.uyan }}"></script>
+      <!-- UY END -->
     {% elseif theme.facebook_sdk.enable and theme.facebook_comments_plugin.enable %}
       <div class="fb-comments"
            data-href="{{ page.permalink }}"
@@ -11,6 +16,7 @@
            data-width="{{ theme.facebook_comments_plugin.width }}"
            data-colorscheme="{{ theme.facebook_comments_plugin.scheme }}">
       </div>
+      
     {% elseif theme.disqus_shortname %}
       <div id="disqus_thread">
         <noscript>
