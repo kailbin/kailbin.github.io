@@ -15,8 +15,7 @@
            data-numposts="{{ theme.facebook_comments_plugin.num_of_posts }}"
            data-width="{{ theme.facebook_comments_plugin.width }}"
            data-colorscheme="{{ theme.facebook_comments_plugin.scheme }}">
-      </div>
-      
+      </div>  
     {% elseif theme.disqus_shortname %}
       <div id="disqus_thread">
         <noscript>
