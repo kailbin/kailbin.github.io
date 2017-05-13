@@ -268,9 +268,11 @@ mathjax:
 #baidu_analytics:
 
 # Duoshuo ShortName
-#duoshuo_shortname: yokoboy
+# duoshuo_shortname: yokoboy
 
-uyan: 2128180
+# uyan: 2128180
+
+cloud_tie: 52bb121099ea43d886078ff555155edf
 
 # Disqus
 #disqus_shortname:

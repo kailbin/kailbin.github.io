@@ -4,11 +4,29 @@
       <div class="ds-thread" data-thread-key="{{ page.path }}"
            data-title="{{ page.title }}" data-url="{{ page.permalink }}">
       </div>
+
     {% elseif theme.uyan %}
-      <!-- UY BEGIN -->
+      
       <div id="uyan_frame"></div>
       <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid={{ theme.uyan }}"></script>
-      <!-- UY END -->
+
+
+    {% elseif theme.cloud_tie %}
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+      <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+      <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "",
+          productKey: "{{ theme.cloud_tie }}",
+          target: "cloud-tie-wrapper"
+        };
+        var yunManualLoad = true;
+        Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vbW9iaWxlL2xpdmVzY3JpcHQuaHRtbA==", true);
+      </script>
+
+
     {% elseif theme.facebook_sdk.enable and theme.facebook_comments_plugin.enable %}
       <div class="fb-comments"
            data-href="{{ page.permalink }}"

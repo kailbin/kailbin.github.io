@@ -191,7 +191,7 @@ class Mail {
 
 这里使用的是 `Grape` 作为的依赖管理，第一次运行 Groovy自带了一个嵌入式的jar依赖管理器，会下载指定的依赖到`~/.groovy/grapes` 目录下。
 
-### 参考
+### 拓展阅读
 
 
 >[The Grape dependency manager](http://www.groovy-lang.org/grape.html)  
