@@ -75,3 +75,6 @@ exit 0	      # 正常退出状态码
 >[使用者自订启动启动程序 (/etc/rc.d/rc.local)](http://cn.linux.vbird.org/linux_basic/0510osloader.php#startup_local)  
 >
 >[daemon 的启动脚本与启动方式](http://cn.linux.vbird.org/linux_basic/0560daemons.php#whereisdaemon)  
+>
+>[Systemd 入门教程：命令篇](http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html)
+>[Systemd 入门教程：实战篇](http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-part-two.html)
