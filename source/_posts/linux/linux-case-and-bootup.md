@@ -58,7 +58,7 @@ esac          # case 倒过来写 case结束
 exit 0	      # 正常退出状态码
 ```
 
-接下来可以使用 `/etc/init.d/rc.java_program start` 启动程序，`/etc/init.d/rc.java_program stop` 关闭程序....
+接下来可以使用 `/etc/init.d/rc.java_program start`(或`service rc.java_program start`) 启动程序，`/etc/init.d/rc.java_program stop`(或`service rc.java_program stop`) 关闭程序....
 
 # 跟随系统启动
 
