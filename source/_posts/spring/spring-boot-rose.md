@@ -3,6 +3,7 @@ title: Spring Boot 集成 paoding-rose-jade
 date: 2017-03-14
 desc: Spring Boot 集成 paoding-rose-jade
 tags: [Java,Spring,Spring Boot] 
+categories: Spring
 ---------------
 
 > paoding-rose 是一个开源框架, 它可以简化 web 应用和 RDMS 应用的开发。

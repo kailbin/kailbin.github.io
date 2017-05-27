@@ -3,6 +3,7 @@ title: Java 内建反编译工具 — javap
 date: 2017-03-05
 desc: Java 内建反编译工具 — javap
 tags: [Java 内建命令,Java,javap] 
+categories: Java
 ---------------
 
 `javap` 是Java内建的一个反编译(反汇编)工具，可以拆解一个或者多个`.class`文件(disassembles one or more class files)。

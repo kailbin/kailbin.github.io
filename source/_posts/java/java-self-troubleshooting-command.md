@@ -4,7 +4,7 @@ date: 2017-02-10
 desc: jcmd,jinfo,jhat,jmap,jsadebugd,jstack
 
 tags: [Java 内建命令,Java,jcmd,jinfo,jhat,jmap,jstack,debug]
-
+categories: Java
 ---
 
 jcmd: 向 JVM 发送诊断命令

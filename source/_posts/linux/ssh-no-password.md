@@ -5,7 +5,7 @@ date: 2016-6-11 23:00:04
 desc: git 常用命令
 
 tags: [git,ssh]
-
+categories: Linux
 ---
 
 如果没有安装ssh，先进行安装
@@ -50,7 +50,7 @@ $ cat .ssh/id_rsa.pub
 ```
 把公钥告诉git托管服务(`码云`、`github`)即可。如下图所示:
 
-![github 免密码登陆](../images/ssh-no-password/1.jpg)
+![github 免密码登陆](//pic01.kail.xyz/images/ssh-no-password/1.jpg)
 
 不过目前好像不太建议这种方式，OSC的说明是：  
 

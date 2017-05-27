@@ -5,7 +5,7 @@ date: 2016-12-06
 desc: base64 和 jq 命令
 
 tags: [Linux,常用命令]
-
+categories: Linux
 ---
 
 base64 一般会默认安装，可以进行 base64 编码和解码。  

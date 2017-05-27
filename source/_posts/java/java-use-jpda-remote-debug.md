@@ -4,7 +4,7 @@ date: 2017-02-17
 desc: JPDA,远程调试,IDEA,Tomcat,Resin
 
 tags: [JPDA,debug,jcmd,jps,jinfo]
-
+categories: Java
 ---
 
 代码调试最简单的办法就是输出日志的方式，但是如果代码发布在远程机器上，通过输出日志的方式可能不太高效，需要频繁的发布代码。本文会通过简单的配置实现**远程代码断点调试**。

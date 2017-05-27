@@ -4,7 +4,7 @@ date: 2016-12-04 00:00:00
 desc: dpkg,apt-get
 
 tags: [Linux,常用命令]
-
+categories: Linux
 ---
 
 dpkg 是一种的软件包管理工具，apt-get 是 dpkg 的一个前端程序，apt-get 最主要的功能是解决软件包的依赖性问题。

@@ -3,6 +3,7 @@ title: Spring Boot 下 paoding-rose-jade 的多数据源配置
 date: 2017-03-16
 desc: Spring Boot 下 paoding-rose-jade 的多数据源配置
 tags: [Java,Spring,Spring Boot] 
+categories: Spring
 ---------------
 
 

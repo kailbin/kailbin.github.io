@@ -4,7 +4,7 @@ date: 2017-01-07 00:00:00
 desc:  JDK7 遍历文件的API
 
 tags: [JDK7,Java,NIO2]
-
+categories: Java
 ---
 
 JDK7 遍历文件系统，需要通过递归的方式，JDK7+ 直接提供了遍历文件的API。

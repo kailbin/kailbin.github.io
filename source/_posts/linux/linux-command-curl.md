@@ -5,7 +5,7 @@ date: 2016-12-07
 desc: curl 命令常见用法
 
 tags: [Linux,常用命令]
-
+categories: Linux
 ---
 
 

@@ -3,6 +3,7 @@ title: Spring @Profile 和 @Conditional 注解
 date: 2017-04-15
 desc: Spring Profile 和 Conditional 条件注解
 tags: [Java,Spring] 
+categories: Spring
 ---------------
 
 `@Profile` 和 `@Conditional` 都可以根据条件加载指定的Bean。`@Profile`主要使用场景是用来跟环境绑定，不同的环境加载不同的Bean；`@Conditional`可用定时更详细的加载条件。

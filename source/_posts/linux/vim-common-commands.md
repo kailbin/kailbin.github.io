@@ -4,7 +4,7 @@ title: vim 常用命令
 date: 2016-08-11
 
 tags: [vim,常用命令]
-
+categories: Linux
 ---
 
 # 一般模式

@@ -5,7 +5,7 @@ date: 2017-3-17
 desc: 使用 json-path 解析 json 数据
 
 tags: [java,json,工具]
-
+categories: Java
 ---
 
 JsonPath 表达式可以用 *类似 XPath 解析 XML 文档* 的方式来解析 JSON 结构。

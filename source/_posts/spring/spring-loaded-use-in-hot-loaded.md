@@ -3,7 +3,7 @@ title: Spring Loaded 热部署
 date: 2016-08-06
 
 tags: [Spring]
-
+categories: Spring
 ---
 
 在玩 JRebel 的时候发现了 Spring Loaded，相比JRebel来说，Spring Loaded最大的优势就是免费。

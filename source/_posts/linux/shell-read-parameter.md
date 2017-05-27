@@ -5,7 +5,7 @@ date: 2017-2-20
 desc: Shell 获取命令行参数,Shell特殊变量
 
 tags: [shell,git]
-
+categories: Linux
 ---
 
 前一段时间使用 Server 端 Git Hooks 的时候，需要获取 Git 提交的信息，这里对如何获取 Git 传递的参数 进行简单记录总结。

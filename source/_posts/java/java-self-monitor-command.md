@@ -4,7 +4,7 @@ date: 2017-02-07
 desc: java,jps,jstat,jstatd,jmc,远程监控,Java进程
 
 tags: [Java 内建命令,Java,jps,jstat,jstatd,debug] 
-
+categories: Java
 ---
 
 jps: 列出当前系统的Java进程
@@ -122,7 +122,7 @@ Timestamp        S0C    S1C    S0U    S1U      EC       EU        OC         OU 
 
 如果要看懂以上每一列的含义，其涉及到 JVM 分代GC的问题，这里给出一个图供参考，应该来自《深入理解Java虚拟机》这本书。
 
-![JVM内存分布](/images/java-self-monitor-command/1.png)
+![JVM内存分布](//pic01.kail.xyz/images/java-self-monitor-command/1.png)
 
 以下给出简单解释：
 

@@ -4,7 +4,7 @@ date: 2017-2-18
 desc: java,WatchService,监控目录树,监控文件变化
 
 tags: [WatchService,jcmd,NIO2,JDK7]
-
+categories: Java
 ---
 
 JDK7提供了一系列的API用来监控文件目录的变化，该API提供了一种监视机制，可以针对事件（如创建、修改和删除）监视特定文件或目录的状态。
