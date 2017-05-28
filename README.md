@@ -9,13 +9,15 @@
 	hexo deploy
 	
 
-	
-	git remote -v
-	git remote add all https://git.coding.net/yokoboy/yokoboy.git 
-	git remote set-url --add all https://git.oschina.net/yokoboy/yokoboy.git
-	git push all hexo-sources
-	
-    .git/config
-	[remote "all"]
-    	url = https://git.coding.net/yokoboy/yokoboy.git
-    	url = https://git.oschina.net/yokoboy/yokoboy.git
+
+# 搜索功能
+
+	$ npm install hexo-generator-search --save
+	$ npm install hexo-generator-searchdb --save
+
+	# _config.yml 文件新增
+	search:
+	  path: search.xml
+	  field: post
+  	  format: html
+	  limit: 10000
