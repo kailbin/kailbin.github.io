@@ -128,7 +128,7 @@ public class MyClassLoader extends ClassLoader {
 
 }
 ```
-这里使用上篇 [Javassit](/post/2017-05-29/java/make-javassist-simple.html) 生成的 `/Users/kail/_test/xyz/kail/blog/CodeClass.class` 文件。
+这里使用上篇 [Javassit](/post/2017-05-28/java/make-javassist-simple.html) 生成的 `/Users/kail/_test/xyz/kail/blog/CodeClass.class` 文件。
 
 ```java
 MyClassLoader myClassLoader = new MyClassLoader();
@@ -153,10 +153,80 @@ System.out.println(myClassLoader.loadClass("xyz.kail.blog.CodeClass").newInstanc
 new Thread(() -> System.out.println(Thread.currentThread().getContextClassLoader())).start(); //
 ```
 
+# 重写 `loadClass()` 打破双亲委派
+
+``` java
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class MyClassLoader extends ClassLoader {
+
+    public static MyClassLoader instanse = new MyClassLoader();
+
+    private static final String MY_CLASS_PATH = "/Users/kail/_test";
+
+    private final Map<String, Class> cacheClass = new ConcurrentHashMap<>();
+
+    private MyClassLoader() {
+        super(Thread.currentThread().getContextClassLoader());
+    }
+
+    @Override
+    protected Class<?> findClass(String name) throws ClassNotFoundException {
+        try {
+            byte[] allBytes = Files.readAllBytes(Paths.get(MY_CLASS_PATH, name.replace(".", "/") + ".class"));
+            return defineClass(name, allBytes, 0, allBytes.length);
+        } catch (IOException e) {
+            throw new ClassNotFoundException(name, e);
+        }
+    }
+
+    @Override
+    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        synchronized (getClassLoadingLock(name)) {
+            // 检测缓存中有没有，有的话直接返回
+            Class c = cacheClass.get(name);
+            if (null != c) {
+                return c;
+            }
+            // 缓存中没有
+            try {
+                c = findClass(name); // 先从自定义类路径下找
+                if (null != c) {
+                    cacheClass.put(name, c);
+                }
+            } catch (ClassNotFoundException ex) {
+                c = super.loadClass(name, resolve); // 自定义类路径下没有再调用系统默认的加载机制
+            }
+
+            if (resolve) {
+                resolveClass(c);
+            }
+            return c;
+        }
+    }
+
+    public void cleanLoader() {
+        instanse = new MyClassLoader();
+        cacheClass.clear();
+    }
+}
+```
+这简单的例子打破了双亲委派的模型，没有先从父加载器加载类，而是先从自定的路径下加载，加载之后进行缓存。
+清除缓存的时候又 重新 new 了一个 MyClassLoader，因为同一个ClassLoader 无法加载一个类文件两次，会报以下错误
+`java.lang.LinkageError: loader (instance of MyClassLoader): attempted  duplicate class definition for name: "xyz/kail/blog/CodeClass"`
+
+扩展一下的话，可以用一个线程扫描类路径的下的class文件有没有变化，如果有清掉缓存重新加载，可以实现一个简单的热加载功能。
+
+以上纯属意淫，实际上实现热加载还是很复杂的，要解决类的之间的依赖关系等很多问题，新加载的类没不会保存运行时的各种信息的。
+
 # PS
 
 深入了解的话可以通过查看 ClassLoader 的继承结构（IDEA 是 Ctrl+H），查看其它开源项目的ClassLoader 实现，这里不再深入了解。
-例如如何打破双亲委派模型、热加载、代码保护、Tomcat项目隔离、热更新等。
+例如 热加载、代码保护、Tomcat项目隔离、热更新等。
 
 
 
