@@ -1,9 +1,9 @@
 ---
 title: javassist 入门
-date: 2017-05-29
+date: 2017-05-28
 desc: javassist 入门, javassist 笔记
 
-tags: [javassist]
+tags: [Java,javassist]
 categories: Java
 ---
 
