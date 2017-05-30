@@ -234,8 +234,6 @@ public class MyClassLoader extends ClassLoader {
 
 > [类 ClassLoader](http://tool.oschina.net/uploads/apidocs/jdk-zh/java/lang/ClassLoader.html)
 >
-> [Java虚拟机动态类加载的形式化模型](http://www.docin.com/p-1265062986.html)  
->
 > [Java 类加载器（ClassLoader）的实际使用场景有哪些？](https://www.zhihu.com/question/46719811)
 >
 > [双亲委派模型](http://blog.csdn.net/p10010/article/details/50448491)
