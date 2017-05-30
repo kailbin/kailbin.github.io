@@ -9,7 +9,7 @@ categories: Java
 
 > The Groovy language proposes several ways to integrate itself into applications (Java or even Groovy) at runtime, from the most basic, simple code execution to the most complete, integrating caching and compiler customization
 
-Groovy语言提出了几种在运行时将自身集成到应用程序(Java甚至Groovy)的方法，从最基本的简单代码执行到最完整的、集成缓存和编译器定制。
+Groovy语言提供了几种在运行时将自身集成到应用程序(Java甚至Groovy)的方法，从最基本的简单代码执行到最完整的、集成缓存和编译器定制。
 
 这里介绍了几种 Java 集成 Groovy 的几种方式。
 
