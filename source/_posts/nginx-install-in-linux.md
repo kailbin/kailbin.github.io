@@ -31,15 +31,15 @@ yum install gcc gcc-c++
 下载地址： [ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/](ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/)
 
 ``` shell
-$ wget wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.tar.gz
-$ tar zxvf pcre-8.38.tar.gz
+$ wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.40.tar.gz
+$ tar zxvf pcre-8.40.tar.gz
 ```
 
 ### 下载 zlib库
 
 ``` shell
-$ wget http://zlib.net/zlib-1.2.8.tar.gz
-$ tar -zxvf zlib-1.2.8.tar.gz
+$ wget http://zlib.net/zlib-1.2.11.tar.gz
+$ tar -zxvf zlib-1.2.11.tar.gz
 ```
 
 ### 下载 openssl
@@ -54,15 +54,15 @@ $ tar zxvf openssl-1.0.1t.tar.gz
 # 安装nginx
 
 ``` shell
-$ wget http://nginx.org/download/nginx-1.11.1.tar.gz
-$ tar zxvf nginx-1.11.1.tar.gz
-$ cd nginx-1.11.1
-$ ./configure --prefix=/usr/local/studio/nginx --with-http_ssl_module --with-pcre=/usr/local/studio/pcre-8.38 --with-zlib=/usr/local/studio/zlib-1.2.8 --with-openssl=/usr/local/studio/openssl-1.0.1t
+$ wget http://nginx.org/download/nginx-1.13.0.tar.gz
+$ tar zxvf nginx-1.13.0.tar.gz
+$ cd nginx-1.13.0
+$ ./configure --prefix=/usr/local/studio/nginx --with-pcre=/usr/local/studio/pcre-8.40 --with-zlib=/usr/local/studio/zlib-1.2.11 --with-http_ssl_module --with-openssl=/usr/local/studio/openssl-1.0.1t
 
 $ make
 $ make install 
-
 ```
+
 # 卸载 nginx
 由于是编译安装，直接删除 /usr/local/studio/nginx (--prefix=*path*) 即可
 
