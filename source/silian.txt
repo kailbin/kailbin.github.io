@@ -1,0 +1,15 @@
+http://blog.kail.xyz/post/2017-02-16-mac-single-user-mode.html
+http://blog.kail.xyz/post/2016-12-06-linux-command-base64-and-jq.html
+http://blog.kail.xyz/post/2017-02-11-spring-schema-ext.html
+http://blog.kail.xyz/post/2017-02-19-java5-jmx-remote-monitor-and-mbean.html
+http://blog.kail.xyz/post/2017-02-17-java-use-jpda-remote-debug.html
+http://blog.kail.xyz/post/2016-12-20-java5-method-time.html
+http://blog.kail.xyz/post/2016-09-15-git-source-install.html
+http://blog.kail.xyz/post/2016-12-04-linux-dpkg-and-apt-get.html
+http://blog.kail.xyz/post/2016-12-07-linux-command-curl.html
+http://blog.kail.xyz/post/2016-12-11-maven-custom-plugin-by-hand.html
+http://blog.kail.xyz/post/2016-12-18-redis-pub_sub.html
+http://blog.kail.xyz/post/2016-12-13-java-spi.html
+http://blog.kail.xyz/post/2016-12-01-linux-source-install.html
+http://blog.kail.xyz/post/2016-08-06-spring-loaded-use-in-hot-loaded.html
+http://blog.kail.xyz/post/2016-06-10-git-make-simple.html
