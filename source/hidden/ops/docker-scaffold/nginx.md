@@ -135,4 +135,6 @@ docker-compose up -d
 # 拓展阅读
 
 > [Docker 脚手架](/post/2017-07-08/ops/docker-scaffold.html)
+>
+> [官方 Nginx Docker 镜像使用说明](https://hub.docker.com/_/nginx/)
 
