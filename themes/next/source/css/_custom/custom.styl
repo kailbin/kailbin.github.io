@@ -193,6 +193,10 @@ table > tbody > tr:hover {
   cursor: hand;
 }
 
+.post-nav-item a:hover {
+  color: $c-green-main !important;
+}
+
 // 归档页面
 .posts-collapse::after {
   background: #333;
@@ -219,6 +223,51 @@ table > tbody > tr:hover {
 
 #ds-thread #ds-reset .ds-post-toolbar {
   box-shadow: none !important;
+}
+
+// github comments
+.gitment-editor-main,.gitment-editor-header{
+  border: 1px solid #333 !important;
+}
+
+a.gitment-footer-project-link, a.gitment-footer-project-link:visited, a.gitment-editor-login-link, a.gitment-editor-login-link:visited {
+    color: $c-green-main !important;
+}
+.gitment-editor-body textarea {
+  background-color: #333 !important;
+  color: #666 !important;
+}
+.gitment-editor-tab.gitment-selected {
+    color: #ddd !important;
+    border-color: #333 !important;
+    background-color: #333 !important;
+}
+.gitment-editor-main::after,
+.gitment-comment-main::after {
+  border-right-color: #333 !important;
+}
+.gitment-editor-main::before, .gitment-comment-main::before {
+    border-right-color: #333 !important;
+}
+
+.gitment-comment-header {
+    color: #999 !important;
+    background-color: #222 !important;
+}
+.gitment-markdown {
+  color: #666 !important;
+}
+
+.gitment-comment-main, .gitment-editor-main {
+    border-color: #333 !important;
+}
+
+.gitment-editor-submit{
+  background-color: $c-green-main !important;
+}
+
+.gitment-editor-submit:hover{
+  background-color: $c-green-light !important;
 }
 
 // 列表页文章分割先线
