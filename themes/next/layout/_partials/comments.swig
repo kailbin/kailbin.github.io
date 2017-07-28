@@ -9,6 +9,23 @@
       
       <div id="uyan_frame"></div>
       <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid={{ theme.uyan }}"></script>
+ 
+    {% elseif theme.gitment and theme.gitment.enable %}
+      
+      <div id="container"></div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <script>
+      var gitment = new Gitment({
+        owner: "{{theme.gitment.github_id}}",
+        repo: "{{theme.gitment.repo}}",
+        oauth: {
+          client_id: "{{theme.gitment.client_id}}",
+          client_secret: "{{theme.gitment.client_secret}}",
+        },
+      })
+      gitment.render('container')
+      </script>
 
 
     {% elseif theme.cloud_tie %}

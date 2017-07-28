@@ -271,8 +271,14 @@ mathjax:
 
 # uyan: 2128180
 
-cloud_tie: 52bb121099ea43d886078ff555155edf
+# cloud_tie: 52bb121099ea43d886078ff555155edf
 
+gitment:
+  enable: true
+  client_id: 6689d68a7079c896119f
+  client_secret: 3f3e595f734a1d66a3422ef7025314fc4f1abcdc
+  github_id: kailbin
+  repo: comments
 # Disqus
 #disqus_shortname:
 
