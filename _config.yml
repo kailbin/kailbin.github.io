@@ -70,12 +70,12 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   - type: git
-    repo: https://ykb553%40163.com@git.coding.net/yokoboy/yokoboy.git
-    branch: coding-pages
+    repo: https://ykb553%40163.com@github.com/kailbin/kailbin.github.io.git
+    branch: master
     message:
 
-search:
-  path: search.xml
-  field: post
-  format: html
-  limit: 10000
+# search:
+#   path: search.xml
+#   field: post
+#   format: html
+#   limit: 10000
