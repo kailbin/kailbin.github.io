@@ -5,6 +5,10 @@ title: 外链
 
 ---
 
+# Blogs
+[kailbin / blog](https://github.com/kailbin/blog/issues)
+
+
 # Tools
 [Data Structure Visualizations](http://www.cs.usfca.edu/~galles/visualization/Algorithms.html)
 
