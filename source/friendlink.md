@@ -7,6 +7,7 @@ title: 外链
 
 # Blogs
 [kailbin / blog](https://github.com/kailbin/blog/issues)
+[@kailbin / kancloud](https://www.kancloud.cn/@kailbin)
 
 
 # Tools
