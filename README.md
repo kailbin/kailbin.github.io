@@ -1,6 +1,9 @@
     
     npm config set registry https://registry.npm.taobao.org
-    npm install --save hexo hexo-deployer-git hexo-renderer-jade hexo-generator-feed hexo-generator-sitemap hexo-browsersync hexo-generator-archive
+	npm install
+	npm install hexo-deployer-git --save
+	npm install hexo-generator-sitemap --save
+
 
 
 	hexo clean
