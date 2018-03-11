@@ -29,7 +29,7 @@
             return {
               title: $( "title", this ).text(),
               content: $("content",this).text(),
-              url: $( "url" , this).text()
+              url: $( "link" , this).attr("href")
             };
           }).get();
           var $input = document.getElementById(search_id);

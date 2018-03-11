@@ -13,7 +13,8 @@
 	
 
 
-# 搜索功能
+# [搜索功能](https://github.com/PaicHyperionDev/hexo-generator-search)
+
 
 	$ npm install hexo-generator-search --save
 	$ npm install hexo-generator-searchdb --save
