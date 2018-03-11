@@ -5,20 +5,23 @@ $c-green-light = #54FFB7;
 $fw-normal = normal;
 $fw-bold = bold;
 
-// 全局
+// 全局宽度
 .main-inner {
   width: 800px;
 }
 
+// 选中文字的样式
 ::selection {
   background: $c-green-main;
   color: $selection-color;
 }
 
+// 字体
 body {
   font-weight: $fw-normal;
 }
 
+// 加粗的字体
 b, strong {
   font-weight: $fw-bold;
 }
@@ -38,16 +41,19 @@ blockquote {
   border-left-color: $c-green-main;
 }
 
+// 表格样式
 table {
   table-layout: auto;
 }
 
+  //
 .headband {
   display: block;
   height: 3px;
   background: $c-green-main;
 }
 
+  //
 .logo-line-before i, .logo-line-after i {
   display: none;
 }
@@ -153,161 +159,8 @@ table {
   right: 120px !important;
 }
 
-/*******************************************************************************/
-/*******************************暗色主题****************************************/
-/*******************************************************************************/
-
-#header {
-  background: #181818;
-  color: #888;
-}
-
-.brand {
-  color: inherit;
-}
-
-.posts-expand .post-title-link {
-  color: #888;
-}
-
-a {
-  color: #888;
-  border-bottom: 1px solid #333;
-}
-
-a:hover {
-  color: $c-green-main;
-}
-
-body {
-  background-color: #222;
-  color: #888;
-}
-
-table > tbody > tr:nth-of-type(odd) {
-  background-color: #333;
-}
-
-table > tbody > tr:hover {
-  background-color: #444;
-  cursor: hand;
-}
-
-.post-nav-item a:hover {
-  color: $c-green-main !important;
-}
-
-// 归档页面
-.posts-collapse::after {
-  background: #333;
-}
-
-.posts-collapse .post-header {
-  border-bottom: 1px dashed #333;
-}
-
-#footer {
-  background: #181818;
-}
-
-// 多说
-
-.theme-next #ds-thread #ds-reset .ds-textarea-wrapper {
-  border-color: #444;
-}
-
-.theme-next #ds-thread #ds-reset .ds-post-toolbar {
-  border: 1px solid #444;
-  background: #333;
-}
-
-#ds-thread #ds-reset .ds-post-toolbar {
-  box-shadow: none !important;
-}
-
-// github comments
-.gitment-editor-main,.gitment-editor-header{
-  border: 1px solid #333 !important;
-}
-
-a.gitment-footer-project-link, a.gitment-footer-project-link:visited, a.gitment-editor-login-link, a.gitment-editor-login-link:visited {
-    color: $c-green-main !important;
-}
-.gitment-editor-body textarea {
-  background-color: #333 !important;
-  color: #666 !important;
-}
-.gitment-editor-tab.gitment-selected {
-    color: #ddd !important;
-    border-color: #333 !important;
-    background-color: #333 !important;
-}
-.gitment-editor-main::after,
-.gitment-comment-main::after {
-  border-right-color: #333 !important;
-}
-.gitment-editor-main::before, .gitment-comment-main::before {
-    border-right-color: #333 !important;
-}
-
-.gitment-comment-header {
-    color: #999 !important;
-    background-color: #222 !important;
-}
-.gitment-markdown {
-  color: #666 !important;
-}
-
-.gitment-comment-main, .gitment-editor-main {
-    border-color: #333 !important;
-}
-
-.gitment-editor-submit{
-  background-color: $c-green-main !important;
-}
-
-.gitment-editor-submit:hover{
-  background-color: $c-green-light !important;
-}
-
-// 列表页文章分割先线
-.post-eof {
-  display: block !important;
-  margin: 40px auto 0px;
-  width: 80% !important;
-  background: #333 !important;
-  box-shadow: none;
-}
-
-.highlight .gutter pre {
-  background-color: #181818;
-}
-
-/*定义滚动条宽高及背景，宽高分别对应横竖滚动条的尺寸*/
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-  background-color: #222;
-}
-
-/*定义滚动条的轨道，内阴影及圆角*/
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 3px rgba(0, 0, 0, .3);
-}
-
-/*定义滑块，内阴影及圆角*/
-::-webkit-scrollbar-thumb {
-  box-shadow: inset 0 0 3px rgba(0, 0, 0, .3);
-  background-color: #333;
-}
-
-/*******************************************************************************/
-/*******************************暗色主题 END ***********************************/
-/*******************************************************************************/
-
-
 @media (max-width: 767px) {
-  #canvas-nest{
-     display:none;
+  #canvas-nest {
+    display: none;
   }
 }
