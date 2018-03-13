@@ -13,32 +13,26 @@ date: 2018-03-12 21:12:09
 hbase> create 'test', {NAME => 'f'}
 ```
 
-其他默认属性如下：
+默认属性如下：
 ``` bash
-hbase(main):003:0> describe 'test'
+hbase> describe 'test'
 
 {
- NAME => 'f', BLOOMFILTER => 'ROW', VERSIONS => '1', IN_MEMORY => 'false',
- KEEP_DELETED_CELLS => 'FALSE', DATA_BLOCK_ENCODING => 'NONE', TTL => 'FOREVER', 
- COMPRESSION => 'NONE', MIN_VERSIONS => '0', BLOCKCACHE => 'true', BLOCKSIZE => '65536', 
+ NAME => 'f', 
+ BLOOMFILTER => 'ROW', 
+ VERSIONS => '1', 
+ MIN_VERSIONS => '0', 
+ KEEP_DELETED_CELLS => 'FALSE', 
+ DATA_BLOCK_ENCODING => 'NONE', 
+ COMPRESSION => 'NONE', 
+ TTL => 'FOREVER', 
+ BLOCKCACHE => 'true', 
+ BLOCKSIZE => '65536', 
+ IN_MEMORY => 'false',
  REPLICATION_SCOPE => '0'
 }
 ```
-
-{
-    BLOOMFILTER => 'ROW',                   默认是 NONE
-    VERSIONS => '100000',                   设置数据版本
-    MIN_VERSIONS => '0',                    最新版本数，如果所有的版本都超期了，要保留的最新的版本数
-    TTL => 'FOREVER',                       超时的数据会在下一次大合并的时候被删除，单位是s
-    COMPRESSION => 'NONE',                  是否压缩：SNAPPY、LZO、GZIP，数据只在写一硬盘的时候进行压缩，内存和网络硬盘中不进行压缩
-    BLOCKSIZE => '65536',                   数据块大小：默认 65536
-    BLOCKCACHE => 'true'                    数据块缓存：默认 false
-    IN_MEMORY => 'false',                   ？？？？？
-    REPLICATION_SCOPE => '0', 
-    DATA_BLOCK_ENCODING => 'NONE',          
-    KEEP_DELETED_CELLS => 'FALSE', 
-}
-
+<!--more--->
 
 # 基本属性
 
@@ -65,25 +59,44 @@ hbase(main):003:0> describe 'test'
 版本的时间戳，也可以自定义，不使用默认生成的时间戳，可以自己指定业务相关的ID
 
 
+## MIN_VERSIONS(最少保留的版本数)
 
-## MIN_VERSIONS(TODO)
-
-
-
-
-## IN_MEMORY(激进缓存的配置)
-
-可以选择一个列族赋予更高的优先级缓存, 激进缓存，表示优先级更高，IN_MEMORY 默认是 false
+如果所有的版本都超期了，至少要保留`MIN_VERSIONS`个版本
 
 
 
 
-## KEEP_DELETED_CELLS(`TODO`)
+## KEEP_DELETED_CELLS(保留删除的单元格)
 
-http://hbase.apache.org/book.html#cf.keep.deleted
+HBase 的`delete`命令，并不是真的删除数据，而是设置一个标记（`delete marker`）。用户在检索数据的时候，会过滤掉这些标示的数据。
+该属性可以设置为 `FALSE`（默认）、`TRUE`、`TTL`。API 的注释里对这三种属性有详细描述：如下
 
-hbase 的`delete`命令，并不是真的删除了文件，而是设置一个标记（`delete marker`）。用户在检索数据的时候，会过滤掉这些标示的数据。
+``` java
+package org.apache.hadoop.hbase;
 
+public enum KeepDeletedCells {
+
+  /** 不保留删除的单元格. */
+  FALSE,
+  
+  /**
+   * 删除的单元格会保留，超期（TTL）或者数据版本数超过 VERSIONS 设置的值 才会被删除。
+   * 如果没有指定TTL或没有超出VERSIONS值，则会永久保留它们。
+   */
+  TRUE,
+  
+  /**
+   * 超期（TTL）才会删除
+   * 当TTL与MIN_VERSIONS结合使用时，会删除过期后的数据，但是同时会保留最少数量的版本。
+   */
+  TTL;
+}
+```
+
+> [41. Keeping Deleted Cells](http://hbase.apache.org/book.html#cf.keep.deleted)
+
+
+major_compact
 
 ``` bash
 alter 'test', NAME => 'f', VERSIONS => 100
@@ -100,67 +113,119 @@ alter 'test' , NAME => 'f', KEEP_DELETED_CELLS => true
 
 
 
+## COMPRESSION(压缩)
+
+数据压缩是 HBase 提供的一个特性，HBase 在写入数据块到 HDFS 之前会首**先对数据块进行压缩，再落盘**，从而可以减少磁盘空间使用量。
+而在读数据的时候首先从HDFS中加载出block块之后**进行解压缩，然后再缓存到BlockCache**，最后返回给用户。
+
+写路径和读路径分别如下
+
+**写路径**： _Finish DataBlock_  -->  _Encoding KVs_  -->  **`Compress DataBlock`**  -->  _Flush_
+**读路径**： _Read Block From Disk_  -->  **`DeCompress DataBlock`**  -->  _Cache DataBlock_  -->  _Decoding Scan KVs_
+
+
+压缩可以**节省空间**，读写数据会**增加CPU负载**，HBase目前提供了三种常用的压缩方式： GZip, LZO, **`Snappy`**；
+**`Snappy`** 的压缩率最低，但是编解码速率最高，对CPU的消耗也最小，目前一般建议使用 **`Snappy`**。
+
+
+> [HBase最佳实践－列族设计优化](http://blog.csdn.net/javastart/article/details/51820212)
+
+
+
+
+## DATA_BLOCK_ENCODING（编码）
+
+除了数据压缩之外，HBase还提供了数据编码功能。
+和压缩一样，数据在落盘之前首先会对KV数据进行编码；但又**和压缩不同，数据块在缓存前并没有执行解码**。
+因此即使后续**命中缓存的查询是编码的数据块，需要解码后才能获取到具体的KV数据**。
+和不编码情况相比，相同数据block快占用内存更少，即**内存利用率更高**，但是读取的时候需要解码，又不利于读性能；
+在内存不足的情况下，可以压榨 CPU 字段，换区更多的缓存数据；
+HBase目前提供了四种常用的编码方式：  **`Prefix_Tree`**、 Diff 、 Fast_Diff 、Prefix 
+
+
+写路径和读路径分别如下：
+
+**写路径**： _Finish DataBlock_  -->  **`Encoding KVs`**  -->  _Compress DataBlock_  -->  _Flush_
+**读路径**： _Read Block From Disk_  -->  _DeCompress DataBlock_  -->  _Cache DataBlock_  -->  **`Decoding Scan KVs`**
+
+
+> [HBase-0.96中新BlockEncoding算法-PREFIX_TREE压缩的初步探究及测试](http://zjushch.iteye.com/blog/1843793)
+
+
+
+
+
+
 
 
 
 ## TTL(存活时间)
-当数据记录一段时间想删除掉，是以s为单位的，设置一个时间 超过后会被设置为删除标记
-生存时间配置：(TTL)
-超过这个时间设置的就会在下一次大合并中被删除
-create "stu",{NAME => "cf",TTL =>"18000"}
 
-
-
-
-
-## DATA_BLOCK_ENCODING
-
-HBase最佳实践－列族设计优化: http://blog.csdn.net/javastart/article/details/51820212
-HBase-0.96中新BlockEncoding算法-PREFIX_TREE压缩的初步探究及测试: http://zjushch.iteye.com/blog/1843793
-
-## COMPRESSION(压缩)
-压缩可以节省空间，读写数据会增加CPU的使用率 LZO，SNAPPY，GZIP
-create "stu",{NAME => "cf",COMPRESSION =>"GZIP"}
-
+当数据记录一段时间想删除掉，设置一个时间，超过后会被设置删除标记，单位是 s（秒），超过这个时间数据的就会在下一次大合并中被删除
 
 
 
 
 
 ## BLOCKCACHE(数据块缓存的配置)
-数据块缓存的配置：
-如果经常顺序访问或很少被访问，可以关闭列族的缓存，列族缓存默认打开
-create "stu",{NAME => "cf",BLOCKCACHE =>"false"}
+
+如果 **经常顺序访问（scan）** 或很少被随机访问，可以关闭列族的缓存；列族缓存默认是 true
 
 
+## BLOCKSIZE(数据块大小配置)
+默认是64K（65536，单位是字节）； 跟 HDFS 不是一个概念，仅仅是 HBase 内部的一个属性；数据块越小，索引越大，占用内存也越大；
 
-
-## BLOCKSIZE
-数据块大小配置优化:   blocksize默认是64K  
-  数据块越小，索引越大，占用内存也越大，   如果随机查询，比如某个表+某个ID方式，   如果是顺序scan扫描区间，那么设置大一点  否则保持默认值 
  
-create "stu",{NAME => "cf",BLOCKSIZE =>"65536"} 设置stu cf列族块大小为64K，默认单位是字节，采用这种细粒度，目的是块操作时更加有效加载和缓存数据，
-不依赖于hdfs块尺寸设计，仅仅是hbase内部的一个属性。
-
 > 随着BlockSize的增大，系统随机读的吞吐量不断降低，延迟不断增大。64K大小比16K大小的吞吐量大约降低13%，延迟增大13%。
 > 同样的，128K大小比64K大小的吞吐量降低约22%，延迟增大27%。
-> **因此，对于以随机读为主的业务，可以适当调低BlockSize的大小，以获得更好的读性能；如果业务请求以Get请求为主，可以考虑将块大小设置较小；如果以Scan请求为主，可以将块大小调大**
+> **如果业务请求以Get请求为主，可以考虑将块大小设置较小；如果以Scan请求为主，可以将块大小调大**
 > 
 > [HBase最佳实践－列族设计优化](http://blog.csdn.net/javastart/article/details/51820212)
 
 
-## REPLICATION_SCOPE
+
+## IN_MEMORY(激进缓存的配置)
+
+可以选择一个列族赋予更高的优先级缓存, 激进缓存，表示优先级更高，IN_MEMORY 默认是 false
+
+
+
+
+
+
+
+## REPLICATION_SCOPE(复制)
  
+通过 HBase 的 replication 功能可以实现集群间的相互复制。
 
-# 其他
+> [Hbase Replication 介绍](http://lib.csdn.net/article/hbase/43717)
+> [150. Cluster Replication](http://hbase.apache.org/book.html#_cluster_replication)
 
-## SPLIT
 
 
+
+
+
+
+
+# 高级配置
+
+## 自定义属性
+
+## SPLITS
+
+https://yq.aliyun.com/articles/43539?spm=a2c4e.11153940.blogcont43538.13.51d469c29DvcBZ
+
+
+
+## SPLITS_FILE
+
+## CONFIGURATION
  
  
 # Read More
 
+- [**HBase API 常量**](http://hbase.apache.org/apidocs/constant-values.html)
 - [113. Schema Design](http://hbase.apache.org/book.html#perf.schema)
     - [113.4. Bloom Filters](http://hbase.apache.org/book.html#schema.bloom)
     - [41. Keeping Deleted Cells](http://hbase.apache.org/book.html#cf.keep.deleted)
