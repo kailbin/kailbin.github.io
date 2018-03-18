@@ -329,4 +329,11 @@ HBASE-8283可以通过`hbase.hstore.useExploringCompation`在`0.94.9`和`CDH 4.4
 这两个例子包含了如何将简单的TSV文件批量加载到HBase以及如何为其他数据格式编写您自己的Mapper。
  
 
+# Read More
+
+- [HBase 写优化之 BulkLoad 实现数据快速入库](https://my.oschina.net/leejun2005/blog/187309)
+    - > 通常 `MapReduce` 在写HBase时使用的是 `TableOutputFormat` 方式，在reduce中直接生成`Put`对象写入`HBase`， 该方式在大数据量写入时效率低下（HBase会频繁进行`flush`，`split`，`compact`等大量IO操作），并对HBase节点的稳定性造成一定的影响（GC时间过长，响应变慢，导致节点超时退出，并引起一系列连锁反应）。
+      > 而HBase支持 `bulk load` 的入库方式，它是利用hbase的数据信息按照特定格式存储在hdfs内这一原理，直接在HDFS中生成持久化的HFile数据格式文件，然后上传至合适位置，即完成巨量数据快速入库的办法。
+      > 配合mapreduce完成，高效便捷，而且不占用region资源，增添负载，在大数据量写入时能极大的提高写入效率，并降低对HBase节点的写入压力。
+- [MapReduce生成HFile入库到HBase及源码分析](http://blog.pureisle.net/archives/1950.html)
 
