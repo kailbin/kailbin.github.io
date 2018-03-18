@@ -291,7 +291,7 @@ split 政策决定了如何拆分 Region。当前可用的各种拆分策略是�
 
 - `DisabledRegionSplitPolicy` 禁用切割
 - `ConstantSizeRegionSplitPolicy` 仅仅当region大小超过常量值（`hbase.hregion.max.filesize`大小）时，才进行拆分
-    - `IncreasingToUpperBoundRegionSplitPolicy` 根据公式`min(r^2*flushSize，maxFileSize)`确定split的maxFileSize，其中`r`为在线region个数，maxFileSize由`hbase.hregion.max.filesize`指定
+    - `IncreasingToUpperBoundRegionSplitPolicy` 根据公式`min(r^2*flushSize，maxFileSize)`确定split的maxFileSize，其中`r`为该表在线region个数，maxFileSize由`hbase.hregion.max.filesize`指定
         - `SteppingSplitPolicy`  根据公式`tableRegionsCount == 1  ? hbase.increasing.policy.initial.size : getDesiredMaxFileSize()`确定split的maxFileSize
         - `DelimitedKeyPrefixRegionSplitPolicy`  保证以分隔符前面的前缀为splitPoint，保证相同RowKey前缀的数据在一个Region中
         - `KeyPrefixRegionSplitPolicy` 保证具有相同前缀的row在一个region中（**要求设计中前缀具有同样长度**）。指定rowkey前缀位数划分region，通过读取table的`prefix_split_key_policy.prefix_length`属性，该属性为数字类型，表示前缀长度，在进行split时，按此长度对splitPoint进行截取。**此种策略比较适合固定前缀的rowkey**。当table中没有设置该属性，或其属性不为Integer类型时，指定此策略效果等同与使用`IncreasingToUpperBoundRegionSplitPolicy`
