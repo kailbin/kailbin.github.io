@@ -206,27 +206,6 @@ HBase目前提供了四种常用的编码方式：  **`Prefix_Tree`**、 Diff �
 
 
 
-
-
-# 高级配置
-
-## CONFIGURATION(自定义属性)
-
-
-
-
-
-
-## SPLITS
-
-https://yq.aliyun.com/articles/43539
-
-
-
-## SPLITS_FILE
-
-## CONFIGURATION
- 
  
 # Read More
 
@@ -237,12 +216,6 @@ https://yq.aliyun.com/articles/43539
  
 
  
-
- 
-http://blog.csdn.net/qqpy789/article/details/52486964
-https://yq.aliyun.com/articles/43538
-
-
  
 
  
