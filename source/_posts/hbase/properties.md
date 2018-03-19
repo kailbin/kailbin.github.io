@@ -428,6 +428,97 @@ HStoreFile的最大尺寸，换句话说，当一个region里的列族的任意�
 
 
 
+## HStore
+
+### `hbase.hstore.blockingStoreFiles`
+
+如果任何一个Store中存储的StoreFiles数量超过此数量（**每次刷新MemStore时将写入一个StoreFile**），则会更新此HRegion，直到压缩完成 或者 已超出`hbase.hstore.blockingWaitTime`
+
+默认 `10`
+
+
+
+### `hbase.hstore.blockingWaitTime`
+
+HRegion在达到`hbase.hstore.blockingStoreFiles`定义的StoreFile限制后，开始compaction，如果时间超过该值，即使压缩尚未完成，HRegion也会停止阻塞更新。
+
+默认 `90000` 毫秒
+
+
+
+### `hbase.hstore.compaction.max`
+
+每个minor compaction的HStoreFile个数上限，
+
+默认 `10`
+
+
+
+### `hbase.hstore.compaction.kv.max`
+
+在`flushing`或者`compacting`时可以读取多少个KeyValue并批量写入，如果有大的 KeyValue 或者 OOME 的话则配置一个小的值，如果行数多且小则配置大值
+
+默认 `10`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+## HFile
+
+
+### `hfile.block.cache.size`
+
+要分配给 HFile和StoreFile 使用的最大堆（-Xmx设置）的百分比。设置为0禁用，但不建议; 您至少需要足够的缓存才能保存存储文件索引
+
+默认 `0.4`，最大堆配置的 40％ 用来作为缓存
+
+
+
+### hfile.index.block.max.size
+
+当多级块索引中的 叶子块、非叶子块、根级索引块的大小增长到此大小时，块将被写出并启动一个新块
+
+默认 `131072`
+
+
+
+
+
+
+
+
+
+
+
 ## Client
 
 
@@ -533,97 +624,6 @@ scanner的超时时间
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-## HStore
-
-### `hbase.hstore.blockingStoreFiles`
-
-如果任何一个Store中存储的StoreFiles数量超过此数量（**每次刷新MemStore时将写入一个StoreFile**），则会更新此HRegion，直到压缩完成 或者 已超出`hbase.hstore.blockingWaitTime`
-
-默认 `10`
-
-
-
-### `hbase.hstore.blockingWaitTime`
-
-HRegion在达到`hbase.hstore.blockingStoreFiles`定义的StoreFile限制后，开始compaction，如果时间超过该值，即使压缩尚未完成，HRegion也会停止阻塞更新。
-
-默认 `90000` 毫秒
-
-
-
-### `hbase.hstore.compaction.max`
-
-每个minor compaction的HStoreFile个数上限，
-
-默认 `10`
-
-
-
-### `hbase.hstore.compaction.kv.max`
-
-在`flushing`或者`compacting`时可以读取多少个KeyValue并批量写入，如果有大的 KeyValue 或者 OOME 的话则配置一个小的值，如果行数多且小则配置大值
-
-默认 `10`
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-## HFile
-
-
-### `hfile.block.cache.size`
-
-要分配给 HFile和StoreFile 使用的最大堆（-Xmx设置）的百分比。设置为0禁用，但不建议; 您至少需要足够的缓存才能保存存储文件索引
-
-默认 `0.4`，最大堆配置的 40％ 用来作为缓存
-
-
-
-### hfile.index.block.max.size
-
-当多级块索引中的 叶子块、非叶子块、根级索引块的大小增长到此大小时，块将被写出并启动一个新块
-
-默认 `131072`
 
 
 
