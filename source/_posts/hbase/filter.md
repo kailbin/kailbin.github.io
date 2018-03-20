@@ -303,4 +303,5 @@ filterList.addFilter(new KeyOnlyFilter());
 
 ## Read More
 
+- [68. Client Request Filters](http://hbase.apache.org/book.html#client.filter)
 - [HBase内置过滤器的一些总结](http://blog.csdn.net/cnweike/article/details/42920547)
