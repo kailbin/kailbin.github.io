@@ -17,38 +17,36 @@ HBase 的过滤器可以让我们**在查询中添加更多的限制条件 来�
 
 ## Filter 的继承结构
 
-> `org.apache.hadoop.hbase.filter `  ->  `*.filter`
 
-- Object (java.lang)
-    - Filter (*.filter)
-        - FilterBase (*.filter)
-            - `CompareFilter` (*.filter)
-                - RowFilter (*.filter)
-                - FamilyFilter (*.filter)
-                - QualifierFilter (*.filter)
-                - ValueFilter (*.filter)
-                - DependentColumnFilter (*.filter)
-            - SingleColumnValueFilter (*.filter)
-                - SingleColumnValueExcludeFilter (*.filter)
-            - PrefixFilter (*.filter)
-            - PageFilter (*.filter)
-            - KeyOnlyFilter (*.filter)
-            - FirstKeyOnlyFilter (*.filter)
-                - FirstKeyValueMatchingQualifiersFilter (*.filter)
-            - InclusiveStopFilter (*.filter)
-            - TimestampsFilter (*.filter)
-            - ColumnCountGetFilter (*.filter)
-            - ColumnPaginationFilter (*.filter)
-            - ColumnPrefixFilter (*.filter)
-            - RandomRowFilter (*.filter)
-            - ColumnRangeFilter (*.filter)
-            - FuzzyRowFilter (*.filter)
-            - MultipleColumnPrefixFilter (*.filter)
-            - MultiRowRangeFilter (*.filter)
-            - SkipFilter (*.filter)
-            - WhileMatchFilter (*.filter)
-        - FilterList (*.filter)
-        - FilterWrapper (*.filter)
+- Filter 
+    - FilterBase 
+        - `CompareFilter` 
+            - `RowFilter` 
+            - `FamilyFilter` 
+            - `QualifierFilter` 
+            - `ValueFilter` 
+            - DependentColumnFilter 
+        - `SingleColumnValueFilter` 
+            - SingleColumnValueExcludeFilter 
+        - `PrefixFilter` 
+        - `PageFilter` (*.fiter)
+        - KeyOnlyFilter 
+        - FirstKeyOnlyFilter 
+            - FirstKeyValueMatchingQualifiersFilter 
+        - InclusiveStopFilter 
+        - `TimestampsFilter` 
+        - ColumnCountGetFilter 
+        - ColumnPaginationFilter 
+        - ColumnPrefixFilter 
+        - RandomRowFilter 
+        - ColumnRangeFilter 
+        - `MultipleColumnPrefixFilter` 
+        - `MultiRowRangeFilter`
+        - `FuzzyRowFilter`
+        - SkipFilter 
+        - WhileMatchFilter 
+    - `FilterList` 
+    - FilterWrapper 
 
 
 ## CompareFilter
@@ -240,8 +238,24 @@ scan 的时候开始行被包含在内，但是结束行被排除在外，**使�
 
 ### FuzzyRowFilter
 
+`FuzzyRowFilter` 是对 **行键模糊匹配** 的优化版。是扫描更加快速。
+它需要 一对儿信息（行键，模糊信息）以匹配行键。
+模糊信息（fuzzy）是以`0`或`1`作为其值的字节数组：
+- `0` - 相同位置上的 RowKey 的字节必须匹配（**不模糊匹配**）
+- `1` - 这个位置上的 RowKey 的字节可以不同于提供的行密钥中的字节（**模糊匹配**）
 
+示例: 假设行键的格式是 `userId_actionId_year_month`. 
+`userId`的长度是`4`, `actionId`的长度是`2` ，`year` 和 `month`的长度分别是`4`和`2`
+假设我们需要在**任意一年**的**一月**中获取执行**特定操作**（编码为`99`）的**所有用户**，我们可以这样。
+pair(row key, fuzzy info) 信息如下: row key = `????_99_????_01` (用`?`代替任何字符) ，fuzzy info = `new byte[]{1,1,1,1,   0,   0,0,   0,   1,1,1,1,   0,   0,0}`
 
+``` java
+Pair<byte[], byte[]> pair = Pair.newPair(
+    Bytes.toBytes("????_99_????_01"), 
+    new byte[]{1,1,1,1,   0,   0,0,   0,   1,1,1,1,   0,   0,0}
+);
+scan.setFilter(new FuzzyRowFilter(Arrays.asList(pair)));
+```
 
 > [FuzzyRowFilter](http://hbase.apache.org/apidocs/org/apache/hadoop/hbase/filter/FuzzyRowFilter.html)
 
@@ -250,9 +264,14 @@ scan 的时候开始行被包含在内，但是结束行被排除在外，**使�
 
 ## 附加过滤器
 
-### 1. SkipFilter
+### SkipFilter
 
-### 2. WhileMatchFilter
+该过滤器用于包装其它过滤器，匹配的过滤器，被该过滤器包装后会跳过。相当于 **不等于**
+
+
+### WhileMatchFilter
+
+该过滤器用于包装其它过滤器，返回从匹配开始，第一次遇到不匹配的之前的匹配到的数据。
 
 
 
@@ -278,16 +297,6 @@ FilterList filterList = new FilterList(FilterList.Operator.MUST_PASS_ALL);
 filterList.addFilter(new PrefixFilter(Bytes.toBytes("dev")));
 filterList.addFilter(new KeyOnlyFilter());
 ```
-
-
-
-## 效果一样的过滤器
-
-- 返回 行键以 `dev` 开头的行 
-    - `new PrefixFilter(Bytes.toBytes("dev"));`
-    - `new RowFilter(CompareOp.EQUAL, new BinaryPrefixComparator(Bytes.toBytes("dev")));`
-    - `new RowFilter(CompareOp.EQUAL, new RegexStringComparator("dev.*"))`
-
 
 
 
