@@ -672,5 +672,6 @@ scanner的超时时间
 
 ## Read More
 
+- [7. Default Configuration](http://hbase.apache.org/book.html#config.files)
 - [Hbase配置项简介](http://blog.sina.com.cn/s/blog_6277623c0102v3jy.html)
 - [HBase 默认配置](http://eclecl1314-163-com.iteye.com/blog/1474286)
