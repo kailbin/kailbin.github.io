@@ -303,4 +303,5 @@ filterList.addFilter(new KeyOnlyFilter());
 
 ## Read More
 
+- [Filters In Hbase Shell](http://blog.csdn.net/u014034934/article/details/74330848)
 - [HBase内置过滤器的一些总结](http://blog.csdn.net/cnweike/article/details/42920547)
