@@ -13,7 +13,7 @@ categories: Other
 
 
 
-<center>
+<!--center>
 ​
 爱是初次相见时的回眸
 爱是初次相见后的等候
@@ -35,4 +35,4 @@ categories: Other
 
 你总是问我爱不爱你
 可能是我爱你还不够
-</center>
+</center-->
