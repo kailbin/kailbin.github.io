@@ -70,6 +70,7 @@ Connection: close
 
 # Read More
 
+- [全局精确流量调度新思路-HttpDNS服务详解](https://mp.weixin.qq.com/s?__biz=MzA3ODgyNzcwMw==&mid=201837080&idx=1&sn=b2a152b84df1c7dbd294ea66037cf262&scene=2&from=timeline&isappinstalled=0&utm_source=tuicool)
 - [Mozilla Host](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Host)
 - [Hypertext Transfer Protocol (HTTP/1.1)](https://tools.ietf.org/html/rfc7230#section-5.4)
 - [HTTP请求方法](http://www.runoob.com/http/http-methods.html)
