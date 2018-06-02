@@ -69,10 +69,10 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  - type: git
-    repo: https://ykb553%40163.com@github.com/kailbin/kailbin.github.io.git
-    branch: master
-    message:
+  type: git
+  repo: https://ykb553%40163.com@github.com/kailbin/kailbin.github.io.git
+  branch: master
+  message:
 
 search:
   path: search.xml
