@@ -100,30 +100,25 @@ menu:
   #schedule: /schedule/ || calendar
   #sitemap: /sitemap.xml || sitemap
   #commonweal: /404/ || heartbeat
-  categories: /categories
-  tags: /tags
+  categories: /categories || folder
+  tags: /tags || th-large
   # about: /guestbook
-  friendlink: /friendlink.html
+  friendlink: /friendlink.html || chain
   #sitemap: /sitemap.xml
   #commonweal: /404.html
-  gitbooks: /gitbooks.html
+  gitbooks: /gitbooks.html || github
 
 # Enable/Disable menu icons.
 menu_icons:
   enable: true
-  #KeyMapsToMenuItemKey: NameOfTheIconFromFontAwesome
   home: home
   about: user
-  categories: th
+  categories: folder
   schedule: calendar
-  tags: tags
   archives: archive
   sitemap: sitemap
   commonweal: heartbeat
-
   guestbook: user
-  friendlink: link
-  gitbooks: book
 
 
 
