@@ -1,5 +1,3 @@
-<a href="http://www.amazingcounters.com"><img border="0" style="height:14px" src="http://cc.amazingcounters.com/counter.php?i=3221555&c=9664978" alt="AmazingCounters.com"></a>
-
 <div class="copyright">{#
 #}{% set current = date(Date.now(), "YYYY") %}{#
 #}&copy; {% if theme.footer.since and theme.footer.since != current %}{{ theme.footer.since }} &mdash; {% endif %}{#
