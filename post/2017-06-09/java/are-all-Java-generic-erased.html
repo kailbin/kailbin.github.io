@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="JDK5 引入了泛型，为了保持跟 JDK5 之前兼容性，Java采用 泛型擦除 的机制来引入泛型。所以说 Java 的泛型实际上是伪泛型，其仅仅是给编译器javac使用的，确保数据的安全性和免去强制类型转换的麻烦。在运行期，Java的泛型将被擦除，使用强转的形式来进行（类似于Integer value = (Integer) map.get(&amp;quot;key&amp;quot;)）。">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 泛型信息真的全都擦除了吗">
+<meta property="og:url" content="http://blog.kail.xyz/post/2017-06-09/java/are-all-Java-generic-erased.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="JDK5 引入了泛型，为了保持跟 JDK5 之前兼容性，Java采用 泛型擦除 的机制来引入泛型。所以说 Java 的泛型实际上是伪泛型，其仅仅是给编译器javac使用的，确保数据的安全性和免去强制类型转换的麻烦。在运行期，Java的泛型将被擦除，使用强转的形式来进行（类似于Integer value = (Integer) map.get(&amp;quot;key&amp;quot;)）。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-16T13:21:39.475Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 泛型信息真的全都擦除了吗">
+<meta name="twitter:description" content="JDK5 引入了泛型，为了保持跟 JDK5 之前兼容性，Java采用 泛型擦除 的机制来引入泛型。所以说 Java 的泛型实际上是伪泛型，其仅仅是给编译器javac使用的，确保数据的安全性和免去强制类型转换的麻烦。在运行期，Java的泛型将被擦除，使用强转的形式来进行（类似于Integer value = (Integer) map.get(&amp;quot;key&amp;quot;)）。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2017-06-09/java/are-all-Java-generic-erased.html"/>
+
+
+
+
+
+  <title>Java 泛型信息真的全都擦除了吗 | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-06-09/java/are-all-Java-generic-erased.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Java 泛型信息真的全都擦除了吗</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-09T00:00:00+08:00">
+                2017-06-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2017-06-09/java/are-all-Java-generic-erased.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2017-06-09/java/are-all-Java-generic-erased.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JDK5 引入了泛型，为了保持跟 JDK5 之前兼容性，Java采用 <strong>泛型擦除</strong> 的机制来引入泛型。<br>所以说 Java 的泛型实际上是伪泛型，其仅仅是给编译器javac使用的，确保数据的安全性和免去强制类型转换的麻烦。<br>在运行期，Java的泛型将被擦除，使用强转的形式来进行（类似于<code>Integer value = (Integer) map.get(&quot;key&quot;)</code>）。</p>
+<a id="more"></a>
+<h1 id="泛型擦除的例子1"><a href="#泛型擦除的例子1" class="headerlink" title="泛型擦除的例子1"></a>泛型擦除的例子1</h1><p>编译前<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">map.put(<span class="string">"one"</span>, <span class="number">1</span>);</span><br><span class="line">System.out.println(map.get(<span class="string">"one"</span>) + <span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
+<p>编译后<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HashMap localHashMap = <span class="keyword">new</span> HashMap();</span><br><span class="line">localHashMap.put(<span class="string">"one"</span>, Integer.valueOf(<span class="number">1</span>));</span><br><span class="line">System.out.println(((Integer)localHashMap.get(<span class="string">"one"</span>)).intValue() + <span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
+<h1 id="泛型擦除的例子2"><a href="#泛型擦除的例子2" class="headerlink" title="泛型擦除的例子2"></a>泛型擦除的例子2</h1><p>编译前<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;? extends ArrayList&gt; stringList = <span class="keyword">new</span> ArrayList&lt;String&gt;().getClass();</span><br><span class="line">Class&lt;? extends ArrayList&gt; integerList = <span class="keyword">new</span> ArrayList&lt;Integer&gt;().getClass();</span><br><span class="line">System.out.println(stringList == integerList);</span><br></pre></td></tr></table></figure></p>
+<p>编译后<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Class localClass1 = <span class="keyword">new</span> ArrayList().getClass();</span><br><span class="line">Class localClass2 = <span class="keyword">new</span> ArrayList().getClass();</span><br><span class="line">System.out.println(localClass1 == localClass2);</span><br></pre></td></tr></table></figure></p>
+<p>这里输出 <code>true</code>，可以看出，新建的两个不同的 <code>ArrayList&lt;&gt;</code>，编译之后都是<code>ArrayList</code>，没有了泛型信息。</p>
+<p>以上两个例子均使用 <code>javac Main.java</code> 编译，使用 <code>jd-gui-1.4.0.jar</code> 反编译，测试中发现，不同的版本的编译和反编译工具出来的结果有些许不同。</p>
+<h1 id="JDK5-之后类文件-class-文件-的变动"><a href="#JDK5-之后类文件-class-文件-的变动" class="headerlink" title="JDK5 之后类文件(.class 文件)的变动"></a>JDK5 之后类文件(.class 文件)的变动</h1><blockquote>
+<p>The Java SE 5.0 platform in 2004 brought momentous changes to the Java programming language but had a relatively muted effect on the design of the Java Virtual Machine. Additions were made to the class file format to support new Java programming language features such as generics and variable arity methods.</p>
+</blockquote>
+<blockquote>
+<p>在 2004 年发布的 Java SE 5.0 版为 Java 语言带来了翻天覆地的变化， 但是对 Java 虚拟机设计上的影响力则相对较小。 在这个版本中， 我们扩充了 Class 文件格式以便支持新的 Java语言特性，譬如<u>泛型</u>和<u>变长参数方法</u>等。</p>
+</blockquote>
+<blockquote>
+<p>From <a href="http://docs.oracle.com/javase/specs/jvms/se7/html/jvms-0-preface7.html" target="_blank" rel="noopener">《Java Virtual Machine Specification》 - Preface to the Java SE 7 Edition </a></p>
+</blockquote>
+<p>添加了泛型支持后，.class 文件格式也发生了变动。其通过 Signature(签名) 的形式来记录定义的 泛型类、泛型方法等。</p>
+<blockquote>
+<p>签名（Signature） 是用于描述字段、方法和类型定义中的泛型信息的字符串;<br>泛型类型、方法描述和参数化类型描述等都属于签名;<br>Java 编译器需要这类信息来实现（或辅助实现） 反射（reflection） 和跟踪调试功能;</p>
+</blockquote>
+<p>详见：<a href="http://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.3.4" target="_blank" rel="noopener">《Java Virtual Machine Specification》 - 4.3.4. Signatures</a></p>
+<h1 id="如何获得声明的泛型类型"><a href="#如何获得声明的泛型类型" class="headerlink" title="如何获得声明的泛型类型"></a>如何获得声明的泛型类型</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * References a generic type.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * http://gafter.blogspot.nl/2006/12/super-type-tokens.html</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> crazybob@google.com (Bob Lee)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTypeReference</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Type type;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">MyTypeReference</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Type superclass = getClass().getGenericSuperclass();</span><br><span class="line">        <span class="keyword">if</span> (superclass <span class="keyword">instanceof</span> Class) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Missing type parameter."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.type = ((ParameterizedType) superclass).getActualTypeArguments()[<span class="number">0</span>]; <span class="comment">// !!!!! 关键部分</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">newInstance</span><span class="params">()</span> <span class="keyword">throws</span> IllegalAccessException, InstantiationException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (T) newInstance(type);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 实例化获得的类型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">newInstance</span><span class="params">(Type type)</span> <span class="keyword">throws</span> IllegalAccessException, InstantiationException </span>&#123;</span><br><span class="line">        Class&lt;?&gt; klass;</span><br><span class="line">        <span class="keyword">if</span> (type <span class="keyword">instanceof</span> Class&lt;?&gt;) &#123;</span><br><span class="line">            klass = (Class&lt;?&gt;) type;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            klass = (Class&lt;?&gt;) ((ParameterizedType) type).getRawType();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> klass.newInstance();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Type <span class="title">getType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.type;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 打印出所有的泛型类型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printAllType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(type);</span><br><span class="line">        printAllType(type, <span class="string">"\t"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">printAllType</span><span class="params">(Type tp, String tab)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 是否是参数化类型 （类似于 Map&lt;String, Integer&gt; 中的 `String` 和 `Integer`）</span></span><br><span class="line">        <span class="keyword">if</span> (tp <span class="keyword">instanceof</span> ParameterizedType) &#123;</span><br><span class="line">            ParameterizedType parameterizedType = (ParameterizedType) tp;</span><br><span class="line">            System.out.println(tab + parameterizedType.getRawType());</span><br><span class="line"></span><br><span class="line">            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();</span><br><span class="line">            <span class="keyword">for</span> (Type actualTypeArgument : actualTypeArguments) &#123;</span><br><span class="line">                printAllType(actualTypeArgument, tab + <span class="string">"\t"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="comment">// 是否是 类类型</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (tp <span class="keyword">instanceof</span> Class) &#123;</span><br><span class="line">            System.out.println(tab + tp);</span><br><span class="line">        &#125;  <span class="comment">// 是否是通配符类型 （类似以与 List&lt;? extends Map&gt; 中的 `? extends Map`）</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (tp <span class="keyword">instanceof</span> WildcardType) &#123;</span><br><span class="line">            WildcardType wildcardType = (WildcardType) tp;</span><br><span class="line">            System.out.println(tab + wildcardType);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// `? super Map`</span></span><br><span class="line">            Type[] lowerBounds = wildcardType.getLowerBounds();</span><br><span class="line">            <span class="keyword">if</span> (lowerBounds.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Type lowerBound : lowerBounds) &#123;</span><br><span class="line">                    printAllType(lowerBound, tab + <span class="string">"\t"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// `? extends Map`</span></span><br><span class="line">            Type[] upperBounds = wildcardType.getUpperBounds();</span><br><span class="line">            <span class="keyword">if</span> (upperBounds.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Type upperBound : upperBounds) &#123;</span><br><span class="line">                    printAllType(upperBound, tab + <span class="string">"\t"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该类是抽象类，获得泛型信息的时候new其子类，如下：</p>
+<h2 id="使用示例1-ParameterizedType"><a href="#使用示例1-ParameterizedType" class="headerlink" title="使用示例1 ParameterizedType"></a>使用示例1 ParameterizedType</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> MyTypeReference&lt;ArrayList&lt;Map&lt;LinkedHashMap&lt;String, <span class="keyword">int</span>[]&gt;, String&gt;&gt;&gt;() &#123;</span><br><span class="line">&#125;.printAllType();</span><br></pre></td></tr></table></figure>
+<p>打印 出所有的泛型信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">java.util.ArrayList&lt;java.util.Map&lt;java.util.LinkedHashMap&lt;java.lang.String, int[]&gt;, java.lang.String&gt;&gt;</span><br><span class="line">    class java.util.ArrayList</span><br><span class="line">        interface java.util.Map</span><br><span class="line">            class java.util.LinkedHashMap</span><br><span class="line">                class java.lang.String</span><br><span class="line">                class [I</span><br><span class="line">            class java.lang.String</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用示例2-WildcardType"><a href="#使用示例2-WildcardType" class="headerlink" title="使用示例2 WildcardType"></a>使用示例2 WildcardType</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> MyTypeReference&lt;List&lt;? extends Map&gt;&gt;() &#123;</span><br><span class="line">&#125;.printAllType();</span><br></pre></td></tr></table></figure>
+<p>打印 出所有的泛型信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java.util.List&lt;? extends java.util.Map&gt;</span><br><span class="line">	interface java.util.List</span><br><span class="line">		? extends java.util.Map</span><br><span class="line">			interface java.util.Map</span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是，这里使用的都是 匿名子类（<code>new MyTypeReference&lt;...&gt;() { }</code>）。</p>
+<h1 id="常见应用场景"><a href="#常见应用场景" class="headerlink" title="常见应用场景"></a>常见应用场景</h1><p>Spring 中的 <code>ParameterizedTypeReference&lt;T&gt;</code>、fastjson 中的<code>TypeReference&lt;T&gt;</code>等，皆是通过该方式获得泛型信息，并反序列化json的。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="RednaxelaFX-说"><a href="#RednaxelaFX-说" class="headerlink" title="RednaxelaFX 说"></a>RednaxelaFX 说</h2><blockquote>
+<p>Java泛型有这么一种规律：<br>位于声明一侧的，源码里写了什么到运行时就能看到什么;<br>位于使用一侧的，源码里写什么到运行时都没了。</p>
+</blockquote>
+<p>什么意思呢?</p>
+<blockquote>
+<p>“声明一侧”包括泛型类型(泛型类与泛型接口)声明、带有泛型参数的方法和域的声明。<br>注意局部变量的声明不算在内，那个属于“使用”一侧</p>
+</blockquote>
+<h1 id="拓展阅读"><a href="#拓展阅读" class="headerlink" title="拓展阅读"></a>拓展阅读</h1><blockquote>
+<p><a href="http://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.3.4" target="_blank" rel="noopener">4.3.4. Signatures</a></p>
+<p><a href="https://segmentfault.com/q/1010000005680647" target="_blank" rel="noopener">为什么能获取到父类的泛型？</a><br><a href="http://developer.51cto.com/art/201103/250028.htm" target="_blank" rel="noopener">详解Java泛型type体系整理</a><br><a href="http://www.webkfa.com/one7/w595.html" target="_blank" rel="noopener">Java类型中ParameterizedType，GenericArrayType，TypeVariabl，WildcardType详解</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2017-06-07/spring/resttemplate-message-converters.html" rel="next" title="自定义 Spring RestTemplate Message Converters">
+                <i class="fa fa-chevron-left"></i> 自定义 Spring RestTemplate Message Converters
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2017-06-10/java/log4j-flush-buffer.html" rel="prev" title="Log4j BufferedIO 与 flush BufferedIO">
+                Log4j BufferedIO 与 flush BufferedIO <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型擦除的例子1"><span class="nav-text"><a href="#&#x6CDB;&#x578B;&#x64E6;&#x9664;&#x7684;&#x4F8B;&#x5B50;1" class="headerlink" title="&#x6CDB;&#x578B;&#x64E6;&#x9664;&#x7684;&#x4F8B;&#x5B50;1"></a>&#x6CDB;&#x578B;&#x64E6;&#x9664;&#x7684;&#x4F8B;&#x5B50;1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型擦除的例子2"><span class="nav-text"><a href="#&#x6CDB;&#x578B;&#x64E6;&#x9664;&#x7684;&#x4F8B;&#x5B50;2" class="headerlink" title="&#x6CDB;&#x578B;&#x64E6;&#x9664;&#x7684;&#x4F8B;&#x5B50;2"></a>&#x6CDB;&#x578B;&#x64E6;&#x9664;&#x7684;&#x4F8B;&#x5B50;2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK5-之后类文件-class-文件-的变动"><span class="nav-text"><a href="#JDK5-&#x4E4B;&#x540E;&#x7C7B;&#x6587;&#x4EF6;-class-&#x6587;&#x4EF6;-&#x7684;&#x53D8;&#x52A8;" class="headerlink" title="JDK5 &#x4E4B;&#x540E;&#x7C7B;&#x6587;&#x4EF6;(.class &#x6587;&#x4EF6;)&#x7684;&#x53D8;&#x52A8;"></a>JDK5 &#x4E4B;&#x540E;&#x7C7B;&#x6587;&#x4EF6;(.class &#x6587;&#x4EF6;)&#x7684;&#x53D8;&#x52A8;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何获得声明的泛型类型"><span class="nav-text"><a href="#&#x5982;&#x4F55;&#x83B7;&#x5F97;&#x58F0;&#x660E;&#x7684;&#x6CDB;&#x578B;&#x7C7B;&#x578B;" class="headerlink" title="&#x5982;&#x4F55;&#x83B7;&#x5F97;&#x58F0;&#x660E;&#x7684;&#x6CDB;&#x578B;&#x7C7B;&#x578B;"></a>&#x5982;&#x4F55;&#x83B7;&#x5F97;&#x58F0;&#x660E;&#x7684;&#x6CDB;&#x578B;&#x7C7B;&#x578B;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例1-ParameterizedType"><span class="nav-text"><a href="#&#x4F7F;&#x7528;&#x793A;&#x4F8B;1-ParameterizedType" class="headerlink" title="&#x4F7F;&#x7528;&#x793A;&#x4F8B;1 ParameterizedType"></a>&#x4F7F;&#x7528;&#x793A;&#x4F8B;1 ParameterizedType</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例2-WildcardType"><span class="nav-text"><a href="#&#x4F7F;&#x7528;&#x793A;&#x4F8B;2-WildcardType" class="headerlink" title="&#x4F7F;&#x7528;&#x793A;&#x4F8B;2 WildcardType"></a>&#x4F7F;&#x7528;&#x793A;&#x4F8B;2 WildcardType</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常见应用场景"><span class="nav-text"><a href="#&#x5E38;&#x89C1;&#x5E94;&#x7528;&#x573A;&#x666F;" class="headerlink" title="&#x5E38;&#x89C1;&#x5E94;&#x7528;&#x573A;&#x666F;"></a>&#x5E38;&#x89C1;&#x5E94;&#x7528;&#x573A;&#x666F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-text"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RednaxelaFX-说"><span class="nav-text"><a href="#RednaxelaFX-&#x8BF4;" class="headerlink" title="RednaxelaFX &#x8BF4;"></a>RednaxelaFX &#x8BF4;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拓展阅读"><span class="nav-text"><a href="#&#x62D3;&#x5C55;&#x9605;&#x8BFB;" class="headerlink" title="&#x62D3;&#x5C55;&#x9605;&#x8BFB;"></a>&#x62D3;&#x5C55;&#x9605;&#x8BFB;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ZooKeeper," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="ZooKeeper ACL 的权限控制信息由三部分组成：scheme:id:permission， 分别是 权限模式、权限对象 和 权限。">
+<meta name="keywords" content="ZooKeeper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ZooKeeper ACL 权限控制">
+<meta property="og:url" content="http://blog.kail.xyz/post/2017-01-04/zookeeper-acl.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="ZooKeeper ACL 的权限控制信息由三部分组成：scheme:id:permission， 分别是 权限模式、权限对象 和 权限。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-16T13:21:39.490Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ZooKeeper ACL 权限控制">
+<meta name="twitter:description" content="ZooKeeper ACL 的权限控制信息由三部分组成：scheme:id:permission， 分别是 权限模式、权限对象 和 权限。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2017-01-04/zookeeper-acl.html"/>
+
+
+
+
+
+  <title>ZooKeeper ACL 权限控制 | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-04/zookeeper-acl.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">ZooKeeper ACL 权限控制</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-04T00:00:00+08:00">
+                2017-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2017-01-04/zookeeper-acl.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2017-01-04/zookeeper-acl.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>ZooKeeper ACL 的权限控制信息由三部分组成：<code>scheme:id:permission</code>， 分别是 <strong>权限模式</strong>、<strong>权限对象</strong> 和 <strong>权限</strong>。</p>
+<a id="more"></a>
+<h1 id="权限模式（scheme）"><a href="#权限模式（scheme）" class="headerlink" title="权限模式（scheme）"></a>权限模式（scheme）</h1><p><strong>world</strong>   ：[默认] 固定用户为anyone，为所有Client端开放权限<br><strong>digest</strong>  ：Client端由用户名和密码验证，譬如<code>user:password</code>，digest的密码生成方式是<code>BASE64(SHA-1(user:password))</code><br><strong>auth</strong>    ：不使用任何id，代表任何已确认用户<br><strong>ip</strong>      ：Client端由IP地址验证，譬如172.2.0.0/24<br><strong>super</strong>   ：在这种scheme情况下，对应的id拥有超级权限，可以做任何事情(cdrwa）</p>
+<blockquote>
+<p>注意：<code>exists</code>操作和<code>getAcl</code>操作并不受ACL许可控制，因此任何客户端可以查询节点的状态和节点的ACL。</p>
+</blockquote>
+<h1 id="权限ID（id）"><a href="#权限ID（id）" class="headerlink" title="权限ID（id）"></a>权限ID（id）</h1><h2 id="digest"><a href="#digest" class="headerlink" title="digest"></a>digest</h2><p><strong>生成密文</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ java -cp ./zookeeper-3.4.6.jar:./lib/slf4j-log4j12-1.6.1.jar:./lib/slf4j-api-1.6.1.jar:./lib/log4j-1.2.16.jar \</span><br><span class="line">org.apache.zookeeper.server.auth.DigestAuthenticationProvider <span class="built_in">test</span>:<span class="built_in">test</span></span><br></pre></td></tr></table></figure></p>
+<p>输出：</p>
+<pre><code>test:test-&gt;test:V28q/NynI4JI3Rk54h0r8O5kMug=
+</code></pre><p><strong>设置权限</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[zk] setAcl /digest_test digest:<span class="built_in">test</span>:V28q/NynI4JI3Rk54h0r8O5kMug=:cdrwa</span><br></pre></td></tr></table></figure></p>
+<h2 id="ip"><a href="#ip" class="headerlink" title="ip"></a>ip</h2><p>可以访问的ip地址（比如127.0.0.1）或ip地址段（比如192.168.1.0/16）  </p>
+<p><strong>设置权限</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[zk] setAcl /ip_test ip:127.0.0.1:crwda</span><br></pre></td></tr></table></figure></p>
+<p><strong>权限信息</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[zk] getAcl /ip_test</span><br><span class="line"><span class="string">'ip,'</span>127.0.0.1</span><br><span class="line">: cdrwa</span><br></pre></td></tr></table></figure></p>
+<h2 id="super"><a href="#super" class="headerlink" title="super"></a>super</h2><p>ZooKeeper 有个管理员权限，需要在启动参数里面配置。</p>
+<p><strong>生成管理员账户密文</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ java -cp ./zookeeper-3.4.6.jar:./lib/slf4j-log4j12-1.6.1.jar:./lib/slf4j-api-1.6.1.jar:./lib/log4j-1.2.16.jar \</span><br><span class="line">org.apache.zookeeper.server.auth.DigestAuthenticationProvider admin:admin</span><br></pre></td></tr></table></figure></p>
+<p>输出：</p>
+<pre><code>admin:admin-&gt;admin:x1nq8J5GOJVPY6zgzhtTtA9izLc=
+</code></pre><p><strong>编辑zkServer.sh</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ./bin/zkServer.sh</span><br></pre></td></tr></table></figure></p>
+<p><strong><code>:/nohup</code> 找到启动的地方，大概在109行(<code>:set nu</code>)左右，新增启动参数</strong><br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup <span class="string">"$JAVA"</span> <span class="string">"-Dzookeeper.log.dir=$&#123;ZOO_LOG_DIR&#125;"</span> <span class="string">"-Dzookeeper.root.logger=$&#123;ZOO_LOG4J_PROP&#125;"</span> \</span><br><span class="line"><span class="string">"-Dzookeeper.DigestAuthenticationProvider.superDigest=admin:x1nq8J5GOJVPY6zgzhtTtA9izLc="</span> \</span><br></pre></td></tr></table></figure></p>
+<p><strong>重启</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./bin/zkServer.sh restart</span><br></pre></td></tr></table></figure></p>
+<p><strong>授权</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[zk] addauth digest admin:admin</span><br></pre></td></tr></table></figure></p>
+<h1 id="权限（permission）"><a href="#权限（permission）" class="headerlink" title="权限（permission）"></a>权限（permission）</h1><p>Create（<strong>c</strong>）：允许对<code>子节点</code>Create操作<br>Delete（<strong>d</strong>）：允许对<code>子节点</code>Delete操作<br>Read（<strong>r</strong>）  ：允许对<code>本节点</code>GetChildren和GetData操作<br>Write（<strong>w</strong>） ：允许对<code>本节点</code>SetData操作<br>Admin（<strong>a</strong>） ：允许对<code>本节点</code>setAcl操作</p>
+<h1 id="权限相关操作"><a href="#权限相关操作" class="headerlink" title="权限相关操作"></a>权限相关操作</h1><h2 id="getAcl-获取权限信息"><a href="#getAcl-获取权限信息" class="headerlink" title="getAcl 获取权限信息"></a><code>getAcl</code> 获取权限信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 16] getAcl /taobao-pamirs-schedule</span><br><span class="line"><span class="string">'digest,'</span>:BaefBs8/Z/cm2uaNGKIpD2yaUMk=</span><br><span class="line">: cdrwa</span><br><span class="line"><span class="string">'world,'</span>anyone</span><br><span class="line">: r</span><br></pre></td></tr></table></figure>
+<p><code>/taobao-pamirs-schedule</code> 该节点对所有人只读（<code>r</code>），对<code>digest</code>验证通过的人拥有所有权限（<code>cdrwa</code>）</p>
+<h2 id="addauth-为当前-session-授权"><a href="#addauth-为当前-session-授权" class="headerlink" title="addauth 为当前 session 授权"></a><code>addauth</code> 为当前 session 授权</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">addauth digest username:password</span><br></pre></td></tr></table></figure>
+<p>为当前session授权之后，就可以对带权限的节点进行操作了</p>
+<h1 id="Java-相关操作"><a href="#Java-相关操作" class="headerlink" title="Java 相关操作"></a>Java 相关操作</h1><h2 id="创建带权限的节点"><a href="#创建带权限的节点" class="headerlink" title="创建带权限的节点"></a>创建带权限的节点</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">List&lt;ACL&gt; acls = <span class="keyword">new</span> ArrayList&lt;ACL&gt;(<span class="number">2</span>);     </span><br><span class="line">  </span><br><span class="line">Id id1 = <span class="keyword">new</span> Id(<span class="string">"digest"</span>, DigestAuthenticationProvider.generateDigest(<span class="string">"admin:admin123"</span>));  </span><br><span class="line">ACL acl1 = <span class="keyword">new</span> ACL(ZooDefs.Perms.ALL, id1);  </span><br><span class="line">  </span><br><span class="line">Id id2 = <span class="keyword">new</span> Id(<span class="string">"digest"</span>, DigestAuthenticationProvider.generateDigest(<span class="string">"guest:guest123"</span>));  </span><br><span class="line">ACL acl2 = <span class="keyword">new</span> ACL(ZooDefs.Perms.READ, id2);  </span><br><span class="line">  </span><br><span class="line">acls.add(acl1);  </span><br><span class="line">acls.add(acl2);  </span><br><span class="line">  </span><br><span class="line">ZooKeeper zk = <span class="keyword">new</span> ZooKeeper(<span class="string">"127.0.0.1:2181"</span>, <span class="number">10000</span>, <span class="keyword">new</span> DefaultWatcher());  </span><br><span class="line">zk.create(<span class="string">"/test"</span>, <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">0</span>], acls, CreateMode.PERSISTENT);</span><br></pre></td></tr></table></figure>
+<h2 id="登陆"><a href="#登陆" class="headerlink" title="登陆"></a>登陆</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ZooKeeper zk = <span class="keyword">new</span> ZooKeeper(<span class="string">"127.0.0.1:2181"</span>, <span class="number">10000</span>, <span class="keyword">new</span> DefaultWatcher());  </span><br><span class="line">zk.addAuthInfo(<span class="string">"digest"</span>, <span class="string">"guest:guest123"</span>.getBytes());</span><br></pre></td></tr></table></figure>
+<h1 id="拓展阅读"><a href="#拓展阅读" class="headerlink" title="拓展阅读"></a>拓展阅读</h1><p><a href="http://www.cnblogs.com/linuxbug/p/5023677.html" target="_blank" rel="noopener">Zookeeper权限管理与Quota管理</a><br><a href="http://zookeeper.apache.org/doc/trunk/zookeeperProgrammers.html#sc_ZooKeeperAccessControl" target="_blank" rel="noopener">ZooKeeper access control using ACLs</a><br><a href="http://nettm.iteye.com/blog/1721778" target="_blank" rel="noopener">ZooKeeper权限配置</a>  </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ZooKeeper/" rel="tag"># ZooKeeper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2017-01-02/java/guava-cache.html" rel="next" title="Guava Cache">
+                <i class="fa fa-chevron-left"></i> Guava Cache
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2017-01-07/java/java7-walkFileTree-fileVisitor.html" rel="prev" title="JDK7 遍历文件的API">
+                JDK7 遍历文件的API <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#权限模式（scheme）"><span class="nav-text"><a href="#&#x6743;&#x9650;&#x6A21;&#x5F0F;&#xFF08;scheme&#xFF09;" class="headerlink" title="&#x6743;&#x9650;&#x6A21;&#x5F0F;&#xFF08;scheme&#xFF09;"></a>&#x6743;&#x9650;&#x6A21;&#x5F0F;&#xFF08;scheme&#xFF09;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#权限ID（id）"><span class="nav-text"><a href="#&#x6743;&#x9650;ID&#xFF08;id&#xFF09;" class="headerlink" title="&#x6743;&#x9650;ID&#xFF08;id&#xFF09;"></a>&#x6743;&#x9650;ID&#xFF08;id&#xFF09;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#digest"><span class="nav-text"><a href="#digest" class="headerlink" title="digest"></a>digest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ip"><span class="nav-text"><a href="#ip" class="headerlink" title="ip"></a>ip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#super"><span class="nav-text"><a href="#super" class="headerlink" title="super"></a>super</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#权限（permission）"><span class="nav-text"><a href="#&#x6743;&#x9650;&#xFF08;permission&#xFF09;" class="headerlink" title="&#x6743;&#x9650;&#xFF08;permission&#xFF09;"></a>&#x6743;&#x9650;&#xFF08;permission&#xFF09;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#权限相关操作"><span class="nav-text"><a href="#&#x6743;&#x9650;&#x76F8;&#x5173;&#x64CD;&#x4F5C;" class="headerlink" title="&#x6743;&#x9650;&#x76F8;&#x5173;&#x64CD;&#x4F5C;"></a>&#x6743;&#x9650;&#x76F8;&#x5173;&#x64CD;&#x4F5C;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#getAcl-获取权限信息"><span class="nav-text"><a href="#getAcl-&#x83B7;&#x53D6;&#x6743;&#x9650;&#x4FE1;&#x606F;" class="headerlink" title="getAcl &#x83B7;&#x53D6;&#x6743;&#x9650;&#x4FE1;&#x606F;"></a><code>getAcl</code> &#x83B7;&#x53D6;&#x6743;&#x9650;&#x4FE1;&#x606F;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#addauth-为当前-session-授权"><span class="nav-text"><a href="#addauth-&#x4E3A;&#x5F53;&#x524D;-session-&#x6388;&#x6743;" class="headerlink" title="addauth &#x4E3A;&#x5F53;&#x524D; session &#x6388;&#x6743;"></a><code>addauth</code> &#x4E3A;&#x5F53;&#x524D; session &#x6388;&#x6743;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-相关操作"><span class="nav-text"><a href="#Java-&#x76F8;&#x5173;&#x64CD;&#x4F5C;" class="headerlink" title="Java &#x76F8;&#x5173;&#x64CD;&#x4F5C;"></a>Java &#x76F8;&#x5173;&#x64CD;&#x4F5C;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建带权限的节点"><span class="nav-text"><a href="#&#x521B;&#x5EFA;&#x5E26;&#x6743;&#x9650;&#x7684;&#x8282;&#x70B9;" class="headerlink" title="&#x521B;&#x5EFA;&#x5E26;&#x6743;&#x9650;&#x7684;&#x8282;&#x70B9;"></a>&#x521B;&#x5EFA;&#x5E26;&#x6743;&#x9650;&#x7684;&#x8282;&#x70B9;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#登陆"><span class="nav-text"><a href="#&#x767B;&#x9646;" class="headerlink" title="&#x767B;&#x9646;"></a>&#x767B;&#x9646;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拓展阅读"><span class="nav-text"><a href="#&#x62D3;&#x5C55;&#x9605;&#x8BFB;" class="headerlink" title="&#x62D3;&#x5C55;&#x9605;&#x8BFB;"></a>&#x62D3;&#x5C55;&#x9605;&#x8BFB;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="HBase,Big Data," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文地址：How-to: Use HBase Bulk Loading, and Why  Apache HBase 为您提供对大数据的 随机、实时、读/写 访问，如何有效地将数据迁移到到 HBase 呢？用户可以尝试通过 客户端API 或使用 MapReduce作业TableOutputFormat输出格式，但这些方法存在一些问题，下面会说到。HBase bulk loading(批量加载)">
+<meta name="keywords" content="HBase,Big Data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何使用 Bulk Loading ，为什么">
+<meta property="og:url" content="http://blog.kail.xyz/post/2018-03-12/hbase/how-to-use-hbase-bulk-loading-and-why.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="原文地址：How-to: Use HBase Bulk Loading, and Why  Apache HBase 为您提供对大数据的 随机、实时、读/写 访问，如何有效地将数据迁移到到 HBase 呢？用户可以尝试通过 客户端API 或使用 MapReduce作业TableOutputFormat输出格式，但这些方法存在一些问题，下面会说到。HBase bulk loading(批量加载)">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-16T13:21:39.474Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何使用 Bulk Loading ，为什么">
+<meta name="twitter:description" content="原文地址：How-to: Use HBase Bulk Loading, and Why  Apache HBase 为您提供对大数据的 随机、实时、读/写 访问，如何有效地将数据迁移到到 HBase 呢？用户可以尝试通过 客户端API 或使用 MapReduce作业TableOutputFormat输出格式，但这些方法存在一些问题，下面会说到。HBase bulk loading(批量加载)">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2018-03-12/hbase/how-to-use-hbase-bulk-loading-and-why.html"/>
+
+
+
+
+
+  <title>如何使用 Bulk Loading ，为什么 | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2018-03-12/hbase/how-to-use-hbase-bulk-loading-and-why.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">如何使用 Bulk Loading ，为什么</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-12T00:50:15+08:00">
+                2018-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/HBase/" itemprop="url" rel="index">
+                    <span itemprop="name">HBase</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2018-03-12/hbase/how-to-use-hbase-bulk-loading-and-why.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2018-03-12/hbase/how-to-use-hbase-bulk-loading-and-why.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>原文地址：<a href="http://blog.cloudera.com/blog/2013/09/how-to-use-hbase-bulk-loading-and-why/" target="_blank" rel="noopener">How-to: Use HBase Bulk Loading, and Why</a></p>
+</blockquote>
+<p>Apache HBase 为您提供对大数据的 <strong>随机、实时、读/写</strong> 访问，如何有效地将数据迁移到到 HBase 呢？<br>用户可以尝试通过 <strong>客户端API</strong> 或使用 <strong><code>MapReduce</code>作业<code>TableOutputFormat</code>输出格式</strong>，但这些方法存在一些问题，下面会说到。<br><strong>HBase bulk loading(批量加载)</strong> 功能更易于使用，并且可以更快地插入相同数量的数据</p>
+<p>本博客文章将介绍 bulk loading(批量加载) 功能的基本概念，介绍两种使用场景，并展示了两个例子。</p>
+<a id="more"></a>
+<h1 id="Bulk-Loading-概述"><a href="#Bulk-Loading-概述" class="headerlink" title="Bulk Loading 概述"></a>Bulk Loading 概述</h1><p>如果您使用传统方式（API、MapReduce）会有下面这些问题，bulk loading(批量加载) 可能是您的正确选择：</p>
+<ul>
+<li>您需要调整 MemStore 来获取更大的内存。</li>
+<li>您需要使用更大的WAL或完全绕过它们。</li>
+<li>您的压缩和flush队列数百个。</li>
+<li>您的GC失控，因为您的插入数据量很大。</li>
+<li>导入数据时，您的延迟超出SLA（Service-Level Agreement，《SRE：Google运维解密》一书中有介绍）</li>
+</ul>
+<p>大多数这些症状通常被称为“成长中的痛苦”（growing pains）。使用批量加载可以帮助您避免它们。</p>
+<p>在HBase中，bulk loading 是准备和加载<code>HFiles</code>（HBase自己的文件格式）到<code>RegionServers</code>中的过程，<br>因此<strong>绕过了写入路径</strong>并完全避免了上述那些问题。此过程与ETL类似，如下所示：</p>
+<h2 id="1-从资源中提取数据，通常是文本文件或其他数据库"><a href="#1-从资源中提取数据，通常是文本文件或其他数据库" class="headerlink" title="1.从资源中提取数据，通常是文本文件或其他数据库"></a>1.从资源中提取数据，通常是文本文件或其他数据库</h2><p>HBase不管理数据提取这部分过程。<br>换句话说，你不能通过直接从 MySQL 读取 <code>HFiles</code> 来告诉HBase准备HFile，相反，<strong>你必须以自己的方式来完成数据抽取</strong>。<br>例如，您可以在一个表上运行<code>mysqldump</code>并将结果文件上传到<code>HDFS</code>，或者获取您的Apache HTTP日志文件。<br>无论如何，在下一步之前，您的数据需要上传到 HDFS。</p>
+<blockquote>
+<p>实际上在本地磁盘也可以，如果数据量一台机器可以承受的话；<br>Hadoop 的 默认文件系统是本地文件系统 “fs.defaultFS=file:///“ </p>
+</blockquote>
+<h2 id="2-将数据转换成HFile"><a href="#2-将数据转换成HFile" class="headerlink" title="2.将数据转换成HFile"></a>2.将数据转换成HFile</h2><p>这一步需要MapReduce作业，对于大多数输入类型，您必须自己编写Mapper。<br>作业将需要发出<code>row key</code>作为输出键，以及<code>KeyValue</code>，<code>Put</code>或<code>Delete</code>作为输出值。<br>Reducer由HBase负责处理; 您可以使用 <strong>HFileOutputFormat.configureIncrementalLoad（）</strong> 对其进行配置，并执行以下操作：</p>
+<ul>
+<li>检查表以配置分区器（partitioner）</li>
+<li>将分区文件上传到群集并将其添加到 DistributedCache（Uploads the partitions file to the cluster and adds it to the DistributedCache）</li>
+<li>设置减少任务的数量以匹配当前的区域数量（Sets the number of reduce tasks to match the current number of regions）</li>
+<li>设置<strong>输出键/值类</strong>以匹配<code>HFileOutputFormat</code>的要求</li>
+<li>将reducer设置为执行适当的排序（<code>KeyValueSortReducer</code>或<code>PutSortReducer</code>）（Sets the reducer up to perform the appropriate sorting ）</li>
+</ul>
+<p>在此阶段，将在输出文件夹的每个region创建一个HFile。<br>请记住，输入数据几乎被完全重写，所以您至少需要比原始数据集的大小多两倍的可用磁盘空间。<br>例如，对于<code>100GB</code>的<code>mysqldump</code>，HDFS中至少应有<code>200GB</code>的可用磁盘空间。 您可以在流程结束时删除转储文件。</p>
+<blockquote>
+<p>这一步应该是整个 Bulk Loading 中工作量最多的一步，因为需要自定义 MapReduce  Mapper，来解析第一步导入 HDFS 的原始数据<br>Mapper 的输出类型一般是 <code>ImmutableBytesWritable</code>（row key）, <code>KeyValue</code>（列族、列限定符、时间戳、值）<br>最新版可以使用 HFileOutputFormat2 来代替 HFileOutputFormat</p>
+</blockquote>
+<h2 id="3-通过告诉RegionServers在哪里找到它们，将文件加载到HBase中"><a href="#3-通过告诉RegionServers在哪里找到它们，将文件加载到HBase中" class="headerlink" title="3.通过告诉RegionServers在哪里找到它们，将文件加载到HBase中"></a>3.通过告诉RegionServers在哪里找到它们，将文件加载到HBase中</h2><p>这是最简单的一步。它需要使用<code>LoadIncrementalHFiles</code>（通常称为<a href="http://hbase.apache.org/book.html#completebulkload" target="_blank" rel="noopener"><code>completebulkload</code></a>工具），<br>并通过向其传递一个URL来定位<code>HDFS</code>中<code>HFile</code>文件，<br>它将通过服务它的<code>RegionServer</code>将每个文件加载到相关区域。<br>如果在创建文件后分割区域，该工具将根据新边界自动分割<code>HFile</code>。<br>这个过程效率不高，所以如果你的表目前正在被其他进程写入，最好在第二步完成后立即加载生成的HFile文件。</p>
+<p>下图是这个过程的描述。数据流从原始数据源流向HDFS，RegionServers只需将文件移动到其区域的目录。</p>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><p><strong>原始数据集加载</strong>：从另一个数据存储库迁移数据， 所有用户都应考虑此用例。<br>首先，你必须学习 并设计表，然后创建表 和 预分割。<br>切割点必须考虑 row key 分配和 RegionServer 的数量。</p>
+<p>这样做的好处是直接写入文件要比通过RegionServer的写入路径（写入MemStore和WAL）并最终刷新，压缩等快得多。<br>这也意味着您不必为导入数据时繁重的工作负载调整群集，然后再为您正常工作时负载调整它。</p>
+<p><strong>增量加载</strong>：假设您有一些数据集当前由HBase提供服务，但是现在您需要从第三方批量导入更多数据，或者您有一个每晚需要插入数千兆字节的作业。<br>它可能不像HBase已经提供的数据集那么大，但它可能会影响你的正常服务，使其延迟增加。<br>通过正常的写入路径将导致在导入过程中触发很多 flush 和压缩（compactions）等不利影响。<br>这种额外的IO压力将与您正常的服务查询相竞争。</p>
+<blockquote>
+<p>Bulk Loading 支持<strong>初始化导入</strong> 和 <strong>增量导入</strong></p>
+</blockquote>
+<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><p>您可以在您自己的Hadoop集群中使用以下示例，也可以使用 <a href="https://www.cloudera.com/downloads/quickstart_vms/5-12.html" target="_blank" rel="noopener">Cloudera QuickStart VM</a>，它是一个单节点集群镜像，包含一些示例数据。</p>
+<h2 id="内置的-TSV-Bulk-Loader"><a href="#内置的-TSV-Bulk-Loader" class="headerlink" title="内置的 TSV Bulk Loader"></a>内置的 TSV Bulk Loader</h2><p>HBase附带一个MR作业，可以读取 指定分割符分隔 的文件并直接输出到HBase表中或创建HFile进行批量加载。</p>
+<ol>
+<li>获取示例数据并将其上传到HDFS。</li>
+<li>根据预先配置的表，运行ImportTsv作业将文件转换为多个HFile。</li>
+<li>准备并加载HBase中的文件。</li>
+</ol>
+<p>第一步是打开控制台并使用以下命令获取示例数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -O https://people.apache.org/~jdcryans/word_count.csv</span><br></pre></td></tr></table></figure>
+<p>该文件是csv格式，只有两列，第一列是单词，第二列是单词出现的个数，没有任何列标题。现在，将文件上传到HDFS：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -put word_count.csv</span><br></pre></td></tr></table></figure>
+<p>接下来需要转换文件， 首先你需要设计表格。<br>为了简单起见，将其称为 “wordcount” - 列族命名为 “f”，row key 是 csv文件第一列单词本身。<br>创建表格时的最佳做法是根据 rowkey  分布对其进行分割，但对于此示例，我们将创建 五个region 。打开hbase shell：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase shell</span><br></pre></td></tr></table></figure>
+<p>运行下面的命令创建表</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'wordcount'</span>, &#123;NAME =&gt; <span class="string">'f'</span>&#125;,   &#123;SPLITS =&gt; [<span class="string">'g'</span>, <span class="string">'m'</span>, <span class="string">'r'</span>, <span class="string">'w'</span>]&#125;</span><br></pre></td></tr></table></figure>
+<p>四个分割点将生成五个区域，其中第一个区域以空行键开始。<br>为了获得更好的分割点，你也可以做一个快速分析，看看这些词是如何真正分布的。</p>
+<p>如果您打开的浏览器访问 http//localhost:60010/，您将看到我们新创建的表及其五个 Region 。</p>
+<blockquote>
+<p>HBase 1.0 之后，web 界面的端口变成了 16010，</p>
+</blockquote>
+<p>现在是时候完成繁重的工作了。 使用“hadoop”脚本在命令行上调用HBase jar将显示可用工具的列表。<br>我们想要的那个被称为<code>importtsv</code>的工具，用法如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar /usr/lib/hbase/hbase-0.94.6-cdh4.3.0-security.jar importtsv</span><br><span class="line"> ERROR: Wrong number of arguments: 0</span><br><span class="line"> Usage: importtsv -Dimporttsv.columns=a,b,c &lt;tablename&gt; &lt;inputdir&gt;</span><br></pre></td></tr></table></figure>
+<p>我们要使用的命令行如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar /usr/lib/hbase/hbase-0.94.6-cdh4.3.0-security.jar importtsv \</span><br><span class="line">-Dimporttsv.separator=, \</span><br><span class="line">-Dimporttsv.bulk.output=output \</span><br><span class="line">-Dimporttsv.columns=HBASE_ROW_KEY,f:count wordcount word_count.csv</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>1.0 之后的使用方式略有不同，如下：</strong>  </p>
+<p>$HADOOP_HOME/bin/hadoop jar $HBASE_HOME/lib/hbase-server-1.2.6.jar importtsv \<br>-Dimporttsv.separator=”,” \<br>-Dimporttsv.bulk.output=”output” \<br>-Dimporttsv.columns=”HBASE_ROW_KEY,f:count” \<br>wordcount \<br>word_count.csv</p>
+<p><strong>请确认有如下环境变量（/etc/profile）</strong>  </p>
+<p>export HBASE_HOME=/opt/websuite/hbase-1.2.6<br>export HADOOP_CLASSPATH=”$HADOOP_CLASSPATH:$HBASE_HOME/lib/*”  </p>
+</blockquote>
+<p>以下是不同配置项的简要介绍：</p>
+<ul>
+<li><code>-Dimporttsv.separator=,</code> 指定分隔符是逗号</li>
+<li><code>-Dimporttsv.bulk.output=output</code> 是HFiles写入的相对路径。由于默认情况下虚拟机上的用户是“cloudera”，这意味着这些文件将位于<code>/user/cloudera/output</code>中。<strong>如果不使用这个选项，数据将直接写入HBase（传统的MapReduce模式）</strong>。</li>
+<li><code>-Dimporttsv.columns=HBASE_ROW_KEY,f:count</code> <code>HBASE_ROW_KEY,f:count</code>是包含在这个文件中的所有列的列表。row key 需要使用全大写的<code>HBASE_ROW_KEY</code>字符串来标识, 否则它不会工作。（这里使用是限定词“count”您也可以指定其他任何内容。）</li>
+</ul>
+<p>鉴于输入数据量较小，该任务应在一分钟内完成。请注意，会运行五个Reducers，每个区域一个。以下是HDFS上的执行的结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-rw-r--r--   3 cloudera cloudera         4265   2013-09-12 13:13 output/f/2c0724e0c8054b70bce11342dc91897b</span><br><span class="line">-rw-r--r--   3 cloudera cloudera         3163   2013-09-12 13:14 output/f/786198ca47ae406f9be05c9eb09beb36</span><br><span class="line">-rw-r--r--   3 cloudera cloudera         2487   2013-09-12 13:14 output/f/9b0e5b2a137e479cbc978132e3fc84d2</span><br><span class="line">-rw-r--r--   3 cloudera cloudera         2961   2013-09-12 13:13 output/f/bb341f04c6d845e8bb95830e9946a914</span><br><span class="line">-rw-r--r--   3 cloudera cloudera         1336   2013-09-12 13:14 output/f/c656d893bd704260a613be62bddb4d5f</span><br></pre></td></tr></table></figure>
+<p>正如你所看到的，这些文件目前属于用户“cloudera”。为了加载它们，我们需要将所有者更改为“hbase”，否则HBase将无权移动这些文件。运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -u hdfs hdfs dfs -chown -R  hbase:hbase /user/cloudera/output</span><br></pre></td></tr></table></figure>
+<p>最后，我们需要使用<code>completebulkload</code>工具来指向文件的位置以及我们要加载的表：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles output wordcount</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>或</p>
+<p>$HADOOP_HOME/bin/hadoop jar $HBASE_HOME/lib/hbase-server-1.2.6.jar completebulkload output wordcount</p>
+</blockquote>
+<p>回到HBase shell中，您可以运行count命令来显示加载了多少行。如果你忘了<code>chown</code>，命令会挂起。</p>
+<h1 id="自定义-MR-任务"><a href="#自定义-MR-任务" class="headerlink" title="自定义 MR 任务"></a>自定义 MR 任务</h1><p>TSV批量加载程序适用场景比较局限，由于它将所有内容都解释为字符串，并且不支持特殊的数据格式，所以不得不编写自己的MR作业。<br>下面这个例子的 数据包含了 湖人队和凯尔特人队2010年总决赛（第一场）相关的公开Facebook和Twitter消息。,<br>你可以在<a href="https://github.com/jrkinley/hbase-bulk-import-example" target="_blank" rel="noopener">这里</a>找到代码。（” Quick Start VM “ 带有 git和maven，您可以直接克隆这份代码。）</p>
+<p>看一下Driver类，最重要的部分如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    job.setMapOutputKeyClass(ImmutableBytesWritable.class);</span><br><span class="line">    job.setMapOutputValueClass(KeyValue.class);</span><br><span class="line">…</span><br><span class="line">	<span class="comment">// Auto configure partitioner and reducer</span></span><br><span class="line">    HFileOutputFormat.configureIncrementalLoad(job, hTable);</span><br></pre></td></tr></table></figure>
+<p>首先，Mapper需要输出<code>ImmutableBytesWritable</code>类型作为 row key，输出值类型可以是<code>KeyValue</code>，<code>Put</code>或<code>Delete</code>。<br>第二个片段显示了如何配置<code>Reducer</code>, 它实际上完全由<code>HFileOutputFormat.confgureIncrementalLoad()</code>处理。</p>
+<p><code>HBaseKVMapper</code>类只处理了关心的配置、输出键和值的映射器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HBaseKVMapper</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">LongWritable</span>, <span class="title">Text</span>, <span class="title">ImmutableBytesWritable</span>, <span class="title">KeyValue</span>&gt; </span>&#123; </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了运行它，您需要使用maven编译项目，并按照README中的链接获取数据文件。（它还包含用于创建表的shell脚本。）<br>在开始作业之前，请不要忘记将文件上传到HDFS，并将您的类路径设置为 HBase的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> HADOOP_CLASSPATH=<span class="variable">$HADOOP_CLASSPATH</span>:/etc/hbase/conf/:/usr/lib/hbase/*</span><br></pre></td></tr></table></figure>
+<p>使用类似于此命令行的命令行启动作业：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar hbase-examples-0.0.1-SNAPSHOT.jar</span><br><span class="line">com.cloudera.examples.hbase.bulkimport.Driver -libjars</span><br><span class="line">/home/cloudera/.m2/repository/joda-time/joda-time/2.1/joda-time-2.1.jar,</span><br><span class="line">/home/cloudera/.m2/repository/net/sf/opencsv/opencsv/2.3/opencsv-2.3.jar</span><br><span class="line"><span class="string">"RowFeeder for Celtics and Lakers Game"</span> 1.csv output2 NBAFinal2010</span><br></pre></td></tr></table></figure>
+<p> 正如你所看到的，工作的依赖关系必须单独添加。最后，您要先更改输出文件的所有者，然后运行<code>completebulkload</code>工具来加载文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo -u hdfs hdfs dfs -chown -R hbase:hbase/user/cloudera/output2</span><br><span class="line">hbase org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles output2 NBAFinal2010</span><br></pre></td></tr></table></figure>
+<h1 id="潜在的问题"><a href="#潜在的问题" class="headerlink" title="潜在的问题"></a>潜在的问题</h1><h2 id="最近删除的数据重现"><a href="#最近删除的数据重现" class="headerlink" title="最近删除的数据重现"></a>最近删除的数据重现</h2><p>当通过批量加载插入<code>Delete</code>时发生此问题，主要是因为 <code>Put</code>仍在<code>MemStore</code>中，这是用进行major压缩。<br>当删除处于HFile中时，数据将被视为已删除，但一旦在压缩过程中将其删除，Put将再次变为可见。,<br>如果您有这样的用例，请考虑配置您的列族以使用<code>KEEP_DELETED_CELLS</code>将已删除的单元格保留在<code>shell</code>或<code>HColumnDescriptor.setKeepDeletedCells()</code>中。</p>
+<h2 id="批量加载的数据不能被其他批量加载覆盖"><a href="#批量加载的数据不能被其他批量加载覆盖" class="headerlink" title="批量加载的数据不能被其他批量加载覆盖"></a>批量加载的数据不能被其他批量加载覆盖</h2><p>当在不同时间加载的两个批量加载的HFile尝试在同一单元中写入不同的值时，会出现此问题，这意味着它们具有相同的行键，系列，限定符和时间戳。<br>结果是第一个插入的值将被返回而不是第二个。这个bug将在<code>HBase 0.96.0</code>和<code>CDH 5</code>（下一个CDH主要版本）中得到解决，<br>并且<code>HBASE-8521</code>正在为<code>0.94</code>分支和<code>CDH 4</code>完成工作。</p>
+<h2 id="批量加载触发-major压缩"><a href="#批量加载触发-major压缩" class="headerlink" title="批量加载触发 major压缩"></a>批量加载触发 major压缩</h2><p>当您<strong>执行增量批量加载时，会出现此问题</strong>，并且有足够的批量加载文件来触发 minor 压缩（默认阈值为3）。<br>HFiles的序列号被设置为0，所以当RegionServer选择文件进行压缩时，它们会首先被拾取，并且由于这个bug，它还会选择所有剩余的文件。<br>这个问题将严重影响那些已经拥有很大数据 region（数GB）或经常批量加载（每隔几小时或更少）的情况，因为大量数据将被压缩。<br><code>HBase 0.96.0</code>有适当的修复，<code>CDH 5</code>也是如此; <code>HBASE-8521</code>解决了<code>0.94</code>中的问题，因为批量加载的HFile现在被分配了正确的序列号。<br>HBASE-8283可以通过<code>hbase.hstore.useExploringCompation</code>在<code>0.94.9</code>和<code>CDH 4.4.0</code>之后启用，以便通过更智能的压缩选择算法来缓解此问题。</p>
+<h2 id="批量加载的数据不会被复制"><a href="#批量加载的数据不会被复制" class="headerlink" title="批量加载的数据不会被复制"></a>批量加载的数据不会被复制</h2><p>当批量加载绕过写入路径时，WAL不会被写入。<br>复制通过读取WAL文件来工作，因此它不会看到批量加载的数据 - 使用<code>Put.setWriteToWAL(true)</code>时也是如此。<br>处理这种情况的一种方法是将原始文件或HFile发送到其他群集，并在那里进行其load处理。</p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>本博文的目标是向您介绍Apache HBase批量加载的基本概念。<br>我们解释了这个过程是如何进行ETL的，并且它比使用普通API更适合大数据集，因为它绕过了写路径。<br>这两个例子包含了如何将简单的TSV文件批量加载到HBase以及如何为其他数据格式编写您自己的Mapper。</p>
+<h1 id="Read-More"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</h1><ul>
+<li><a href="https://my.oschina.net/leejun2005/blog/187309" target="_blank" rel="noopener">HBase 写优化之 BulkLoad 实现数据快速入库</a><ul>
+<li><blockquote>
+<p>通常 <code>MapReduce</code> 在写HBase时使用的是 <code>TableOutputFormat</code> 方式，在reduce中直接生成<code>Put</code>对象写入<code>HBase</code>， 该方式在大数据量写入时效率低下（HBase会频繁进行<code>flush</code>，<code>split</code>，<code>compact</code>等大量IO操作），并对HBase节点的稳定性造成一定的影响（GC时间过长，响应变慢，导致节点超时退出，并引起一系列连锁反应）。<br>而HBase支持 <code>bulk load</code> 的入库方式，它是利用hbase的数据信息按照特定格式存储在hdfs内这一原理，直接在HDFS中生成持久化的HFile数据格式文件，然后上传至合适位置，即完成巨量数据快速入库的办法。<br>配合mapreduce完成，高效便捷，而且不占用region资源，增添负载，在大数据量写入时能极大的提高写入效率，并降低对HBase节点的写入压力。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><a href="http://blog.pureisle.net/archives/1950.html" target="_blank" rel="noopener">MapReduce生成HFile入库到HBase及源码分析</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HBase/" rel="tag"># HBase</a>
+          
+            <a href="/tags/Big-Data/" rel="tag"># Big Data</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2017-07-08/ops/docker-scaffold.html" rel="next" title="Docker 脚手架">
+                <i class="fa fa-chevron-left"></i> Docker 脚手架
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2018-03-12/hbase/hbase-family-properties.html" rel="prev" title="HBase 列族配置">
+                HBase 列族配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Bulk-Loading-概述"><span class="nav-text"><a href="#Bulk-Loading-&#x6982;&#x8FF0;" class="headerlink" title="Bulk Loading &#x6982;&#x8FF0;"></a>Bulk Loading &#x6982;&#x8FF0;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-从资源中提取数据，通常是文本文件或其他数据库"><span class="nav-text"><a href="#1-&#x4ECE;&#x8D44;&#x6E90;&#x4E2D;&#x63D0;&#x53D6;&#x6570;&#x636E;&#xFF0C;&#x901A;&#x5E38;&#x662F;&#x6587;&#x672C;&#x6587;&#x4EF6;&#x6216;&#x5176;&#x4ED6;&#x6570;&#x636E;&#x5E93;" class="headerlink" title="1.&#x4ECE;&#x8D44;&#x6E90;&#x4E2D;&#x63D0;&#x53D6;&#x6570;&#x636E;&#xFF0C;&#x901A;&#x5E38;&#x662F;&#x6587;&#x672C;&#x6587;&#x4EF6;&#x6216;&#x5176;&#x4ED6;&#x6570;&#x636E;&#x5E93;"></a>1.&#x4ECE;&#x8D44;&#x6E90;&#x4E2D;&#x63D0;&#x53D6;&#x6570;&#x636E;&#xFF0C;&#x901A;&#x5E38;&#x662F;&#x6587;&#x672C;&#x6587;&#x4EF6;&#x6216;&#x5176;&#x4ED6;&#x6570;&#x636E;&#x5E93;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-将数据转换成HFile"><span class="nav-text"><a href="#2-&#x5C06;&#x6570;&#x636E;&#x8F6C;&#x6362;&#x6210;HFile" class="headerlink" title="2.&#x5C06;&#x6570;&#x636E;&#x8F6C;&#x6362;&#x6210;HFile"></a>2.&#x5C06;&#x6570;&#x636E;&#x8F6C;&#x6362;&#x6210;HFile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-通过告诉RegionServers在哪里找到它们，将文件加载到HBase中"><span class="nav-text"><a href="#3-&#x901A;&#x8FC7;&#x544A;&#x8BC9;RegionServers&#x5728;&#x54EA;&#x91CC;&#x627E;&#x5230;&#x5B83;&#x4EEC;&#xFF0C;&#x5C06;&#x6587;&#x4EF6;&#x52A0;&#x8F7D;&#x5230;HBase&#x4E2D;" class="headerlink" title="3.&#x901A;&#x8FC7;&#x544A;&#x8BC9;RegionServers&#x5728;&#x54EA;&#x91CC;&#x627E;&#x5230;&#x5B83;&#x4EEC;&#xFF0C;&#x5C06;&#x6587;&#x4EF6;&#x52A0;&#x8F7D;&#x5230;HBase&#x4E2D;"></a>3.&#x901A;&#x8FC7;&#x544A;&#x8BC9;RegionServers&#x5728;&#x54EA;&#x91CC;&#x627E;&#x5230;&#x5B83;&#x4EEC;&#xFF0C;&#x5C06;&#x6587;&#x4EF6;&#x52A0;&#x8F7D;&#x5230;HBase&#x4E2D;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用场景"><span class="nav-text"><a href="#&#x4F7F;&#x7528;&#x573A;&#x666F;" class="headerlink" title="&#x4F7F;&#x7528;&#x573A;&#x666F;"></a>&#x4F7F;&#x7528;&#x573A;&#x666F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例"><span class="nav-text"><a href="#&#x793A;&#x4F8B;" class="headerlink" title="&#x793A;&#x4F8B;"></a>&#x793A;&#x4F8B;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内置的-TSV-Bulk-Loader"><span class="nav-text"><a href="#&#x5185;&#x7F6E;&#x7684;-TSV-Bulk-Loader" class="headerlink" title="&#x5185;&#x7F6E;&#x7684; TSV Bulk Loader"></a>&#x5185;&#x7F6E;&#x7684; TSV Bulk Loader</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义-MR-任务"><span class="nav-text"><a href="#&#x81EA;&#x5B9A;&#x4E49;-MR-&#x4EFB;&#x52A1;" class="headerlink" title="&#x81EA;&#x5B9A;&#x4E49; MR &#x4EFB;&#x52A1;"></a>&#x81EA;&#x5B9A;&#x4E49; MR &#x4EFB;&#x52A1;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#潜在的问题"><span class="nav-text"><a href="#&#x6F5C;&#x5728;&#x7684;&#x95EE;&#x9898;" class="headerlink" title="&#x6F5C;&#x5728;&#x7684;&#x95EE;&#x9898;"></a>&#x6F5C;&#x5728;&#x7684;&#x95EE;&#x9898;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#最近删除的数据重现"><span class="nav-text"><a href="#&#x6700;&#x8FD1;&#x5220;&#x9664;&#x7684;&#x6570;&#x636E;&#x91CD;&#x73B0;" class="headerlink" title="&#x6700;&#x8FD1;&#x5220;&#x9664;&#x7684;&#x6570;&#x636E;&#x91CD;&#x73B0;"></a>&#x6700;&#x8FD1;&#x5220;&#x9664;&#x7684;&#x6570;&#x636E;&#x91CD;&#x73B0;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#批量加载的数据不能被其他批量加载覆盖"><span class="nav-text"><a href="#&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x7684;&#x6570;&#x636E;&#x4E0D;&#x80FD;&#x88AB;&#x5176;&#x4ED6;&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x8986;&#x76D6;" class="headerlink" title="&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x7684;&#x6570;&#x636E;&#x4E0D;&#x80FD;&#x88AB;&#x5176;&#x4ED6;&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x8986;&#x76D6;"></a>&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x7684;&#x6570;&#x636E;&#x4E0D;&#x80FD;&#x88AB;&#x5176;&#x4ED6;&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x8986;&#x76D6;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#批量加载触发-major压缩"><span class="nav-text"><a href="#&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x89E6;&#x53D1;-major&#x538B;&#x7F29;" class="headerlink" title="&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x89E6;&#x53D1; major&#x538B;&#x7F29;"></a>&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x89E6;&#x53D1; major&#x538B;&#x7F29;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#批量加载的数据不会被复制"><span class="nav-text"><a href="#&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x7684;&#x6570;&#x636E;&#x4E0D;&#x4F1A;&#x88AB;&#x590D;&#x5236;" class="headerlink" title="&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x7684;&#x6570;&#x636E;&#x4E0D;&#x4F1A;&#x88AB;&#x590D;&#x5236;"></a>&#x6279;&#x91CF;&#x52A0;&#x8F7D;&#x7684;&#x6570;&#x636E;&#x4E0D;&#x4F1A;&#x88AB;&#x590D;&#x5236;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结论"><span class="nav-text"><a href="#&#x7ED3;&#x8BBA;" class="headerlink" title="&#x7ED3;&#x8BBA;"></a>&#x7ED3;&#x8BBA;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Read-More"><span class="nav-text"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

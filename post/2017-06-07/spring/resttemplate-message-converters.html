@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,Spring,RestTemplate," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="org.springframework.core.ParameterizedTypeReference 是 Spring 3.2 之后新增的类，使用 RestTemplate 请求数据反序列化的时候，通过该类可以保留泛型。 Spring 对 Jackson 是默认支持的，当 classpath 下有 Jackson 的时候，Spring 会使用 Jackson 进行反序列化，但是配合 Parame">
+<meta name="keywords" content="Java,Spring,RestTemplate">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义 Spring RestTemplate Message Converters">
+<meta property="og:url" content="http://blog.kail.xyz/post/2017-06-07/spring/resttemplate-message-converters.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="org.springframework.core.ParameterizedTypeReference 是 Spring 3.2 之后新增的类，使用 RestTemplate 请求数据反序列化的时候，通过该类可以保留泛型。 Spring 对 Jackson 是默认支持的，当 classpath 下有 Jackson 的时候，Spring 会使用 Jackson 进行反序列化，但是配合 Parame">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-16T13:21:39.488Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自定义 Spring RestTemplate Message Converters">
+<meta name="twitter:description" content="org.springframework.core.ParameterizedTypeReference 是 Spring 3.2 之后新增的类，使用 RestTemplate 请求数据反序列化的时候，通过该类可以保留泛型。 Spring 对 Jackson 是默认支持的，当 classpath 下有 Jackson 的时候，Spring 会使用 Jackson 进行反序列化，但是配合 Parame">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2017-06-07/spring/resttemplate-message-converters.html"/>
+
+
+
+
+
+  <title>自定义 Spring RestTemplate Message Converters | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-06-07/spring/resttemplate-message-converters.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">自定义 Spring RestTemplate Message Converters</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-07T00:00:00+08:00">
+                2017-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2017-06-07/spring/resttemplate-message-converters.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2017-06-07/spring/resttemplate-message-converters.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>org.springframework.core.ParameterizedTypeReference</code> 是 Spring 3.2 之后新增的类，使用 <code>RestTemplate</code> 请求数据反序列化的时候，通过该类可以<strong>保留泛型</strong>。</p>
+<p>Spring 对 Jackson 是默认支持的，当 classpath 下有 Jackson 的时候，Spring 会使用 Jackson 进行反序列化，但是配合 <code>ParameterizedTypeReference</code> 的时候有个”bug”，假如<em>请求到的 json 数据里面的字段比 目标 bean 里面的字段多</em>，就会报一下的异常：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Caused by: com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field &quot;...&quot;</span><br><span class="line">.... 省略若干</span><br></pre></td></tr></table></figure></p>
+<p>这里只测试了 <code>3.2.18.RELEASE</code>、<code>4.0.7.RELEASE</code> 、<code>4.2.9.RELEASE</code> 都存在该问题，到目前为止Spring4的最后一个版本<code>4.3.9.RELEASE</code> 则没有该问题。</p>
+<p>如果公司的Spring 版本在 3.2 ~ 4.2 之间徘徊，并且不考虑升级Spring版本的话，接下来内容可能会对您有用。</p>
+<a id="more"></a>
+<h1 id="默认的-Message-Converters"><a href="#默认的-Message-Converters" class="headerlink" title="默认的 Message Converters"></a>默认的 Message Converters</h1><p>通过 RestTemplate 的构造方法可以大致了解一下 其默认的 Message Converters。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">RestTemplate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.messageConverters.add(<span class="keyword">new</span> ByteArrayHttpMessageConverter()); <span class="comment">// application/octet-stream</span></span><br><span class="line">    <span class="keyword">this</span>.messageConverters.add(<span class="keyword">new</span> StringHttpMessageConverter()); <span class="comment">// text/plain</span></span><br><span class="line">    <span class="keyword">this</span>.messageConverters.add(<span class="keyword">new</span> ResourceHttpMessageConverter()); </span><br><span class="line">    <span class="keyword">this</span>.messageConverters.add(<span class="keyword">new</span> SourceHttpMessageConverter&lt;Source&gt;()); <span class="comment">// application/xml</span></span><br><span class="line">    <span class="keyword">this</span>.messageConverters.add(<span class="keyword">new</span> AllEncompassingFormHttpMessageConverter()); <span class="comment">// application/x-www-form-urlencoded</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (romePresent) &#123;</span><br><span class="line">        <span class="keyword">this</span>.messageConverters.add(<span class="keyword">new</span> AtomFeedHttpMessageConverter());</span><br><span class="line">        <span class="keyword">this</span>.messageConverters.add(<span class="keyword">new</span> RssChannelHttpMessageConverter());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (jaxb2Present) &#123;</span><br><span class="line">        <span class="keyword">this</span>.messageConverters.add(<span class="keyword">new</span> Jaxb2RootElementHttpMessageConverter());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (jackson2Present) &#123;</span><br><span class="line">        <span class="keyword">this</span>.messageConverters.add(<span class="keyword">new</span> MappingJackson2HttpMessageConverter()); <span class="comment">// GenericHttpMessageConverter 接口的实现，支持泛型反序列化</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (jacksonPresent) &#123;</span><br><span class="line">        <span class="keyword">this</span>.messageConverters.add(<span class="keyword">new</span> org.springframework.http.converter.json.MappingJacksonHttpMessageConverter());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Message Convert(消息格式转换) 的时候会从前到后，通过<code>Content-Type</code>来匹配使用哪个转换器来转换<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (HttpMessageConverter&lt;?&gt; messageConverter : <span class="keyword">this</span>.messageConverters) &#123;</span><br><span class="line">    <span class="comment">// 是否支持泛型 Convert，通过 ParameterizedTypeReference 的匿名子类来实现</span></span><br><span class="line">    <span class="keyword">if</span> (messageConverter <span class="keyword">instanceof</span> GenericHttpMessageConverter) &#123;</span><br><span class="line">        GenericHttpMessageConverter&lt;?&gt; genericMessageConverter = (GenericHttpMessageConverter&lt;?&gt;) messageConverter;</span><br><span class="line">        <span class="keyword">if</span> (genericMessageConverter.canRead(<span class="keyword">this</span>.responseType, <span class="keyword">null</span>, contentType)) &#123;</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 非泛型的 Convert，类似于 List.class 、String.class 等</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.responseClass != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (messageConverter.canRead(<span class="keyword">this</span>.responseClass, contentType)) &#123;</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来会通过  <code>new ParameterizedTypeReference&lt;List&lt;GithubGistVO&gt;&gt;() {};</code> 来保留泛型，MappingJackson2HttpMessageConverter 前面的 Converter 都没有实现 GenericHttpMessageConverter，所以会通过 MappingJackson2HttpMessageConverter 来反序列化请求到的json数据。</p>
+<h1 id="自定义-Jackson-配置"><a href="#自定义-Jackson-配置" class="headerlink" title="自定义 Jackson 配置"></a>自定义 Jackson 配置</h1><p>json数据与Bean字段不一致报错，实际上是 Jackson 的配置问题，自定义 Jackson 配置，覆盖 Spring 的默认配置即可。</p>
+<p>创建 MyObjectMapper 继承 ObjectMapper：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> xyz.kail.blog.test.resttemplate;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.DeserializationFeature;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.ObjectMapper;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.SerializationFeature;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyObjectMapper</span> <span class="keyword">extends</span> <span class="title">ObjectMapper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyObjectMapper</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, <span class="keyword">false</span>); <span class="comment">// 空对象不报错</span></span><br><span class="line">        <span class="keyword">this</span>.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, <span class="keyword">false</span>); <span class="comment">// 出现未知的属性不报错</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Spring 配置<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"mappingJackson2HttpMessageConverter"</span> <span class="attr">class</span>=<span class="string">"org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"objectMapper"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"xyz.kail.blog.test.resttemplate.MyObjectMapper"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="修改-RestTemplate-Message-Converters"><a href="#修改-RestTemplate-Message-Converters" class="headerlink" title="修改 RestTemplate Message Converters"></a>修改 RestTemplate Message Converters</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"restTemplate"</span> <span class="attr">class</span>=<span class="string">"org.springframework.web.client.RestTemplate"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">ref</span>=<span class="string">"httpClientFactory"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"messageConverters"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">list</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"mappingJackson2HttpMessageConverter"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">list</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面这个配置（RestTemplate.setMessageConverters）实际上存在一个问题，除非把所默认的MessageConverters再配置一遍，否则<code>setMessageConverters(List&lt;HttpMessageConverter&lt;?&gt;&gt; messageConverters)</code> 实际上会覆盖掉所有默认MessageConverters。</p>
+<p>如何添加自定义的 MessageConverter 而不清除默认的MessageConverters呢？这里创建 MyRestTemplate 继承 RestTemplate：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> xyz.kail.blog.test.resttemplate;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.http.client.ClientHttpRequestFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.http.converter.HttpMessageConverter;</span><br><span class="line"><span class="keyword">import</span> org.springframework.util.Assert;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.client.RestTemplate;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyRestTemplate</span> <span class="keyword">extends</span> <span class="title">RestTemplate</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyRestTemplate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyRestTemplate</span><span class="params">(ClientHttpRequestFactory requestFactory)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(requestFactory);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMessageConverters</span><span class="params">(List&lt;HttpMessageConverter&lt;?&gt;&gt; messageConverters)</span> </span>&#123;</span><br><span class="line">        Assert.notEmpty(messageConverters, <span class="string">"'messageConverters' must not be empty"</span>);</span><br><span class="line">        List&lt;HttpMessageConverter&lt;?&gt;&gt; defaultConverters = <span class="keyword">super</span>.getMessageConverters();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (defaultConverters != messageConverters) &#123;</span><br><span class="line">            defaultConverters.addAll(<span class="number">0</span>, messageConverters);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里把新的自定义的 MessageConverters 放到默认的前面，如果<code>Content-Type</code>是<code>application/json</code>,会先匹配到自定的MessageConverters。</p>
+<h1 id="国产的-fastjson"><a href="#国产的-fastjson" class="headerlink" title="国产的 fastjson"></a>国产的 fastjson</h1><p>如果确定了系统中的交互只是 json的形式，实际上覆盖掉默认的也未尝不可。这里使用 fastjson 作为 MessageConverter：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"restTemplate"</span> <span class="attr">class</span>=<span class="string">"org.springframework.web.client.RestTemplate"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">ref</span>=<span class="string">"httpClientFactory"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"messageConverters"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">list</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">list</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>fastjson 的序列化配置这里就不说，相比 jackson 的配置要简单许多，实际上fastjson的默认配置已经很符合中国国情了。</p>
+<h1 id="RestTemplate-使用"><a href="#RestTemplate-使用" class="headerlink" title="RestTemplate 使用"></a>RestTemplate 使用</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String URL_STR = <span class="string">"https://api.github.com/gists/public"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> RestTemplate <span class="title">getRestTemplate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ClassPathXmlApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"app-rest.xml"</span>);</span><br><span class="line">        <span class="keyword">return</span> context.getBean(RestTemplate.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ParameterizedTypeReference&lt;List&lt;GithubGistVO&gt;&gt; pt = <span class="keyword">new</span> ParameterizedTypeReference&lt;List&lt;GithubGistVO&gt;&gt;() &#123;</span><br><span class="line">        &#125;;</span><br><span class="line">        ResponseEntity&lt;List&lt;GithubGistVO&gt;&gt; responseEntity = getRestTemplate().exchange(URL_STR, HttpMethod.GET, <span class="keyword">null</span>, pt);</span><br><span class="line">        List&lt;GithubGistVO&gt; githubGists = responseEntity.getBody();</span><br><span class="line">        System.out.println(githubGists);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GithubGistVO</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="keyword">private</span> String url;</span><br><span class="line">    <span class="keyword">private</span> String description;</span><br><span class="line">    <span class="keyword">private</span> String commentsUrl;</span><br><span class="line"></span><br><span class="line">    ... 省略 getter setter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="拓展阅读"><a href="#拓展阅读" class="headerlink" title="拓展阅读"></a>拓展阅读</h1><blockquote>
+<p><a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/remoting.html#rest-resttemplate" target="_blank" rel="noopener">28.10.1 RestTemplate</a></p>
+<p><a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/remoting.html#rest-message-conversion" target="_blank" rel="noopener">28.10.2 HTTP Message Conversion</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+            <a href="/tags/RestTemplate/" rel="tag"># RestTemplate</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2017-05-30/java/integrating-groovy-in-a-java-application.html" rel="next" title="在 Java 应用中整合 Groovy">
+                <i class="fa fa-chevron-left"></i> 在 Java 应用中整合 Groovy
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2017-06-09/java/are-all-Java-generic-erased.html" rel="prev" title="Java 泛型信息真的全都擦除了吗">
+                Java 泛型信息真的全都擦除了吗 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#默认的-Message-Converters"><span class="nav-text"><a href="#&#x9ED8;&#x8BA4;&#x7684;-Message-Converters" class="headerlink" title="&#x9ED8;&#x8BA4;&#x7684; Message Converters"></a>&#x9ED8;&#x8BA4;&#x7684; Message Converters</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义-Jackson-配置"><span class="nav-text"><a href="#&#x81EA;&#x5B9A;&#x4E49;-Jackson-&#x914D;&#x7F6E;" class="headerlink" title="&#x81EA;&#x5B9A;&#x4E49; Jackson &#x914D;&#x7F6E;"></a>&#x81EA;&#x5B9A;&#x4E49; Jackson &#x914D;&#x7F6E;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改-RestTemplate-Message-Converters"><span class="nav-text"><a href="#&#x4FEE;&#x6539;-RestTemplate-Message-Converters" class="headerlink" title="&#x4FEE;&#x6539; RestTemplate Message Converters"></a>&#x4FEE;&#x6539; RestTemplate Message Converters</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#国产的-fastjson"><span class="nav-text"><a href="#&#x56FD;&#x4EA7;&#x7684;-fastjson" class="headerlink" title="&#x56FD;&#x4EA7;&#x7684; fastjson"></a>&#x56FD;&#x4EA7;&#x7684; fastjson</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RestTemplate-使用"><span class="nav-text"><a href="#RestTemplate-&#x4F7F;&#x7528;" class="headerlink" title="RestTemplate &#x4F7F;&#x7528;"></a>RestTemplate &#x4F7F;&#x7528;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拓展阅读"><span class="nav-text"><a href="#&#x62D3;&#x5C55;&#x9605;&#x8BFB;" class="headerlink" title="&#x62D3;&#x5C55;&#x9605;&#x8BFB;"></a>&#x62D3;&#x5C55;&#x9605;&#x8BFB;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

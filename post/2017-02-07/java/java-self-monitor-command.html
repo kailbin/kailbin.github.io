@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,Java 内建命令,jps,jstat,jstatd,debug," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="jps: 列出当前系统的Java进程jstat: 显示 JVM 统计信息jstatd: 可以远程监控 JVM 统计信息jmc: 启动 Java Mission Controla 工具， 监控和管理正在运行的Java应用或者JVMs。">
+<meta name="keywords" content="Java,Java 内建命令,jps,jstat,jstatd,debug">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 内建&quot;监控&quot;工具 — jps、jstat、jstatd">
+<meta property="og:url" content="http://blog.kail.xyz/post/2017-02-07/java/java-self-monitor-command.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="jps: 列出当前系统的Java进程jstat: 显示 JVM 统计信息jstatd: 可以远程监控 JVM 统计信息jmc: 启动 Java Mission Controla 工具， 监控和管理正在运行的Java应用或者JVMs。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://pic01.kail.xyz/images/java-self-monitor-command/1.png">
+<meta property="og:updated_time" content="2018-06-16T13:21:39.477Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 内建&quot;监控&quot;工具 — jps、jstat、jstatd">
+<meta name="twitter:description" content="jps: 列出当前系统的Java进程jstat: 显示 JVM 统计信息jstatd: 可以远程监控 JVM 统计信息jmc: 启动 Java Mission Controla 工具， 监控和管理正在运行的Java应用或者JVMs。">
+<meta name="twitter:image" content="http://pic01.kail.xyz/images/java-self-monitor-command/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2017-02-07/java/java-self-monitor-command.html"/>
+
+
+
+
+
+  <title>Java 内建"监控"工具 — jps、jstat、jstatd | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-07/java/java-self-monitor-command.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Java 内建"监控"工具 — jps、jstat、jstatd</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-07T00:00:00+08:00">
+                2017-02-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2017-02-07/java/java-self-monitor-command.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2017-02-07/java/java-self-monitor-command.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>jps: 列出当前系统的Java进程<br>jstat: 显示 JVM 统计信息<br>jstatd: 可以远程监控 JVM 统计信息<br>jmc: 启动 Java Mission Controla 工具， 监控和管理正在运行的Java应用或者JVMs。</p>
+<a id="more"></a>
+<h1 id="jps-列出当前系统的Java进程"><a href="#jps-列出当前系统的Java进程" class="headerlink" title="jps 列出当前系统的Java进程"></a>jps 列出当前系统的Java进程</h1><p>语法：<br><code>jps [ options ] [ hostid ]</code></p>
+<p><code>jps [-q] [-mlvV] [&lt;hostid&gt;]</code>    </p>
+<h2 id="options"><a href="#options" class="headerlink" title="options"></a>options</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-<span class="built_in">help</span>       帮助信息</span><br><span class="line">-q          只列出进程ID</span><br><span class="line">-m          显示main方法参数</span><br><span class="line">-l          显示main方法包名 或者 应用jar包的全路径</span><br><span class="line">-v          显示JVM参数</span><br><span class="line">-V          通过 flags 文件传递给JVM的参数 (the .hotspotrc file or the file specified by the -XX:Flags=&lt;filename&gt; argument)</span><br><span class="line">-J          给jps命令传递JVM参数，例如：jps -J-Xms2m 分配了 2M 起始内存</span><br></pre></td></tr></table></figure>
+<h2 id="hostid"><a href="#hostid" class="headerlink" title="hostid"></a>hostid</h2><p>可以进行远程监控，详请查看 <strong> <a href="#jstatd">jstatd 例子</a>部分 </strong></p>
+<h2 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h2><p>jps - Java Virtual Machine Process Status Tool <a href="https://docs.oracle.com/javase/7/docs/technotes/tools/share/jps.html" target="_blank" rel="noopener">JDK7</a>/<a href="(http://docs.oracle.com/javase/8/docs/technotes/tools/windows/jps.html">JDK8</a></p>
+<p>JDK7 和 JDK8 对 jps 的解释还是稍有不同的。  </p>
+<h1 id="jstat-统计-JVM-信息"><a href="#jstat-统计-JVM-信息" class="headerlink" title="jstat 统计 JVM 信息"></a>jstat 统计 JVM 信息</h1><h2 id="一般参数"><a href="#一般参数" class="headerlink" title="一般参数"></a>一般参数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-<span class="built_in">help</span>       显示帮助信息</span><br><span class="line">-options    支持的统计项</span><br></pre></td></tr></table></figure>
+<p>这里使用<code>-options</code> 输出如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ jstat -options</span><br><span class="line">-class</span><br><span class="line">-compiler</span><br><span class="line">-gc</span><br><span class="line">-gccapacity</span><br><span class="line">-gccause</span><br><span class="line">-gcnew</span><br><span class="line">-gcnewcapacity</span><br><span class="line">-gcold</span><br><span class="line">-gcoldcapacity</span><br><span class="line">-gcpermcapacity</span><br><span class="line">-gcutil</span><br><span class="line">-printcompilation</span><br></pre></td></tr></table></figure>
+<h2 id="输出参数"><a href="#输出参数" class="headerlink" title="输出参数"></a>输出参数</h2><p>格式 ： <code>jstat -&lt;option&gt; [-t] [-h&lt;lines&gt;] &lt;vmid&gt; [&lt;interval&gt; [&lt;count&gt;]]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;interval&gt;          每隔多长时间统计一次，单位支持 ms 和 s</span><br><span class="line">&lt;count&gt;             统计的次数</span><br><span class="line">-t                  每次会输出目标JVM启动开始到现在的时间戳</span><br><span class="line">-h&lt;lines&gt;           没隔多少次输出一下统计表头</span><br></pre></td></tr></table></figure>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ jstat -gc -t -h 4 20901 500 10</span><br><span class="line">Timestamp        S0C    S1C    S0U    S1U      EC       EU        OC         OU       PC     PU    YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line">         1998.6 10752.0 10752.0 8038.9  0.0   66048.0  45065.2   174592.0    627.8    21504.0 17411.2      2    0.039   1      0.029    0.069</span><br><span class="line">         1999.2 10752.0 10752.0 8038.9  0.0   66048.0  45065.2   174592.0    627.8    21504.0 17411.2      2    0.039   1      0.029    0.069</span><br><span class="line">         1999.6 10752.0 10752.0 8038.9  0.0   66048.0  45065.2   174592.0    627.8    21504.0 17411.2      2    0.039   1      0.029    0.069</span><br><span class="line">         2000.2 10752.0 10752.0 8038.9  0.0   66048.0  45065.2   174592.0    627.8    21504.0 17411.2      2    0.039   1      0.029    0.069</span><br><span class="line">Timestamp        S0C    S1C    S0U    S1U      EC       EU        OC         OU       PC     PU    YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line">         2000.7 10752.0 10752.0 8038.9  0.0   66048.0  45065.2   174592.0    627.8    21504.0 17411.2      2    0.039   1      0.029    0.069</span><br><span class="line">         2001.2 10752.0 10752.0 8038.9  0.0   66048.0  45065.2   174592.0    627.8    21504.0 17411.2      2    0.039   1      0.029    0.069</span><br><span class="line">         2001.7 10752.0 10752.0 8038.9  0.0   66048.0  45065.2   174592.0    627.8    21504.0 17411.2      2    0.039   1      0.029    0.069</span><br><span class="line">         2002.2 10752.0 10752.0 8038.9  0.0   66048.0  45065.2   174592.0    627.8    21504.0 17411.2      2    0.039   1      0.029    0.069</span><br><span class="line">Timestamp        S0C    S1C    S0U    S1U      EC       EU        OC         OU       PC     PU    YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line">         2002.7 10752.0 10752.0 8038.9  0.0   66048.0  45065.2   174592.0    627.8    21504.0 17411.2      2    0.039   1      0.029    0.069</span><br><span class="line">         2003.2 10752.0 10752.0 8038.9  0.0   66048.0  45065.2   174592.0    627.8    21504.0 17411.2      2    0.039   1      0.029    0.069</span><br></pre></td></tr></table></figure>
+<h2 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-gc   ：JVM中堆的垃圾收集情况的统计</span><br><span class="line">-t    ：即第一列 Timestamp 这一列</span><br><span class="line">-h 4  ：每输出4次，就把表头再输出一次</span><br><span class="line">20901 ：vmid，JVM 的进程ID</span><br><span class="line">500   ：每500毫秒输出一次统计</span><br><span class="line">10    ：统计10次</span><br></pre></td></tr></table></figure>
+<p>如果要看懂以上每一列的含义，其涉及到 JVM 分代GC的问题，这里给出一个图供参考，应该来自《深入理解Java虚拟机》这本书。</p>
+<p><img src="//pic01.kail.xyz/images/java-self-monitor-command/1.png" alt="JVM内存分布"></p>
+<p>以下给出简单解释：</p>
+<blockquote>
+<p>堆内存 = 年轻代 + 年老代 + 永久代<br>年轻代 = Eden区 + 两个Survivor区（From和To）  </p>
+<p>S0C、S1C、S0U、S1U： Survivor 0/1区容量（Capacity）和使用量（Used）<br>EC、EU：            Eden区容量和使用量<br>OC、OU：            年老代容量和使用量<br>PC、PU：            永久代容量和使用量<br>YGC、YGT：          年轻代GC次数和GC耗时<br>FGC、FGCT：         Full GC次数和Full GC耗时<br>GCT：              GC总耗时</p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><a href="http://www.jianshu.com/p/778dd3848196" target="_blank" rel="noopener">Java垃圾回收机制</a><br><a href="http://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/toc.html" target="_blank" rel="noopener">HotSpot Virtual Machine Garbage Collection Tuning Guide</a></p>
+</blockquote>
+</blockquote>
+<p>详细解释详见<a href="https://docs.oracle.com/javase/7/docs/technotes/tools/share/jstat.html#output_options" target="_blank" rel="noopener">官网 jstat</a></p>
+<p>网友总结的 <a href="http://blog.csdn.net/fenglibing/article/details/6411951" target="_blank" rel="noopener">jstat命令(Java Virtual Machine Statistics Monitoring Tool)</a></p>
+<p>摘录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">gc                  用于查看JVM中堆的垃圾收集情况的统计</span><br><span class="line">gcutil              用于查看新生代、老生代及持代垃圾收集的情况</span><br><span class="line">class               用于查看类加载情况的统计</span><br><span class="line">compiler            用于查看HotSpot中即时编译器编译情况的统计</span><br><span class="line">gccapacity  	    用于查看新生代、老生代及持久代的存储容量情况</span><br><span class="line">gccause	            用于查看垃圾收集的统计情况（这个和-gcutil选项一样），如果有发生垃圾收集，它还会显示最后一次及当前正在发生垃圾收集的原因。</span><br><span class="line">gcnew               用于查看新生代垃圾收集的情况</span><br><span class="line">gcnewcapacity	    用于查看新生代的存储容量情况</span><br><span class="line">gcold	            用于查看老生代及持久代发生GC的情况</span><br><span class="line">gcoldcapacity	    用于查看老生代的容量</span><br><span class="line">gcpermcapacity	    用于查看持久代的容量</span><br><span class="line">printcompilation    HotSpot编译方法的统计</span><br></pre></td></tr></table></figure></p>
+<h1 id="jstatd"><a href="#jstatd" class="headerlink" title="jstatd"></a>jstatd</h1><p>jstatd 会开启一个 RMI 服务，供其他机器进行远程监控</p>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-nr     如果RMI注册中心没有找到，不会创建一个内部的RMI注册中心</span><br><span class="line">-p      RMI端口，默认为1099</span><br><span class="line">-n      RMI名称， 默认是 JStatRemoteHost</span><br><span class="line">-J      传递JVM参数</span><br></pre></td></tr></table></figure>
+<h2 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h2><p><strong>文件 <code>jstatd.all.policy</code>内容如下，给jstatd授予所有权限</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grant codebase &quot;file:$&#123;java.home&#125;/../lib/tools.jar&quot; &#123;   </span><br><span class="line">    permission java.security.AllPermission;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p><strong>开启jstatd 守护进程</strong>，开启后会有一个光标一直在闪，<code>Ctrl + C</code> 退出<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jstatd -J-Djava.security.policy=jstatd.all.policy</span><br></pre></td></tr></table></figure></p>
+<p><strong>绑定端口和设置名称</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jstatd -J-Djava.security.policy=jstatd.all.policy -p 6789 -n rmiJstatsName</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用jps远程监控</strong><br>假设 jstatd 的所在机器是 <code>192.168.4.35</code><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jps rmi://192.168.4.35:6789/rmiJstatsName</span><br></pre></td></tr></table></figure></p>
+<p>输出结果</p>
+<pre><code>11452 RemoteMavenServer
+4440 Jstatd
+10016 Launcher
+</code></pre><p><strong>使用 jstat 远程监控</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jstat -gcutil 11452@192.168.4.35:6789/rmiJstatsName 500 10</span><br></pre></td></tr></table></figure></p>
+<p><strong>打开日志输出</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jstatd -J-Djava.security.policy=jstatd.all.policy -J-Djava.rmi.server.logCalls=<span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="详请查看以下文档"><a href="#详请查看以下文档" class="headerlink" title="详请查看以下文档"></a>详请查看以下文档</h2><blockquote>
+<p>官网 <a href="http://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstatd.html" target="_blank" rel="noopener">jstatd</a></p>
+<p><a href="http://blog.csdn.net/fenglibing/article/details/17323515" target="_blank" rel="noopener">jstatd 命令(Java Statistics Monitoring Daemon) </a></p>
+<p><a href="http://docs.oracle.com/javase/8/docs/technotes/guides/security/PolicyFiles.html" target="_blank" rel="noopener">Default Policy Implementation and Policy File Syntax</a></p>
+</blockquote>
+<h1 id="jmc"><a href="#jmc" class="headerlink" title="jmc"></a>jmc</h1><p>jmc (Java Mission Control) 是一个集成的图形化界面管理工具，监控功能十分强大，下面是官方文档，这里暂不做过多介绍。 </p>
+<p><a href="https://docs.oracle.com/javacomponents/jmc-5-5/jmc-user-guide/toc.htm" target="_blank" rel="noopener">Java Mission Control User’s Guide</a><br><a href="https://docs.oracle.com/javacomponents/jmc-5-5/jfr-runtime-guide/toc.htm" target="_blank" rel="noopener">Java Flight Recorder Runtime Guide</a>  </p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
+<p><a href="http://docs.oracle.com/javase/8/docs/technotes/tools/unix/s9-monitoring-tools.html" target="_blank" rel="noopener">13 Monitor the JVM</a></p>
+<p><a href="http://docs.oracle.com/javase/8/docs/technotes/tools/" target="_blank" rel="noopener">JDK Tools and Utilities</a></p>
+<p><a href="http://docs.oracle.com/javase/8/" target="_blank" rel="noopener">Java Platform, Standard Edition (Java SE) 8</a></p>
+<p><a href="http://blog.csdn.net/fenglibing/article/details/6411999" target="_blank" rel="noopener">JDK内置工具使用</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Java-内建命令/" rel="tag"># Java 内建命令</a>
+          
+            <a href="/tags/jps/" rel="tag"># jps</a>
+          
+            <a href="/tags/jstat/" rel="tag"># jstat</a>
+          
+            <a href="/tags/jstatd/" rel="tag"># jstatd</a>
+          
+            <a href="/tags/debug/" rel="tag"># debug</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2017-02-05/embedded-mysql-in-java-with-connector-mxj.html" rel="next" title="使用 MySQL Connector/MXJ 在 Java 中嵌入 MySQL 进行测试">
+                <i class="fa fa-chevron-left"></i> 使用 MySQL Connector/MXJ 在 Java 中嵌入 MySQL 进行测试
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2017-02-10/java/java-self-troubleshooting-command.html" rel="prev" title="Java 内建"故障排除"工具 — jcmd、jinfo、jmap、jhat、jstack、jsadebugd">
+                Java 内建"故障排除"工具 — jcmd、jinfo、jmap、jhat、jstack、jsadebugd <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#jps-列出当前系统的Java进程"><span class="nav-text"><a href="#jps-&#x5217;&#x51FA;&#x5F53;&#x524D;&#x7CFB;&#x7EDF;&#x7684;Java&#x8FDB;&#x7A0B;" class="headerlink" title="jps &#x5217;&#x51FA;&#x5F53;&#x524D;&#x7CFB;&#x7EDF;&#x7684;Java&#x8FDB;&#x7A0B;"></a>jps &#x5217;&#x51FA;&#x5F53;&#x524D;&#x7CFB;&#x7EDF;&#x7684;Java&#x8FDB;&#x7A0B;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#options"><span class="nav-text"><a href="#options" class="headerlink" title="options"></a>options</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hostid"><span class="nav-text"><a href="#hostid" class="headerlink" title="hostid"></a>hostid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#官方文档"><span class="nav-text"><a href="#&#x5B98;&#x65B9;&#x6587;&#x6863;" class="headerlink" title="&#x5B98;&#x65B9;&#x6587;&#x6863;"></a>&#x5B98;&#x65B9;&#x6587;&#x6863;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jstat-统计-JVM-信息"><span class="nav-text"><a href="#jstat-&#x7EDF;&#x8BA1;-JVM-&#x4FE1;&#x606F;" class="headerlink" title="jstat &#x7EDF;&#x8BA1; JVM &#x4FE1;&#x606F;"></a>jstat &#x7EDF;&#x8BA1; JVM &#x4FE1;&#x606F;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一般参数"><span class="nav-text"><a href="#&#x4E00;&#x822C;&#x53C2;&#x6570;" class="headerlink" title="&#x4E00;&#x822C;&#x53C2;&#x6570;"></a>&#x4E00;&#x822C;&#x53C2;&#x6570;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输出参数"><span class="nav-text"><a href="#&#x8F93;&#x51FA;&#x53C2;&#x6570;" class="headerlink" title="&#x8F93;&#x51FA;&#x53C2;&#x6570;"></a>&#x8F93;&#x51FA;&#x53C2;&#x6570;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-text"><a href="#&#x4F8B;&#x5B50;" class="headerlink" title="&#x4F8B;&#x5B50;"></a>&#x4F8B;&#x5B50;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解释"><span class="nav-text"><a href="#&#x89E3;&#x91CA;" class="headerlink" title="&#x89E3;&#x91CA;"></a>&#x89E3;&#x91CA;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jstatd"><span class="nav-text"><a href="#jstatd" class="headerlink" title="jstatd"></a>jstatd</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参数"><span class="nav-text"><a href="#&#x53C2;&#x6570;" class="headerlink" title="&#x53C2;&#x6570;"></a>&#x53C2;&#x6570;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例子-1"><span class="nav-text"><a href="#&#x4F8B;&#x5B50;-1" class="headerlink" title="&#x4F8B;&#x5B50;"></a>&#x4F8B;&#x5B50;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#详请查看以下文档"><span class="nav-text"><a href="#&#x8BE6;&#x8BF7;&#x67E5;&#x770B;&#x4EE5;&#x4E0B;&#x6587;&#x6863;" class="headerlink" title="&#x8BE6;&#x8BF7;&#x67E5;&#x770B;&#x4EE5;&#x4E0B;&#x6587;&#x6863;"></a>&#x8BE6;&#x8BF7;&#x67E5;&#x770B;&#x4EE5;&#x4E0B;&#x6587;&#x6863;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jmc"><span class="nav-text"><a href="#jmc" class="headerlink" title="jmc"></a>jmc</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

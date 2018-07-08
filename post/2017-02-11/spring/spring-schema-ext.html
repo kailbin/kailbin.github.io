@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spring提供了可扩展Schema的支持，一般情况下，扩展Spring标签的意义并不大，但是对第三方工具来说，开发自己的标签供开发人员使用还是很有必要的。 首先就是有了语义，再者配置起来也相对方便，会减少一定的配置项。 常见的 Spring 的事物管理(tx:)、AOP(aop:)，还有淘宝的 Dubbo(dubbo:) 都有自己的标签库。">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Schema 扩展">
+<meta property="og:url" content="http://blog.kail.xyz/post/2017-02-11/spring/spring-schema-ext.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="Spring提供了可扩展Schema的支持，一般情况下，扩展Spring标签的意义并不大，但是对第三方工具来说，开发自己的标签供开发人员使用还是很有必要的。 首先就是有了语义，再者配置起来也相对方便，会减少一定的配置项。 常见的 Spring 的事物管理(tx:)、AOP(aop:)，还有淘宝的 Dubbo(dubbo:) 都有自己的标签库。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-16T13:21:39.489Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Schema 扩展">
+<meta name="twitter:description" content="Spring提供了可扩展Schema的支持，一般情况下，扩展Spring标签的意义并不大，但是对第三方工具来说，开发自己的标签供开发人员使用还是很有必要的。 首先就是有了语义，再者配置起来也相对方便，会减少一定的配置项。 常见的 Spring 的事物管理(tx:)、AOP(aop:)，还有淘宝的 Dubbo(dubbo:) 都有自己的标签库。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2017-02-11/spring/spring-schema-ext.html"/>
+
+
+
+
+
+  <title>Spring Schema 扩展 | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-11/spring/spring-schema-ext.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Spring Schema 扩展</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T00:00:00+08:00">
+                2017-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2017-02-11/spring/spring-schema-ext.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2017-02-11/spring/spring-schema-ext.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Spring提供了可扩展Schema的支持，一般情况下，扩展Spring标签的意义并不大，但是对第三方工具来说，开发自己的标签供开发人员使用还是很有必要的。</p>
+<p>首先就是有了语义，再者配置起来也相对方便，会减少一定的配置项。</p>
+<p>常见的 Spring 的事物管理(<code>tx:</code>)、AOP(<code>aop:</code>)，还有淘宝的 Dubbo(<code>dubbo:</code>) 都有自己的标签库。</p>
+<a id="more"></a>
+<h1 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-context<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.3.6.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="从-NamespaceHandlerSupport-入手"><a href="#从-NamespaceHandlerSupport-入手" class="headerlink" title="从 NamespaceHandlerSupport 入手"></a>从 <code>NamespaceHandlerSupport</code> 入手</h1><p>可以通过 IDE 查看 <code>NamespaceHandlerSupport</code> 的继承关系，常见的如 <code>TxNamespaceHandler</code>、<code>MvcNamespaceHandler</code>、<code>AopNamespaceHandler</code> 等都是该类的子类。</p>
+<p>这里我们也继承<code>NamespaceHandlerSupport</code>，该类是一个抽象类，需要实现其中的 <code>init()</code> 方法，该方法是在<code>NamespaceHandler</code>接口中定义的，注释如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">NamespaceHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Invoked by the &#123;<span class="doctag">@link</span> DefaultBeanDefinitionDocumentReader&#125; after</span></span><br><span class="line"><span class="comment">	 * construction but before any custom elements are parsed.</span></span><br><span class="line"><span class="comment">	 *</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@see</span> NamespaceHandlerSupport#registerBeanDefinitionParser(String, BeanDefinitionParser)</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>@see NamespaceHandlerSupport#registerBeanDefinitionParser(String, BeanDefinitionParser)</code>，实现自己的 <code>PojoNamespaceHandler</code>，代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> xyz.kail.blog.example;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.xml.NamespaceHandlerSupport;</span><br><span class="line">  </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by kail on 2017/2/11.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PojoNamespaceHandler</span> <span class="keyword">extends</span> <span class="title">NamespaceHandlerSupport</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// pojo 即为 自定义的标签名</span></span><br><span class="line">        registerBeanDefinitionParser(<span class="string">"pojo"</span>,<span class="keyword">new</span> PojoBeanParser());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="实现-PojoBeanParser"><a href="#实现-PojoBeanParser" class="headerlink" title="实现 PojoBeanParser"></a>实现 PojoBeanParser</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> xyz.kail.blog.example;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.support.BeanDefinitionBuilder;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;</span><br><span class="line"><span class="keyword">import</span> org.w3c.dom.Element;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">import</span> java.text.ParseException;</span><br><span class="line"><span class="keyword">import</span> java.text.SimpleDateFormat;</span><br><span class="line">  </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by kail on 2017/2/11.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PojoBeanParser</span> <span class="keyword">extends</span> <span class="title">AbstractSingleBeanDefinitionParser</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doParse</span><span class="params">(Element element, BeanDefinitionBuilder builder)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// element 即为 pojo 元素对象，从中可以获得定义的属性</span></span><br><span class="line">        String name = element.getAttribute(<span class="string">"username"</span>);</span><br><span class="line">        String birthday = element.getAttribute(<span class="string">"birthday"</span>);</span><br><span class="line">  </span><br><span class="line">        SimpleDateFormat simpleDateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd"</span>);</span><br><span class="line">        builder.addPropertyValue(<span class="string">"username"</span>, name);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            builder.addPropertyValue(<span class="string">"birthday"</span>, simpleDateFormat.parse(birthday));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ParseException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 需要告诉 Spring 自定义标签生产的对象是什么</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt; getBeanClass(Element element) &#123;</span><br><span class="line">        <span class="keyword">return</span> MySelfVO.class;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="MySelfVO-对象如下"><a href="#MySelfVO-对象如下" class="headerlink" title="MySelfVO 对象如下"></a>MySelfVO 对象如下</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> xyz.kail.blog.example;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line">  </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by kail on 2017/2/11.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MySelfVO</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">private</span> Date birthday;</span><br><span class="line">  </span><br><span class="line">    ... 省略 get set</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="编写-Scheme"><a href="#编写-Scheme" class="headerlink" title="编写 Scheme"></a>编写 Scheme</h1><p>XML Schema 的作用是定义 XML 文档的合法构建模块，是W3C标准。</p>
+<p>通俗来讲就是定义了一个XML文件应该有哪些元素、一个元素可以有哪些属性、属性必须是什么值、属性的类型等。</p>
+<h2 id="META-INF-kail-pojo-xsd-文件"><a href="#META-INF-kail-pojo-xsd-文件" class="headerlink" title="META-INF/kail-pojo.xsd 文件"></a>META-INF/kail-pojo.xsd 文件</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">xsd:schema</span> <span class="attr">xmlns:xsd</span>=<span class="string">"http://www.w3.org/2001/XMLSchema"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">xmlns</span>=<span class="string">"http://blog.kail.xyz/schema/kail"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">targetNamespace</span>=<span class="string">"http://blog.kail.xyz/schema/kail"</span></span></span><br><span class="line"><span class="tag">  </span></span><br><span class="line"><span class="tag">            <span class="attr">elementFormDefault</span>=<span class="string">"qualified"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">attributeFormDefault</span>=<span class="string">"unqualified"</span>&gt;</span></span><br><span class="line">  </span><br><span class="line">    <span class="tag">&lt;<span class="name">xsd:element</span> <span class="attr">name</span>=<span class="string">"pojo"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xsd:complexType</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xsd:attribute</span> <span class="attr">name</span>=<span class="string">"id"</span> <span class="attr">use</span>=<span class="string">"required"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xsd:attribute</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">type</span>=<span class="string">"xsd:string"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xsd:attribute</span> <span class="attr">name</span>=<span class="string">"birthday"</span> <span class="attr">type</span>=<span class="string">"xsd:date"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">xsd:complexType</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xsd:element</span>&gt;</span></span><br><span class="line">  </span><br><span class="line"><span class="tag">&lt;/<span class="name">xsd:schema</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>该xsd 定义了一个 pojo 元素，包含 <code>id</code>、<code>username</code>、<code>birthday</code>三个属性，<code>id</code>是必填的，<code>username</code>是字符串类型的，<code>birthday</code>是日期类型的。<br>编写完 scheme 文件后，还需要在 <code>META-INF</code> 目录下写入 <code>spring.handlers</code>和<code>spring.schemas</code>两个文件，指明标签的实现和 scheme 文件位置，格式如下：</p>
+<h2 id="META-INF-spring-handlers"><a href="#META-INF-spring-handlers" class="headerlink" title="META-INF/spring.handlers"></a>META-INF/spring.handlers</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http\://blog.kail.xyz/schema/kail=xyz.kail.blog.example.PojoNamespaceHandler</span><br></pre></td></tr></table></figure>
+<h2 id="META-INF-spring-schemas"><a href="#META-INF-spring-schemas" class="headerlink" title="META-INF/spring.schemas"></a>META-INF/spring.schemas</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http\://blog.kail.xyz/schema/kail/kail-pojo.xsd=META-INF/kail-pojo.xsd</span><br></pre></td></tr></table></figure>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.3.6.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">  </span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="测试类"><a href="#测试类" class="headerlink" title="测试类"></a>测试类</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.RunWith;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.test.context.ContextConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.test.context.junit4.SpringJUnit4ClassRunner;</span><br><span class="line"><span class="keyword">import</span> xyz.kail.blog.example.MySelfVO;</span><br><span class="line">  </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by kail on 2017/2/11.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations = <span class="string">"classpath:/applicationContext.xml"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PojoNSTest</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MySelfVO self1;</span><br><span class="line">  </span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MySelfVO self2;</span><br><span class="line">  </span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testPojoNS</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(self1.getUsername());</span><br><span class="line">        System.out.println(self1.getBirthday());</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSpringBean</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(self2.getUsername());</span><br><span class="line">        System.out.println(self2.getBirthday());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="applicationContext-xml-文件"><a href="#applicationContext-xml-文件" class="headerlink" title="applicationContext.xml 文件"></a>applicationContext.xml 文件</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:kail</span>=<span class="string">"http://blog.kail.xyz/schema/kail"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">                http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">                </span></span></span><br><span class="line"><span class="tag"><span class="string">                http://blog.kail.xyz/schema/kail</span></span></span><br><span class="line"><span class="tag"><span class="string">                http://blog.kail.xyz/schema/kail/kail-pojo.xsd"</span>&gt;</span></span><br><span class="line">  </span><br><span class="line">    <span class="comment">&lt;!-- 自定义标签的形式 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">kail:pojo</span> <span class="attr">id</span>=<span class="string">"self1"</span> <span class="attr">username</span>=<span class="string">"ykb"</span> <span class="attr">birthday</span>=<span class="string">"1992-07-23"</span>/&gt;</span></span><br><span class="line">  </span><br><span class="line">    <span class="comment">&lt;!-- 实例工厂的形式 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dateFormat"</span> <span class="attr">class</span>=<span class="string">"java.text.SimpleDateFormat"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">value</span>=<span class="string">"yyyy-MM-dd"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">   </span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"self2"</span> <span class="attr">class</span>=<span class="string">"xyz.kail.blog.example.MySelfVO"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"dxp"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"birthday"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">bean</span> <span class="attr">factory-bean</span>=<span class="string">"dateFormat"</span> <span class="attr">factory-method</span>=<span class="string">"parse"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">value</span>=<span class="string">"1992-02-26"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">  </span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h1><p>本文讲的比较简单，复杂用法可以查看官方文档<a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/xml-custom.html" target="_blank" rel="noopener">42. Extensible XML authoring</a>，Scheme 语法可以查看 <a href="http://www.w3school.com.cn/schema/index.asp" target="_blank" rel="noopener">w3c.cn Schema 教程</a>.</p>
+<p>具体编写的时候可以查看 <code>NamespaceHandler</code> 接口的实现，根据其中的<code>init()</code> 方法顺藤摸瓜，查看其他优秀的第三方框架是如何实现的。</p>
+<p>使用到未知的标签的时候也可以通过该方法，找到对应标签的实现，了解标签背后的原理。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
+<p>官方文档<a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/xml-custom.html" target="_blank" rel="noopener">42. Extensible XML authoring</a></p>
+<p><a href="http://blog.csdn.net/cutesource/article/details/5864562" target="_blank" rel="noopener">基于Spring可扩展Schema提供自定义配置支持</a></p>
+<p><a href="http://www.w3school.com.cn/schema/index.asp" target="_blank" rel="noopener">w3c.cn Schema 教程</a><br><a href="https://www.w3.org/XML/Schema#dev" target="_blank" rel="noopener">W3C Schema Specifications and Development</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2017-02-10/java/java-self-troubleshooting-command.html" rel="next" title="Java 内建"故障排除"工具 — jcmd、jinfo、jmap、jhat、jstack、jsadebugd">
+                <i class="fa fa-chevron-left"></i> Java 内建"故障排除"工具 — jcmd、jinfo、jmap、jhat、jstack、jsadebugd
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2017-02-16/mac-single-user-mode.html" rel="prev" title="Mac 单用户模式(Single User Mode)获得root权限">
+                Mac 单用户模式(Single User Mode)获得root权限 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#依赖"><span class="nav-text"><a href="#&#x4F9D;&#x8D56;" class="headerlink" title="&#x4F9D;&#x8D56;"></a>&#x4F9D;&#x8D56;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从-NamespaceHandlerSupport-入手"><span class="nav-text"><a href="#&#x4ECE;-NamespaceHandlerSupport-&#x5165;&#x624B;" class="headerlink" title="&#x4ECE; NamespaceHandlerSupport &#x5165;&#x624B;"></a>&#x4ECE; <code>NamespaceHandlerSupport</code> &#x5165;&#x624B;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现-PojoBeanParser"><span class="nav-text"><a href="#&#x5B9E;&#x73B0;-PojoBeanParser" class="headerlink" title="&#x5B9E;&#x73B0; PojoBeanParser"></a>&#x5B9E;&#x73B0; PojoBeanParser</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MySelfVO-对象如下"><span class="nav-text"><a href="#MySelfVO-&#x5BF9;&#x8C61;&#x5982;&#x4E0B;" class="headerlink" title="MySelfVO &#x5BF9;&#x8C61;&#x5982;&#x4E0B;"></a>MySelfVO &#x5BF9;&#x8C61;&#x5982;&#x4E0B;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编写-Scheme"><span class="nav-text"><a href="#&#x7F16;&#x5199;-Scheme" class="headerlink" title="&#x7F16;&#x5199; Scheme"></a>&#x7F16;&#x5199; Scheme</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#META-INF-kail-pojo-xsd-文件"><span class="nav-text"><a href="#META-INF-kail-pojo-xsd-&#x6587;&#x4EF6;" class="headerlink" title="META-INF/kail-pojo.xsd &#x6587;&#x4EF6;"></a>META-INF/kail-pojo.xsd &#x6587;&#x4EF6;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#META-INF-spring-handlers"><span class="nav-text"><a href="#META-INF-spring-handlers" class="headerlink" title="META-INF/spring.handlers"></a>META-INF/spring.handlers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#META-INF-spring-schemas"><span class="nav-text"><a href="#META-INF-spring-schemas" class="headerlink" title="META-INF/spring.schemas"></a>META-INF/spring.schemas</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试"><span class="nav-text"><a href="#&#x6D4B;&#x8BD5;" class="headerlink" title="&#x6D4B;&#x8BD5;"></a>&#x6D4B;&#x8BD5;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加依赖"><span class="nav-text"><a href="#&#x6DFB;&#x52A0;&#x4F9D;&#x8D56;" class="headerlink" title="&#x6DFB;&#x52A0;&#x4F9D;&#x8D56;"></a>&#x6DFB;&#x52A0;&#x4F9D;&#x8D56;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试类"><span class="nav-text"><a href="#&#x6D4B;&#x8BD5;&#x7C7B;" class="headerlink" title="&#x6D4B;&#x8BD5;&#x7C7B;"></a>&#x6D4B;&#x8BD5;&#x7C7B;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#applicationContext-xml-文件"><span class="nav-text"><a href="#applicationContext-xml-&#x6587;&#x4EF6;" class="headerlink" title="applicationContext.xml &#x6587;&#x4EF6;"></a>applicationContext.xml &#x6587;&#x4EF6;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PS"><span class="nav-text"><a href="#PS" class="headerlink" title="PS"></a>PS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

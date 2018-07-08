@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="常用命令,Linux," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="base64 一般会默认安装，可以进行 base64 编码和解码。jq 可以对json进行解析、选择、格式化、高亮等，需要通过 apt-get install jq 进行安装。">
+<meta name="keywords" content="常用命令,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="base64 和 jq 命令">
+<meta property="og:url" content="http://blog.kail.xyz/post/2016-12-06/linux/linux-command-base64-and-jq.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="base64 一般会默认安装，可以进行 base64 编码和解码。jq 可以对json进行解析、选择、格式化、高亮等，需要通过 apt-get install jq 进行安装。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-16T13:21:39.481Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="base64 和 jq 命令">
+<meta name="twitter:description" content="base64 一般会默认安装，可以进行 base64 编码和解码。jq 可以对json进行解析、选择、格式化、高亮等，需要通过 apt-get install jq 进行安装。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2016-12-06/linux/linux-command-base64-and-jq.html"/>
+
+
+
+
+
+  <title>base64 和 jq 命令 | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-06/linux/linux-command-base64-and-jq.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">base64 和 jq 命令</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-06T00:00:00+08:00">
+                2016-12-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2016-12-06/linux/linux-command-base64-and-jq.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2016-12-06/linux/linux-command-base64-and-jq.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>base64 一般会默认安装，可以进行 base64 编码和解码。<br>jq 可以对json进行解析、选择、格式化、高亮等，需要通过 <code>apt-get install jq</code> 进行安装。</p>
+<a id="more"></a>
+<h3 id="测试数据"><a href="#测试数据" class="headerlink" title="测试数据"></a>测试数据</h3><h5 id="①-原始数据"><a href="#①-原始数据" class="headerlink" title="① 原始数据"></a>① 原始数据</h5><pre><code>eyJuYW1lIjoiNWJDUDVwaU8iLCJhZ2UiOjI0LCJDb250YWN0Ijp7InRlbCI6IjE4NzMzMzMzMzMzIiwicXEiOiI1NTU1NTU1NTUifSwiZnJpZW5kcyI6W3sibmFtZSI6IjViQ1A2SXF4IiwiYWdlIjoyMn0seyJuYW1lIjoiNWJDUDZJdTUiLCJhZ2UiOjI0fV19
+</code></pre><p><strong>将原始数据保存到 <code>test.json</code> 文件中。</strong>  </p>
+<h5 id="②-Bsee64-解码之后"><a href="#②-Bsee64-解码之后" class="headerlink" title="② Bsee64 解码之后"></a>② Bsee64 解码之后</h5><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"name"</span>:<span class="string">"5bCP5piO"</span>,</span><br><span class="line">    <span class="attr">"age"</span>:<span class="number">24</span>,</span><br><span class="line">    <span class="attr">"Contact"</span>:&#123;</span><br><span class="line">        <span class="attr">"tel"</span>:<span class="string">"18733333333"</span>,</span><br><span class="line">        <span class="attr">"qq"</span>:<span class="string">"555555555"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"friends"</span>:[</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"name"</span>:<span class="string">"5bCP6Iqx"</span>,</span><br><span class="line">            <span class="attr">"age"</span>:<span class="number">22</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"name"</span>:<span class="string">"5bCP6Iu5"</span>,</span><br><span class="line">            <span class="attr">"age"</span>:<span class="number">24</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="③-json-字段解码之后"><a href="#③-json-字段解码之后" class="headerlink" title="③ json 字段解码之后"></a>③ json 字段解码之后</h5><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"name"</span>:<span class="string">"小明"</span>,</span><br><span class="line">    <span class="attr">"age"</span>:<span class="number">24</span>,</span><br><span class="line">    <span class="attr">"Contact"</span>:&#123;</span><br><span class="line">        <span class="attr">"tel"</span>:<span class="string">"18733333333"</span>,</span><br><span class="line">        <span class="attr">"qq"</span>:<span class="string">"555555555"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"friends"</span>:[</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"name"</span>:<span class="string">"小花"</span>,</span><br><span class="line">            <span class="attr">"age"</span>:<span class="number">22</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"name"</span>:<span class="string">"小苹"</span>,</span><br><span class="line">            <span class="attr">"age"</span>:<span class="number">24</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="bass64"><a href="#bass64" class="headerlink" title="bass64"></a>bass64</h3><h5 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line"><span class="built_in">echo</span> <span class="string">"str"</span> | base64         <span class="comment"># 将字符串 str + \n 编码为base64字符串输出 </span></span><br><span class="line"><span class="built_in">echo</span> -n <span class="string">"str"</span> | base64      <span class="comment"># 将字符串 str编码为base64字符串输出。注意与上面的差别</span></span><br><span class="line">    </span><br><span class="line"><span class="built_in">echo</span> <span class="string">"str"</span> | base64 -d      <span class="comment"># 将base64编码的字符串 str + \n  解码输出  </span></span><br><span class="line"><span class="built_in">echo</span> -n <span class="string">"str"</span> | base64 -d   <span class="comment"># 将base64编码的字符串str解码输出</span></span><br><span class="line">        </span><br><span class="line">base64                      <span class="comment"># 从标准输入中读取数据，按Ctrl+D结束输入。将输入的内容编码为base64字符串输出  </span></span><br><span class="line">base64 file                 <span class="comment"># 从指定的文件file中读取数据，编码为base64字符串输出 </span></span><br><span class="line">    </span><br><span class="line">base64 -d                   <span class="comment"># 从标准输入中读取已经进行base64编码的内容，解码输出  </span></span><br><span class="line">base64 -d file              <span class="comment"># 从指定的文件file中读取base64编码的内容，解码输出  </span></span><br><span class="line">    </span><br><span class="line">base64 -d -i                <span class="comment"># 从标准输入中读取已经进行base64编码的内容，解码输出。加上-i参数，忽略非字母表字符，比如换行符</span></span><br></pre></td></tr></table></figure>
+<h5 id="测试-1"><a href="#测试-1" class="headerlink" title="测试 1"></a>测试 1</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat test.json | base64 -d</span><br></pre></td></tr></table></figure>
+<h5 id="结果-1"><a href="#结果-1" class="headerlink" title="结果 1"></a>结果 1</h5><pre><code>{&quot;name&quot;:&quot;5bCP5piO&quot;,&quot;age&quot;:24,&quot;Contact&quot;:{&quot;tel&quot;:&quot;18733333333&quot;,&quot;qq&quot;:&quot;555555555&quot;},&quot;friends&quot;:[{&quot;name&quot;:&quot;5bCP6Iqx&quot;,&quot;age&quot;:22},{&quot;name&quot;:&quot;5bCP6Iu5&quot;,&quot;age&quot;:24}]}
+</code></pre><h3 id="jq"><a href="#jq" class="headerlink" title="jq"></a>jq</h3><h5 id="格式化输出json"><a href="#格式化输出json" class="headerlink" title="格式化输出json"></a>格式化输出json</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat test.json | base64 -d | jq <span class="string">"."</span></span><br></pre></td></tr></table></figure>
+<p>结果  </p>
+<pre><code>{
+    &quot;name&quot;:&quot;5bCP5piO&quot;,
+    &quot;age&quot;:24,
+    &quot;Contact&quot;:{
+        &quot;tel&quot;:&quot;18733333333&quot;,
+        &quot;qq&quot;:&quot;555555555&quot;
+    },
+    &quot;friends&quot;:[
+        {
+            &quot;name&quot;:&quot;5bCP6Iqx&quot;,
+            &quot;age&quot;:22
+        },
+        {
+            &quot;name&quot;:&quot;5bCP6Iu5&quot;,
+            &quot;age&quot;:24
+        }
+    ]
+}
+</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cat test.json | base64 -d | jq <span class="string">".name"</span>                                               <span class="comment"># "5bCP5piO"</span></span><br><span class="line">cat test.json | base64 -d | jq <span class="string">".Contact.tel"</span>                                        <span class="comment"># "18733333333"</span></span><br><span class="line">cat test.json | base64 -d | jq <span class="string">".friends[0].name"</span>                                    <span class="comment"># "5bCP6Iqx"</span></span><br><span class="line">cat test.json | base64 -d | jq <span class="string">".friends[0].name"</span>  | sed <span class="string">'s/"//g'</span>                    <span class="comment"># 5bCP6Iqx</span></span><br><span class="line">cat test.json | base64 -d | jq <span class="string">".friends[0].name"</span> | sed <span class="string">'s/"//g'</span> | base64 -d         <span class="comment"># 小花</span></span><br><span class="line">    </span><br><span class="line">cat test.json | base64 -d | jq <span class="string">".friends[].name"</span>                                     <span class="comment"># "5bCP6Iqx"</span></span><br><span class="line">                                                                                     <span class="comment"># "5bCP6Iu5"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat test.json | base64 -d | jq <span class="string">".friends[] | &#123;friend_name: .name, friend_age: .age&#125;"</span></span><br></pre></td></tr></table></figure>
+<pre><code>{
+  &quot;friend_age&quot;: 22,
+  &quot;friend_name&quot;: &quot;5bCP6Iqx&quot;
+}
+{
+  &quot;friend_age&quot;: 24,
+  &quot;friend_name&quot;: &quot;5bCP6Iu5&quot;
+}
+</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat test.json | base64 -d | jq <span class="string">"[ .friends[] | &#123;friend_name: .name, friend_age: .age&#125; ]"</span></span><br></pre></td></tr></table></figure>
+<pre><code>[
+  {
+    &quot;friend_age&quot;: 22,
+    &quot;friend_name&quot;: &quot;5bCP6Iqx&quot;
+  },
+  {
+    &quot;friend_age&quot;: 24,
+    &quot;friend_name&quot;: &quot;5bCP6Iu5&quot;
+  }
+]
+</code></pre><blockquote>
+<p><a href="http://codingstandards.iteye.com/blog/934928" target="_blank" rel="noopener">用base64编解码</a><br><a href="https://stedolan.github.io/jq/tutorial/" target="_blank" rel="noopener">jq 官方快速指南</a><br><a href="https://stedolan.github.io/jq/manual/" target="_blank" rel="noopener">jq 官方手册</a>  </p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/常用命令/" rel="tag"># 常用命令</a>
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2016-12-04/linux/linux-dpkg-and-apt-get.html" rel="next" title="dpkg 和 apt-get">
+                <i class="fa fa-chevron-left"></i> dpkg 和 apt-get
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2016-12-07/linux/linux-command-curl.html" rel="prev" title="curl 命令常见用法">
+                curl 命令常见用法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试数据"><span class="nav-text"><a href="#&#x6D4B;&#x8BD5;&#x6570;&#x636E;" class="headerlink" title="&#x6D4B;&#x8BD5;&#x6570;&#x636E;"></a>&#x6D4B;&#x8BD5;&#x6570;&#x636E;</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#①-原始数据"><span class="nav-text"><a href="#&#x2460;-&#x539F;&#x59CB;&#x6570;&#x636E;" class="headerlink" title="&#x2460; &#x539F;&#x59CB;&#x6570;&#x636E;"></a>&#x2460; &#x539F;&#x59CB;&#x6570;&#x636E;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#②-Bsee64-解码之后"><span class="nav-text"><a href="#&#x2461;-Bsee64-&#x89E3;&#x7801;&#x4E4B;&#x540E;" class="headerlink" title="&#x2461; Bsee64 &#x89E3;&#x7801;&#x4E4B;&#x540E;"></a>&#x2461; Bsee64 &#x89E3;&#x7801;&#x4E4B;&#x540E;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#③-json-字段解码之后"><span class="nav-text"><a href="#&#x2462;-json-&#x5B57;&#x6BB5;&#x89E3;&#x7801;&#x4E4B;&#x540E;" class="headerlink" title="&#x2462; json &#x5B57;&#x6BB5;&#x89E3;&#x7801;&#x4E4B;&#x540E;"></a>&#x2462; json &#x5B57;&#x6BB5;&#x89E3;&#x7801;&#x4E4B;&#x540E;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bass64"><span class="nav-text"><a href="#bass64" class="headerlink" title="bass64"></a>bass64</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#简述"><span class="nav-text"><a href="#&#x7B80;&#x8FF0;" class="headerlink" title="&#x7B80;&#x8FF0;"></a>&#x7B80;&#x8FF0;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#测试-1"><span class="nav-text"><a href="#&#x6D4B;&#x8BD5;-1" class="headerlink" title="&#x6D4B;&#x8BD5; 1"></a>&#x6D4B;&#x8BD5; 1</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结果-1"><span class="nav-text"><a href="#&#x7ED3;&#x679C;-1" class="headerlink" title="&#x7ED3;&#x679C; 1"></a>&#x7ED3;&#x679C; 1</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jq"><span class="nav-text"><a href="#jq" class="headerlink" title="jq"></a>jq</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#格式化输出json"><span class="nav-text"><a href="#&#x683C;&#x5F0F;&#x5316;&#x8F93;&#x51FA;json" class="headerlink" title="&#x683C;&#x5F0F;&#x5316;&#x8F93;&#x51FA;json"></a>&#x683C;&#x5F0F;&#x5316;&#x8F93;&#x51FA;json</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

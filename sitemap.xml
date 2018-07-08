@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-07-08/java/jmx-monitoring-data.html</loc>
+    
+    <lastmod>2018-07-07T17:17:35.130Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-05-27/other/domain_name-and-host.html</loc>
+    
+    <lastmod>2018-06-24T10:29:25.043Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-06-23/java/jce-policy-changes-in-java-se-8u151.html</loc>
+    
+    <lastmod>2018-06-24T10:28:59.293Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/tags/index.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.507Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/osc-blog.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.506Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/ops/docker-scaffold/nginx.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.500Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/22-mediator.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.499Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/23-interpreter.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.499Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/20-state.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.499Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/21-visitor.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.499Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/19-memento.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.498Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/17-chain-of-responsibility.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.498Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/18-command.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.498Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/16-iterator.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.497Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/15-observer.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.497Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/11-composite.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.496Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/12-flyweight.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.496Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/14-template-method.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.496Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/13-strategy.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.496Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/08-proxy.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.495Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/09-facade.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.495Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/10-bridge.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.495Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/07-decorator.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.495Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/06-adapter.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.494Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/05-prototype.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.494Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/04-builder.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.494Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/03-singleton.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.493Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/02-abstract-factory.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.493Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/01-factory-method.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.493Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/friendlink.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.492Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/gitbooks.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.492Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/guestbook/index.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.492Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/categories/index.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.491Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-01-01/theory-blocking_non-synch_async-concurrent_parallel.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.490Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-01-04/zookeeper-acl.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.490Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-08-06/spring/spring-loaded-use-in-hot-loaded.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.489Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-04-15/spring/spring-profile-and-conditional-annotation.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.489Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-02-11/spring/spring-schema-ext.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.489Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-06-07/spring/resttemplate-message-converters.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.488Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-03-14/spring/spring-boot-rose.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.488Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-03-16/spring/spring-boot-rose-multi-datasource.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.488Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-12-18/redis-pub_sub.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.487Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-12-16/redis-install.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.487Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-03-28/other/windows-find-kill.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.487Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-04-28/other/wedding.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.487Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-05-06/other/e.164.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.486Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-08-22/other/marry.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.486Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-05-14/other/use-cloud-tie.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.486Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-07-24/nginx-use-in-local-develop.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.485Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-06-25/nginx-install-in-linux.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.485Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-07-08/ops/docker-scaffold.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.485Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-12-11/maven-custom-plugin-by-hand.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.484Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2015-08-17/maven-used-plugin.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.484Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-03-14/maven-assembly-plugin_package.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.484Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-02-16/mac-single-user-mode.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.483Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-06-11/linux/ssh-no-password.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.483Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-08-11/linux/vim-common-commands.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.483Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-12-07/linux/linux-command-curl.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.482Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-12-04/linux/linux-dpkg-and-apt-get.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.482Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-02-20/linux/shell-read-parameter.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.482Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-12-01/linux/linux-source-install.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.482Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-12-06/linux/linux-command-base64-and-jq.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.481Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-12-17/js-flowchart.js.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.481Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-05-24/linux/linux-case-and-bootup.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.481Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-02-18/java/java7-watch-file-change.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.480Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-06-10/java/log4j-flush-buffer.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.480Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-05-28/java/make-javassist-simple.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.480Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-02-19/java/java5-jmx-remote-monitor-and-mbean.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.479Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-12-20/java/java5-method-time.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.479Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-01-07/java/java7-walkFileTree-fileVisitor.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.479Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-12-13/java/java-spi.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.478Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-02-17/java/java-use-jpda-remote-debug.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.478Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-02-10/java/java-self-troubleshooting-command.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.478Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-02-07/java/java-self-monitor-command.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.477Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-03-05/java/java-self-decompile-command.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.477Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-03-17/java/java-json-path.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.477Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-01-02/java/guava-cache.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.476Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-05-29/java/custom-classloader.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.476Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-05-30/java/integrating-groovy-in-a-java-application.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.476Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-07-09/installing-mysql-using-a-no-install-zip-archive.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.475Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-06-09/java/are-all-Java-generic-erased.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.475Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-06-01/hello-world.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.475Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-03-17/hbase/properties.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.474Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-03-12/hbase/how-to-use-hbase-bulk-loading-and-why.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.474Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-03-12/hbase/hbase-family-properties.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.473Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-03-20/hbase/filter.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.473Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-03-21/hbase/hfile-pretty-printer.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.473Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-05-13/groovy-monitor-kaoqin-send-mail.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.472Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-09-15/git-source-install.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.472Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-06-10/git-make-simple.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.471Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-09-10/git-recovery-and-restore.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.471Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-01-15/apache-httpd-ab.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.470Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-08-24/design-pattern.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.470Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2017-02-05/embedded-mysql-in-java-with-connector-mxj.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.470Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2013-05-31/commons-cli-jian-shu.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.470Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/404.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.463Z</lastmod>
+    
+  </url>
+  
+</urlset>

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="HBase," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="创建一个测试表（test），列族名为 f1hbase&amp;gt; create &apos;test&apos;, &amp;#123;NAME =&amp;gt; &apos;f&apos;&amp;#125; 默认属性如下：12345678910111213141516hbase&amp;gt; describe &apos;test&apos;&amp;#123; NAME =&amp;gt; &apos;f&apos;,  BLOOMFILTER =&amp;gt; &apos;ROW&apos;,  VERSIONS =&amp;gt; &apos;1&apos;,  M">
+<meta name="keywords" content="HBase">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HBase 列族配置">
+<meta property="og:url" content="http://blog.kail.xyz/post/2018-03-12/hbase/hbase-family-properties.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="创建一个测试表（test），列族名为 f1hbase&amp;gt; create &apos;test&apos;, &amp;#123;NAME =&amp;gt; &apos;f&apos;&amp;#125; 默认属性如下：12345678910111213141516hbase&amp;gt; describe &apos;test&apos;&amp;#123; NAME =&amp;gt; &apos;f&apos;,  BLOOMFILTER =&amp;gt; &apos;ROW&apos;,  VERSIONS =&amp;gt; &apos;1&apos;,  M">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-16T13:21:39.473Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HBase 列族配置">
+<meta name="twitter:description" content="创建一个测试表（test），列族名为 f1hbase&amp;gt; create &apos;test&apos;, &amp;#123;NAME =&amp;gt; &apos;f&apos;&amp;#125; 默认属性如下：12345678910111213141516hbase&amp;gt; describe &apos;test&apos;&amp;#123; NAME =&amp;gt; &apos;f&apos;,  BLOOMFILTER =&amp;gt; &apos;ROW&apos;,  VERSIONS =&amp;gt; &apos;1&apos;,  M">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2018-03-12/hbase/hbase-family-properties.html"/>
+
+
+
+
+
+  <title>HBase 列族配置 | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2018-03-12/hbase/hbase-family-properties.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">HBase 列族配置</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-12T21:12:09+08:00">
+                2018-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/HBase/" itemprop="url" rel="index">
+                    <span itemprop="name">HBase</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2018-03-12/hbase/hbase-family-properties.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2018-03-12/hbase/hbase-family-properties.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>创建一个测试表（<code>test</code>），列族名为 <code>f</code><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase&gt; create <span class="string">'test'</span>, &#123;NAME =&gt; <span class="string">'f'</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>默认属性如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">hbase&gt; describe <span class="string">'test'</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"> NAME =&gt; <span class="string">'f'</span>, </span><br><span class="line"> BLOOMFILTER =&gt; <span class="string">'ROW'</span>, </span><br><span class="line"> VERSIONS =&gt; <span class="string">'1'</span>, </span><br><span class="line"> MIN_VERSIONS =&gt; <span class="string">'0'</span>, </span><br><span class="line"> KEEP_DELETED_CELLS =&gt; <span class="string">'FALSE'</span>, </span><br><span class="line"> DATA_BLOCK_ENCODING =&gt; <span class="string">'NONE'</span>, </span><br><span class="line"> COMPRESSION =&gt; <span class="string">'NONE'</span>, </span><br><span class="line"> TTL =&gt; <span class="string">'FOREVER'</span>, </span><br><span class="line"> BLOCKCACHE =&gt; <span class="string">'true'</span>, </span><br><span class="line"> BLOCKSIZE =&gt; <span class="string">'65536'</span>, </span><br><span class="line"> IN_MEMORY =&gt; <span class="string">'false'</span>,</span><br><span class="line"> REPLICATION_SCOPE =&gt; <span class="string">'0'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h1 id="基本属性"><a href="#基本属性" class="headerlink" title="基本属性"></a>基本属性</h1><h2 id="BLOOMFILTER-布隆过滤器"><a href="#BLOOMFILTER-布隆过滤器" class="headerlink" title="BLOOMFILTER(布隆过滤器)"></a>BLOOMFILTER(布隆过滤器)</h2><p><strong>布隆过滤器 可以判断数据不存在</strong>，当判断结果存在时，数据可能真的存在，也可能不存在。可选的值有 三个 <code>NONE</code>, <code>ROW</code> (default), <code>ROWCOL</code>。</p>
+<p>当开启 布隆过滤器 时，<strong>可以判断要查询的数据不存在在表中</strong>，从而避免查表。</p>
+<p>行级（<code>ROW</code>）布隆过滤器在数据块里<strong>检查特定行键是否不存在</strong>，列标识符级（<code>ROWCOL</code>）布隆过滤器<strong>检查行和列标识符联合体是否不存在</strong>。<code>ROWCOL</code>布隆过滤器的开销高于<code>ROW</code>布隆过滤器。</p>
+<h2 id="VERSIONS-Cell数据版本"><a href="#VERSIONS-Cell数据版本" class="headerlink" title="VERSIONS(Cell数据版本)"></a>VERSIONS(Cell数据版本)</h2><p>0.96版本默认是3个， 0.98版本之后是1， 要根据业务来划分，版本是历史记录，版本增多意味空间消耗。</p>
+<p>插入数据的时候，版本默认是当前时间；查询的时候可以指定要获取的版本个数 <code>get &#39;test&#39;, &#39;rk1&#39;,  { COLUMN =&gt; &#39;f&#39;,  VERSIONS =&gt; 100}</code>；</p>
+<p>获取多个版本的时候，多个数据是按照 时间戳倒序排序，也可以通过这个特性，来保存类似于事件发生的数据，查询时间历史的时候，拿出来的数据是按照时间排好序，如果要拿最新的事件，不指定版本即可。</p>
+<p>版本的时间戳，也可以自定义，不使用默认生成的时间戳，可以自己指定业务相关的ID</p>
+<h2 id="MIN-VERSIONS-最少保留的版本数"><a href="#MIN-VERSIONS-最少保留的版本数" class="headerlink" title="MIN_VERSIONS(最少保留的版本数)"></a>MIN_VERSIONS(最少保留的版本数)</h2><p>如果所有的版本都超期了，至少要保留<code>MIN_VERSIONS</code>个版本</p>
+<h2 id="KEEP-DELETED-CELLS-保留删除的单元格"><a href="#KEEP-DELETED-CELLS-保留删除的单元格" class="headerlink" title="KEEP_DELETED_CELLS(保留删除的单元格)"></a>KEEP_DELETED_CELLS(保留删除的单元格)</h2><p>HBase 的<code>delete</code>命令，并不是真的删除数据，而是设置一个标记（<code>delete marker</code>）。用户在检索数据的时候，会过滤掉这些标示的数据。<br>该属性可以设置为 <code>FALSE</code>（默认）、<code>TRUE</code>、<code>TTL</code>。API 的注释里对这三种属性有详细描述：如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.apache.hadoop.hbase;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> KeepDeletedCells &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** 不保留删除的单元格. */</span></span><br><span class="line">  FALSE,</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 删除的单元格会保留，超期（TTL）或者数据版本数超过 VERSIONS 设置的值 才会被删除。</span></span><br><span class="line"><span class="comment">   * 如果没有指定TTL或没有超出VERSIONS值，则会永久保留它们。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  TRUE,</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 超期（TTL）才会删除</span></span><br><span class="line"><span class="comment">   * 当TTL与MIN_VERSIONS结合使用时，会删除过期后的数据，但是同时会保留最少数量的版本。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  TTL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="http://hbase.apache.org/book.html#cf.keep.deleted" target="_blank" rel="noopener">41. Keeping Deleted Cells</a></p>
+</blockquote>
+<p>major_compact</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">alter <span class="string">'test'</span>, NAME =&gt; <span class="string">'f'</span>, VERSIONS =&gt; 100</span><br><span class="line"></span><br><span class="line">put <span class="string">'test'</span>, <span class="string">'k1'</span> , <span class="string">'f:c'</span>, 123</span><br><span class="line">put <span class="string">'test'</span>, <span class="string">'k1'</span> , <span class="string">'f:c'</span>, 456</span><br><span class="line">scan <span class="string">'test'</span>,&#123;VERSIONS =&gt; 100&#125;</span><br><span class="line">alter <span class="string">'test'</span> , NAME =&gt; <span class="string">'f'</span>, KEEP_DELETED_CELLS =&gt; <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h2 id="COMPRESSION-压缩"><a href="#COMPRESSION-压缩" class="headerlink" title="COMPRESSION(压缩)"></a>COMPRESSION(压缩)</h2><p>数据压缩是 HBase 提供的一个特性，HBase 在写入数据块到 HDFS 之前会首<strong>先对数据块进行压缩，再落盘</strong>，从而可以减少磁盘空间使用量。<br>而在读数据的时候首先从HDFS中加载出block块之后<strong>进行解压缩，然后再缓存到BlockCache</strong>，最后返回给用户。</p>
+<p>写路径和读路径分别如下</p>
+<p><strong>写路径</strong>： <em>Finish DataBlock</em>  –&gt;  <em>Encoding KVs</em>  –&gt;  <strong><code>Compress DataBlock</code></strong>  –&gt;  <em>Flush</em><br><strong>读路径</strong>： <em>Read Block From Disk</em>  –&gt;  <strong><code>DeCompress DataBlock</code></strong>  –&gt;  <em>Cache DataBlock</em>  –&gt;  <em>Decoding Scan KVs</em></p>
+<p>压缩可以<strong>节省空间</strong>，读写数据会<strong>增加CPU负载</strong>，HBase目前提供了三种常用的压缩方式： GZip, LZO, <strong><code>Snappy</code></strong>；<br><strong><code>Snappy</code></strong> 的压缩率最低，但是编解码速率最高，对CPU的消耗也最小，目前一般建议使用 <strong><code>Snappy</code></strong>。</p>
+<blockquote>
+<p><a href="http://blog.csdn.net/javastart/article/details/51820212" target="_blank" rel="noopener">HBase最佳实践－列族设计优化</a></p>
+</blockquote>
+<h2 id="DATA-BLOCK-ENCODING（编码）"><a href="#DATA-BLOCK-ENCODING（编码）" class="headerlink" title="DATA_BLOCK_ENCODING（编码）"></a>DATA_BLOCK_ENCODING（编码）</h2><p>除了数据压缩之外，HBase还提供了数据编码功能。<br>和压缩一样，数据在落盘之前首先会对KV数据进行编码；但又<strong>和压缩不同，数据块在缓存前并没有执行解码</strong>。<br>因此即使后续<strong>命中缓存的查询是编码的数据块，需要解码后才能获取到具体的KV数据</strong>。<br>和不编码情况相比，相同数据block快占用内存更少，即<strong>内存利用率更高</strong>，但是读取的时候需要解码，又不利于读性能；<br>在内存不足的情况下，可以压榨 CPU 字段，换区更多的缓存数据；<br>HBase目前提供了四种常用的编码方式：  <strong><code>Prefix_Tree</code></strong>、 Diff 、 Fast_Diff 、Prefix </p>
+<p>写路径和读路径分别如下：</p>
+<p><strong>写路径</strong>： <em>Finish DataBlock</em>  –&gt;  <strong><code>Encoding KVs</code></strong>  –&gt;  <em>Compress DataBlock</em>  –&gt;  <em>Flush</em><br><strong>读路径</strong>： <em>Read Block From Disk</em>  –&gt;  <em>DeCompress DataBlock</em>  –&gt;  <em>Cache DataBlock</em>  –&gt;  <strong><code>Decoding Scan KVs</code></strong></p>
+<blockquote>
+<p><a href="http://zjushch.iteye.com/blog/1843793" target="_blank" rel="noopener">HBase-0.96中新BlockEncoding算法-PREFIX_TREE压缩的初步探究及测试</a></p>
+</blockquote>
+<h2 id="TTL-存活时间"><a href="#TTL-存活时间" class="headerlink" title="TTL(存活时间)"></a>TTL(存活时间)</h2><p>当数据记录一段时间想删除掉，设置一个时间，超过后会被设置删除标记，单位是 s（秒），超过这个时间数据的就会在下一次大合并中被删除</p>
+<h2 id="BLOCKCACHE-数据块缓存的配置"><a href="#BLOCKCACHE-数据块缓存的配置" class="headerlink" title="BLOCKCACHE(数据块缓存的配置)"></a>BLOCKCACHE(数据块缓存的配置)</h2><p>如果 <strong>经常顺序访问（scan）</strong> 或很少被随机访问，可以关闭列族的缓存；列族缓存默认是 true</p>
+<h2 id="BLOCKSIZE-数据块大小配置"><a href="#BLOCKSIZE-数据块大小配置" class="headerlink" title="BLOCKSIZE(数据块大小配置)"></a>BLOCKSIZE(数据块大小配置)</h2><p>默认是64K（65536，单位是字节）； 跟 HDFS 不是一个概念，仅仅是 HBase 内部的一个属性；数据块越小，索引越大，占用内存也越大；</p>
+<blockquote>
+<p>随着BlockSize的增大，系统随机读的吞吐量不断降低，延迟不断增大。64K大小比16K大小的吞吐量大约降低13%，延迟增大13%。<br>同样的，128K大小比64K大小的吞吐量降低约22%，延迟增大27%。<br><strong>如果业务请求以Get请求为主，可以考虑将块大小设置较小；如果以Scan请求为主，可以将块大小调大</strong></p>
+<p><a href="http://blog.csdn.net/javastart/article/details/51820212" target="_blank" rel="noopener">HBase最佳实践－列族设计优化</a></p>
+</blockquote>
+<h2 id="IN-MEMORY-激进缓存的配置"><a href="#IN-MEMORY-激进缓存的配置" class="headerlink" title="IN_MEMORY(激进缓存的配置)"></a>IN_MEMORY(激进缓存的配置)</h2><p>可以选择一个列族赋予更高的优先级缓存, 激进缓存，表示优先级更高，IN_MEMORY 默认是 false</p>
+<h2 id="REPLICATION-SCOPE-复制"><a href="#REPLICATION-SCOPE-复制" class="headerlink" title="REPLICATION_SCOPE(复制)"></a>REPLICATION_SCOPE(复制)</h2><p>通过 HBase 的 replication 功能可以实现集群间的相互复制。</p>
+<blockquote>
+<p><a href="http://lib.csdn.net/article/hbase/43717" target="_blank" rel="noopener">Hbase Replication 介绍</a><br><a href="http://hbase.apache.org/book.html#_cluster_replication" target="_blank" rel="noopener">150. Cluster Replication</a></p>
+</blockquote>
+<h1 id="Read-More"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</h1><ul>
+<li><a href="http://hbase.apache.org/apidocs/constant-values.html" target="_blank" rel="noopener"><strong>HBase API 常量</strong></a></li>
+<li><a href="http://hbase.apache.org/book.html#perf.schema" target="_blank" rel="noopener">113. Schema Design</a><ul>
+<li><a href="http://hbase.apache.org/book.html#schema.bloom" target="_blank" rel="noopener">113.4. Bloom Filters</a></li>
+<li><a href="http://hbase.apache.org/book.html#cf.keep.deleted" target="_blank" rel="noopener">41. Keeping Deleted Cells</a></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HBase/" rel="tag"># HBase</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2018-03-12/hbase/how-to-use-hbase-bulk-loading-and-why.html" rel="next" title="如何使用 Bulk Loading ，为什么">
+                <i class="fa fa-chevron-left"></i> 如何使用 Bulk Loading ，为什么
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2018-03-14/maven-assembly-plugin_package.html" rel="prev" title="使用 maven-assembly-plugin 打包">
+                使用 maven-assembly-plugin 打包 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本属性"><span class="nav-text"><a href="#&#x57FA;&#x672C;&#x5C5E;&#x6027;" class="headerlink" title="&#x57FA;&#x672C;&#x5C5E;&#x6027;"></a>&#x57FA;&#x672C;&#x5C5E;&#x6027;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BLOOMFILTER-布隆过滤器"><span class="nav-text"><a href="#BLOOMFILTER-&#x5E03;&#x9686;&#x8FC7;&#x6EE4;&#x5668;" class="headerlink" title="BLOOMFILTER(&#x5E03;&#x9686;&#x8FC7;&#x6EE4;&#x5668;)"></a>BLOOMFILTER(&#x5E03;&#x9686;&#x8FC7;&#x6EE4;&#x5668;)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VERSIONS-Cell数据版本"><span class="nav-text"><a href="#VERSIONS-Cell&#x6570;&#x636E;&#x7248;&#x672C;" class="headerlink" title="VERSIONS(Cell&#x6570;&#x636E;&#x7248;&#x672C;)"></a>VERSIONS(Cell&#x6570;&#x636E;&#x7248;&#x672C;)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MIN-VERSIONS-最少保留的版本数"><span class="nav-text"><a href="#MIN-VERSIONS-&#x6700;&#x5C11;&#x4FDD;&#x7559;&#x7684;&#x7248;&#x672C;&#x6570;" class="headerlink" title="MIN_VERSIONS(&#x6700;&#x5C11;&#x4FDD;&#x7559;&#x7684;&#x7248;&#x672C;&#x6570;)"></a>MIN_VERSIONS(&#x6700;&#x5C11;&#x4FDD;&#x7559;&#x7684;&#x7248;&#x672C;&#x6570;)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KEEP-DELETED-CELLS-保留删除的单元格"><span class="nav-text"><a href="#KEEP-DELETED-CELLS-&#x4FDD;&#x7559;&#x5220;&#x9664;&#x7684;&#x5355;&#x5143;&#x683C;" class="headerlink" title="KEEP_DELETED_CELLS(&#x4FDD;&#x7559;&#x5220;&#x9664;&#x7684;&#x5355;&#x5143;&#x683C;)"></a>KEEP_DELETED_CELLS(&#x4FDD;&#x7559;&#x5220;&#x9664;&#x7684;&#x5355;&#x5143;&#x683C;)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#COMPRESSION-压缩"><span class="nav-text"><a href="#COMPRESSION-&#x538B;&#x7F29;" class="headerlink" title="COMPRESSION(&#x538B;&#x7F29;)"></a>COMPRESSION(&#x538B;&#x7F29;)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DATA-BLOCK-ENCODING（编码）"><span class="nav-text"><a href="#DATA-BLOCK-ENCODING&#xFF08;&#x7F16;&#x7801;&#xFF09;" class="headerlink" title="DATA_BLOCK_ENCODING&#xFF08;&#x7F16;&#x7801;&#xFF09;"></a>DATA_BLOCK_ENCODING&#xFF08;&#x7F16;&#x7801;&#xFF09;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TTL-存活时间"><span class="nav-text"><a href="#TTL-&#x5B58;&#x6D3B;&#x65F6;&#x95F4;" class="headerlink" title="TTL(&#x5B58;&#x6D3B;&#x65F6;&#x95F4;)"></a>TTL(&#x5B58;&#x6D3B;&#x65F6;&#x95F4;)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BLOCKCACHE-数据块缓存的配置"><span class="nav-text"><a href="#BLOCKCACHE-&#x6570;&#x636E;&#x5757;&#x7F13;&#x5B58;&#x7684;&#x914D;&#x7F6E;" class="headerlink" title="BLOCKCACHE(&#x6570;&#x636E;&#x5757;&#x7F13;&#x5B58;&#x7684;&#x914D;&#x7F6E;)"></a>BLOCKCACHE(&#x6570;&#x636E;&#x5757;&#x7F13;&#x5B58;&#x7684;&#x914D;&#x7F6E;)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BLOCKSIZE-数据块大小配置"><span class="nav-text"><a href="#BLOCKSIZE-&#x6570;&#x636E;&#x5757;&#x5927;&#x5C0F;&#x914D;&#x7F6E;" class="headerlink" title="BLOCKSIZE(&#x6570;&#x636E;&#x5757;&#x5927;&#x5C0F;&#x914D;&#x7F6E;)"></a>BLOCKSIZE(&#x6570;&#x636E;&#x5757;&#x5927;&#x5C0F;&#x914D;&#x7F6E;)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IN-MEMORY-激进缓存的配置"><span class="nav-text"><a href="#IN-MEMORY-&#x6FC0;&#x8FDB;&#x7F13;&#x5B58;&#x7684;&#x914D;&#x7F6E;" class="headerlink" title="IN_MEMORY(&#x6FC0;&#x8FDB;&#x7F13;&#x5B58;&#x7684;&#x914D;&#x7F6E;)"></a>IN_MEMORY(&#x6FC0;&#x8FDB;&#x7F13;&#x5B58;&#x7684;&#x914D;&#x7F6E;)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REPLICATION-SCOPE-复制"><span class="nav-text"><a href="#REPLICATION-SCOPE-&#x590D;&#x5236;" class="headerlink" title="REPLICATION_SCOPE(&#x590D;&#x5236;)"></a>REPLICATION_SCOPE(&#x590D;&#x5236;)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Read-More"><span class="nav-text"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

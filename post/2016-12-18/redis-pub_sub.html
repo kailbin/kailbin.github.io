@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Redis," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Redis的 发布/订阅 功能可用于构建即时通信应用，比如网络聊天室、实时广播、实时提醒等。">
+<meta name="keywords" content="Redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis Pub&#x2F;Sub">
+<meta property="og:url" content="http://blog.kail.xyz/post/2016-12-18/redis-pub_sub.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="Redis的 发布/订阅 功能可用于构建即时通信应用，比如网络聊天室、实时广播、实时提醒等。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-16T13:21:39.487Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis Pub&#x2F;Sub">
+<meta name="twitter:description" content="Redis的 发布/订阅 功能可用于构建即时通信应用，比如网络聊天室、实时广播、实时提醒等。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2016-12-18/redis-pub_sub.html"/>
+
+
+
+
+
+  <title>Redis Pub/Sub | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-18/redis-pub_sub.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Redis Pub/Sub</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-18T00:00:00+08:00">
+                2016-12-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2016-12-18/redis-pub_sub.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2016-12-18/redis-pub_sub.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>　Redis的 <code>发布/订阅</code> 功能可用于构建即时通信应用，比如网络聊天室、实时广播、实时提醒等。</p>
+<a id="more"></a>
+<h1 id="命令概述"><a href="#命令概述" class="headerlink" title="命令概述"></a>命令概述</h1><h2 id="SUBSCRIBE-amp-PSUBSCRIBE"><a href="#SUBSCRIBE-amp-PSUBSCRIBE" class="headerlink" title="SUBSCRIBE &amp; PSUBSCRIBE"></a>SUBSCRIBE &amp; PSUBSCRIBE</h2><p>订阅给定的一个或多个频道的信息，不同之处在于 <code>PSUBSCRIBE</code> 可以模式（模糊）订阅，比如 it* 匹配所有以 it 开头( it.news、it.blog、……)的频道。</p>
+<p>SUBSCRIBE  channel_1 [channel_2 …]<br>PSUBSCRIBE pattern_1 [pattern_2 …]</p>
+<h2 id="PUBLISH"><a href="#PUBLISH" class="headerlink" title="PUBLISH"></a>PUBLISH</h2><p>将信息 message 发送到指定的频道(channel)</p>
+<p><strong>时间复杂度：</strong><br>O(N+M)，其中 N 是频道 channel 的订阅者数量，而 M 则是使用模式订阅(subscribed patterns)的客户端的数量。</p>
+<p><strong>返回值：</strong><br>接收到信息 message 的订阅者数量。</p>
+<h2 id="UNSUBSCRIBE-amp-PUNSUBSCRIBE"><a href="#UNSUBSCRIBE-amp-PUNSUBSCRIBE" class="headerlink" title="UNSUBSCRIBE &amp; PUNSUBSCRIBE"></a>UNSUBSCRIBE &amp; PUNSUBSCRIBE</h2><p><code>UNSUBSCRIBE [channel [channel ...]]</code> or <code>PUNSUBSCRIBE [pattern [pattern ...]]</code></p>
+<p>指示客户端退订所有给定 模式/频道。</p>
+<p>如果没有注定参数，那么客户端订阅的所有 模式/频道 都会被退订。在这种情况下，命令会返回一个信息，告知客户端所有被退订的 模式/频道。</p>
+<h2 id="PUBSUB"><a href="#PUBSUB" class="headerlink" title="PUBSUB"></a>PUBSUB</h2><p><code>PUBSUB</code> 由三个子命令组成(<code>CHANNELS</code>/<code>NUMSUB</code>/<code>NUMPAT</code>)，需要配合使用。</p>
+<p><strong>CHANNELS：</strong> 查看被订阅的频道</p>
+<p><code>PUBSUB CHANNELS</code> or <code>PUBSUB CHANNELS it.*</code></p>
+<pre><code>1) &quot;it.sport&quot;
+2) &quot;it.internet&quot;
+</code></pre><p><strong>NUMSUB：</strong> 查看频道订阅者的数量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PUBSUB NUMSUB it.*</span><br></pre></td></tr></table></figure>
+<pre><code>1) &quot;it.news&quot;    # 频道
+2) &quot;2&quot;          # 订阅该频道的客户端数量
+3) &quot;it.interne
+4) 1
+</code></pre><p><strong>NUMPAT：</strong> 查看有多少种订阅模式</p>
+<h1 id="发布-订阅模式的结构"><a href="#发布-订阅模式的结构" class="headerlink" title="发布/订阅模式的结构"></a>发布/订阅模式的结构</h1><p>结构用json表示</p>
+<h2 id="SUBSCRIBE"><a href="#SUBSCRIBE" class="headerlink" title="SUBSCRIBE"></a>SUBSCRIBE</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"news"</span>:[<span class="string">"client1"</span>,<span class="string">"client2"</span>],</span><br><span class="line">    <span class="attr">"sport"</span>:[<span class="string">"client2"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其类似于一个Map的结构，键为<code>channel</code>，值为订阅的客户端。</p>
+<p><code>PUBLISH</code> 的时候，找到对应的键，遍历其值，发送消息即可。即是上面介绍 <code>PUBLISH</code> 时间复杂度中的<code>N</code>。</p>
+<h2 id="PSUBSCRIBE"><a href="#PSUBSCRIBE" class="headerlink" title="PSUBSCRIBE"></a>PSUBSCRIBE</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"pattern"</span>:<span class="string">"news.*"</span>,</span><br><span class="line">        <span class="attr">"client"</span>:<span class="string">"client1"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"pattern"</span>:<span class="string">"news.*"</span>,</span><br><span class="line">        <span class="attr">"client"</span>:<span class="string">"client2"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"pattern"</span>:<span class="string">"it.*"</span>,</span><br><span class="line">        <span class="attr">"client"</span>:<span class="string">"client1"</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>其类似于一个列表，列表中每个对象包含 模式和客户端 的对应信息。发布的时候需要与每一个对象的模式进行匹配，如果匹配上的话就推送信息给客户端。</p>
+<p>感觉以上结构还可以调整为如下结构：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"pattern"</span>:<span class="string">"news.*"</span>,</span><br><span class="line">        <span class="attr">"clients"</span>:[<span class="string">"client1"</span>,<span class="string">"client2"</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"pattern"</span>:<span class="string">"it.*"</span>,</span><br><span class="line">        <span class="attr">"clients"</span>:[<span class="string">"client1"</span>]</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>或者</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"news.*"</span>:[<span class="string">"client1"</span>,<span class="string">"client2"</span>],</span><br><span class="line">    <span class="attr">"it.*"</span>:[<span class="string">"client1"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样模式匹配的时候可以少匹配几次，不知道作者为什么没有这样设计？</p>
+<blockquote>
+<p><a href="http://blog.csdn.net/clh604/article/details/19754939" target="_blank" rel="noopener">Redis 发布/订阅机制原理分析</a><br><a href="https://github.com/huangz1990/reading_redis_source/blob/master/pubsub.c_redis_2.9.7_b62bdf1c/pubsub.c" target="_blank" rel="noopener">huangz1990/reading_redis_source</a><br><a href="http://wiki.jikexueyuan.com/project/redis/subscribe-to-release-mechanism.html" target="_blank" rel="noopener">订阅发布机制</a><br><a href="https://github.com/huangz1990" target="_blank" rel="noopener">黄健宏 Github</a></p>
+</blockquote>
+<h1 id="客户端的使用"><a href="#客户端的使用" class="headerlink" title="客户端的使用"></a>客户端的使用</h1><h2 id="Jedis"><a href="#Jedis" class="headerlink" title="Jedis"></a>Jedis</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>redis.clients<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jedis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis();</span><br><span class="line">  </span><br><span class="line">JedisPubSub jedisPubSub = <span class="keyword">new</span> JedisPubSub() &#123;</span><br><span class="line">  </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPMessage</span><span class="params">(String pattern, String channel, String message)</span> </span>&#123;</span><br><span class="line">        System.out.println(pattern + <span class="string">":"</span> + channel + <span class="string">":"</span> + message);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPUnsubscribe</span><span class="params">(String pattern, <span class="keyword">int</span> subscribedChannels)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"onUnsubscribe::"</span> + pattern + <span class="string">": subscribedChannels:"</span> + subscribedChannels);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">new</span> Thread(() -&gt; jedis.psubscribe(jedisPubSub, <span class="string">"hello"</span>, <span class="string">"sub.*"</span>)).start();</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">Thread.sleep(<span class="number">30000</span>);</span><br><span class="line">System.out.println(<span class="string">"subscribe"</span>);</span><br><span class="line">jedisPubSub.punsubscribe();</span><br></pre></td></tr></table></figure>
+<p><strong>输入</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PUBLISH sub.asd asd</span><br><span class="line">PUBLISH hello asd</span><br></pre></td></tr></table></figure></p>
+<p><strong>输出</strong></p>
+<pre><code>sub.*:sub.asd:asd                                  # `PUBLISH sub.asd asd` -&gt; onPMessage
+hello:hello:asd                                     # `PUBLISH hello asd`   -&gt; onPMessage
+
+subscribe                                           # System.out.println(&quot;subscribe&quot;);
+onUnsubscribe::hello: subscribedChannels:1          # onPUnsubscribe
+onUnsubscribe::sub.*: subscribedChannels:0          # onPUnsubscribe
+</code></pre><h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
+<p><a href="http://doc.redisfans.com/pub_sub/index.html" target="_blank" rel="noopener">Pub/Sub（发布/订阅）</a></p>
+<p><a href="http://redisbook.com/index.html" target="_blank" rel="noopener">Redis 设计与实现</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" rel="tag"># Redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2016-12-17/js-flowchart.js.html" rel="next" title="flowchart.js 绘制流程图">
+                <i class="fa fa-chevron-left"></i> flowchart.js 绘制流程图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2016-12-20/java/java5-method-time.html" rel="prev" title="Java 方法执行超时时间">
+                Java 方法执行超时时间 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#命令概述"><span class="nav-text"><a href="#&#x547D;&#x4EE4;&#x6982;&#x8FF0;" class="headerlink" title="&#x547D;&#x4EE4;&#x6982;&#x8FF0;"></a>&#x547D;&#x4EE4;&#x6982;&#x8FF0;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SUBSCRIBE-amp-PSUBSCRIBE"><span class="nav-text"><a href="#SUBSCRIBE-amp-PSUBSCRIBE" class="headerlink" title="SUBSCRIBE &amp; PSUBSCRIBE"></a>SUBSCRIBE &amp; PSUBSCRIBE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PUBLISH"><span class="nav-text"><a href="#PUBLISH" class="headerlink" title="PUBLISH"></a>PUBLISH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UNSUBSCRIBE-amp-PUNSUBSCRIBE"><span class="nav-text"><a href="#UNSUBSCRIBE-amp-PUNSUBSCRIBE" class="headerlink" title="UNSUBSCRIBE &amp; PUNSUBSCRIBE"></a>UNSUBSCRIBE &amp; PUNSUBSCRIBE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PUBSUB"><span class="nav-text"><a href="#PUBSUB" class="headerlink" title="PUBSUB"></a>PUBSUB</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#发布-订阅模式的结构"><span class="nav-text"><a href="#&#x53D1;&#x5E03;-&#x8BA2;&#x9605;&#x6A21;&#x5F0F;&#x7684;&#x7ED3;&#x6784;" class="headerlink" title="&#x53D1;&#x5E03;/&#x8BA2;&#x9605;&#x6A21;&#x5F0F;&#x7684;&#x7ED3;&#x6784;"></a>&#x53D1;&#x5E03;/&#x8BA2;&#x9605;&#x6A21;&#x5F0F;&#x7684;&#x7ED3;&#x6784;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SUBSCRIBE"><span class="nav-text"><a href="#SUBSCRIBE" class="headerlink" title="SUBSCRIBE"></a>SUBSCRIBE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PSUBSCRIBE"><span class="nav-text"><a href="#PSUBSCRIBE" class="headerlink" title="PSUBSCRIBE"></a>PSUBSCRIBE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端的使用"><span class="nav-text"><a href="#&#x5BA2;&#x6237;&#x7AEF;&#x7684;&#x4F7F;&#x7528;" class="headerlink" title="&#x5BA2;&#x6237;&#x7AEF;&#x7684;&#x4F7F;&#x7528;"></a>&#x5BA2;&#x6237;&#x7AEF;&#x7684;&#x4F7F;&#x7528;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jedis"><span class="nav-text"><a href="#Jedis" class="headerlink" title="Jedis"></a>Jedis</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

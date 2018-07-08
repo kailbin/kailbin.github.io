@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="常用命令,Linux," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="dpkg 是一种的软件包管理工具，apt-get 是 dpkg 的一个前端程序，apt-get 最主要的功能是解决软件包的依赖性问题。">
+<meta name="keywords" content="常用命令,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dpkg 和 apt-get">
+<meta property="og:url" content="http://blog.kail.xyz/post/2016-12-04/linux/linux-dpkg-and-apt-get.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="dpkg 是一种的软件包管理工具，apt-get 是 dpkg 的一个前端程序，apt-get 最主要的功能是解决软件包的依赖性问题。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-16T13:21:39.482Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dpkg 和 apt-get">
+<meta name="twitter:description" content="dpkg 是一种的软件包管理工具，apt-get 是 dpkg 的一个前端程序，apt-get 最主要的功能是解决软件包的依赖性问题。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2016-12-04/linux/linux-dpkg-and-apt-get.html"/>
+
+
+
+
+
+  <title>dpkg 和 apt-get | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-04/linux/linux-dpkg-and-apt-get.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">dpkg 和 apt-get</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-04T00:00:00+08:00">
+                2016-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2016-12-04/linux/linux-dpkg-and-apt-get.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2016-12-04/linux/linux-dpkg-and-apt-get.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>dpkg 是一种的软件包管理工具，apt-get 是 dpkg 的一个前端程序，apt-get 最主要的功能是解决软件包的依赖性问题。</p>
+<a id="more"></a>
+<h3 id="dpkg"><a href="#dpkg" class="headerlink" title="dpkg"></a>dpkg</h3><h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg -i package-name.deb                # 安装软件包</span><br></pre></td></tr></table></figure>
+<h5 id="删除软件包"><a href="#删除软件包" class="headerlink" title="删除软件包"></a>删除软件包</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dpkg -r package-name                    # 删除软件包（保留配置信息）</span><br><span class="line">dpkg -P package-name                    # 删除软件包（包括配置信息）</span><br></pre></td></tr></table></figure>
+<h5 id="包信息查询"><a href="#包信息查询" class="headerlink" title="包信息查询"></a>包信息查询</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dpkg -c package-name.deb                # 列出软件包内容</span><br><span class="line">dpkg -I package-name.deb                # 查看软件包信息</span><br></pre></td></tr></table></figure>
+<h5 id="搜索软件包"><a href="#搜索软件包" class="headerlink" title="搜索软件包"></a>搜索软件包</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dpkg -s filename                        # 查看package-name对应的软件包信息</span><br><span class="line">dpkg -I filename                        # 查看软件说明(直接使用dpkg -l 查询所有安装的软件包，filename可以使用正则，我通常用```dpkg -l | grep "filename"因为会存在软件名记不住的情况)</span><br><span class="line">dpkg -L filename                        # 查看package-name对应的软件包安装的文件及目录</span><br><span class="line">dpkg -S filename-pattern                # 从已经安装的软件包中查找包含filename的软件包名称</span><br></pre></td></tr></table></figure>
+<h5 id="dpkg软件包相关文件介绍"><a href="#dpkg软件包相关文件介绍" class="headerlink" title="dpkg软件包相关文件介绍"></a>dpkg软件包相关文件介绍</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/etc/dpkg/dpkg.cfg                       # dpkg包管理软件的配置文件</span><br><span class="line">/var/log/dpkg.log                        # dpkg包管理软件的日志文件</span><br><span class="line">/var/lib/dpkg/available                  # 存放系统所有安装过的软件包信息</span><br><span class="line">/var/lib/dpkg/status                     # 存放系统现在所有安装软件的状态信息</span><br><span class="line">/var/lib/dpkg/info                       # 记安装软件包控制目录的控制信息文件</span><br></pre></td></tr></table></figure>
+<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="apt-get"><a href="#apt-get" class="headerlink" title="apt-get"></a>apt-get</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">apt-get update                            # 更新源</span><br><span class="line">apt-get dist-upgrade                      # 升级系统</span><br><span class="line">apt-get upgrade                           # 更新所有已经安装的软件包  </span><br><span class="line">  </span><br><span class="line">apt-get install package_name              # 安装软件包(加上 --reinstall重新安装)</span><br><span class="line">apt-get remove                            # 移除软件包（保留配置信息）</span><br><span class="line">apt-get purge package_name                # 移除软件包（删除配置信息）</span><br><span class="line">  </span><br><span class="line">apt-get check                             # 检查是否有损坏的依赖</span><br></pre></td></tr></table></figure>
+<h3 id="apt"><a href="#apt" class="headerlink" title="apt"></a>apt</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Usage: apt [options] command</span><br><span class="line"></span><br><span class="line">CLI for apt.</span><br><span class="line">Basic commands:</span><br><span class="line"> list                                      # list packages based on package names</span><br><span class="line"> search                                    # 搜索包的相关信息  </span><br><span class="line"> show                                      # 获取包的相关信息</span><br><span class="line"></span><br><span class="line"> update                                    # update list of available packages</span><br><span class="line"></span><br><span class="line"> install                                   # install packages</span><br><span class="line"> remove                                    # remove packages</span><br><span class="line"></span><br><span class="line"> upgrade                                   # upgrade the system by installing/upgrading packages</span><br><span class="line"> full-upgrade                              # upgrade the system by removing/installing/upgrading packages</span><br><span class="line"></span><br><span class="line"> edit-sources                              # edit the source information file(/etc/apt/sources.list)</span><br></pre></td></tr></table></figure>
+<h5 id="apt-软件包相关文件介绍"><a href="#apt-软件包相关文件介绍" class="headerlink" title="apt 软件包相关文件介绍"></a>apt 软件包相关文件介绍</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/apt/sources.list                     # 记录软件源的地址</span><br><span class="line">/var/cache/apt/archives                   # 已经下载到的软件包都放在这里</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Ubuntu镜像使用帮助 <a href="http://mirrors.163.com/.help/ubuntu.html" target="_blank" rel="noopener">http://mirrors.163.com/.help/ubuntu.html</a></p>
+</blockquote>
+<h3 id="aptitude"><a href="#aptitude" class="headerlink" title="aptitude"></a>aptitude</h3><p>与 apt-get 不同的是，aptitude在处理依赖问题上更佳一些。举例来说，aptitude在删除一个包时，会同时删除本身所依赖的包。这样，系统中不会残留无用的包，整个系统更为干净。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">aptitude update                           # 更新可用的包列表</span><br><span class="line">aptitude safe-upgrade                     # 执行一次安全的升级</span><br><span class="line">aptitude full-upgrade                     # 将系统升级到新的发行版</span><br><span class="line">aptitude install pkgname                  # 安装包</span><br><span class="line">aptitude remove pkgname                   # 删除包</span><br><span class="line">aptitude purge pkgname                    # 删除包及其配置文件</span><br><span class="line">aptitude search string                    # 搜索包</span><br><span class="line">aptitude show pkgname                     # 显示包的详细信息</span><br><span class="line">aptitude clean                            # 删除下载的包文件</span><br><span class="line">aptitude autoclean                        # 仅删除过期的包文件</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p><a href="http://baike.baidu.com/link?url=b7OUyTP7eNemuKiuyTJkj_DjBwwJK2pFKi4XKqnxlE5yVktFM37QWtKIL_vRJwzqB_7iLSk-2dSOG0nT-v4_YvvyiakVm8tSbt3pCqPxdxe" target="_blank" rel="noopener">aptitude （Debian系统的包管理工具）</a></p>
+</blockquote>
+<h3 id="apt-cache"><a href="#apt-cache" class="headerlink" title="apt-cache"></a>apt-cache</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">Usage: apt-cache [options] command</span><br><span class="line">       apt-cache [options] showpkg pkg1 [pkg2 ...]</span><br><span class="line">       apt-cache [options] showsrc pkg1 [pkg2 ...]</span><br><span class="line"></span><br><span class="line">apt-cache is a low-level tool used to query information</span><br><span class="line">from APT&apos;s binary cache files</span><br><span class="line"></span><br><span class="line">Commands:</span><br><span class="line">   gencaches                            # Build both the package and source cache</span><br><span class="line">   showpkg                              # Show some general information for a single package (显示软件包的一些常规信息 )</span><br><span class="line">   showsrc                              # Show source records</span><br><span class="line">   stats                                # Show some basic statistics   </span><br><span class="line">   dump                                 # Show the entire file in a terse form</span><br><span class="line">   dumpavail                            # Print an available file to stdout</span><br><span class="line">   unmet                                # Show unmet dependencies</span><br><span class="line">   search                               # Search the package list for a regex pattern (查找软件包)</span><br><span class="line">   show                                 # Show a readable record for the package</span><br><span class="line">   depends                              # 了解使用依赖</span><br><span class="line">   rdepends                             # Show reverse dependency information for a package</span><br><span class="line">   pkgnames                             # List the names of all packages in the system(列出所有的软件包)</span><br><span class="line">   dotty                                # Generate package graphs for GraphViz</span><br><span class="line">   xvcg                                 # Generate package graphs for xvcg</span><br><span class="line">   policy                               # Show policy settings</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  -h   This help text.</span><br><span class="line">  -p=? The package cache.</span><br><span class="line">  -s=? The source cache.</span><br><span class="line">  -q   Disable progress indicator.</span><br><span class="line">  -i   Show only important deps for the unmet command.</span><br><span class="line">  -c=? Read this configuration file</span><br><span class="line">  -o=? Set an arbitrary configuration option, eg -o dir::cache=/tmp</span><br><span class="line">See the apt-cache(8) and apt.conf(5) manual pages for more information.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="http://wiki.ubuntu.org.cn/Apt%E5%92%8Cdpkg%E5%BF%AB%E9%80%9F%E5%8F%82%E8%80%83" target="_blank" rel="noopener">Apt和dpkg快速参考</a><br><a href="http://www.jianshu.com/p/45fa3d6b2e8d" target="_blank" rel="noopener">ubuntu 源码编译,dpkg,apt 安装原理 及简单使用</a><br><a href="http://blog.csdn.net/mbxc816/article/details/7473906" target="_blank" rel="noopener">关于Ubuntu下apt的一些用法及和yum的比较</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/常用命令/" rel="tag"># 常用命令</a>
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2016-12-01/linux/linux-source-install.html" rel="next" title="源码软件包编译安装方式">
+                <i class="fa fa-chevron-left"></i> 源码软件包编译安装方式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2016-12-06/linux/linux-command-base64-and-jq.html" rel="prev" title="base64 和 jq 命令">
+                base64 和 jq 命令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#dpkg"><span class="nav-text"><a href="#dpkg" class="headerlink" title="dpkg"></a>dpkg</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装"><span class="nav-text"><a href="#&#x5B89;&#x88C5;" class="headerlink" title="&#x5B89;&#x88C5;"></a>&#x5B89;&#x88C5;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#删除软件包"><span class="nav-text"><a href="#&#x5220;&#x9664;&#x8F6F;&#x4EF6;&#x5305;" class="headerlink" title="&#x5220;&#x9664;&#x8F6F;&#x4EF6;&#x5305;"></a>&#x5220;&#x9664;&#x8F6F;&#x4EF6;&#x5305;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#包信息查询"><span class="nav-text"><a href="#&#x5305;&#x4FE1;&#x606F;&#x67E5;&#x8BE2;" class="headerlink" title="&#x5305;&#x4FE1;&#x606F;&#x67E5;&#x8BE2;"></a>&#x5305;&#x4FE1;&#x606F;&#x67E5;&#x8BE2;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#搜索软件包"><span class="nav-text"><a href="#&#x641C;&#x7D22;&#x8F6F;&#x4EF6;&#x5305;" class="headerlink" title="&#x641C;&#x7D22;&#x8F6F;&#x4EF6;&#x5305;"></a>&#x641C;&#x7D22;&#x8F6F;&#x4EF6;&#x5305;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#dpkg软件包相关文件介绍"><span class="nav-text"><a href="#dpkg&#x8F6F;&#x4EF6;&#x5305;&#x76F8;&#x5173;&#x6587;&#x4EF6;&#x4ECB;&#x7ECD;" class="headerlink" title="dpkg&#x8F6F;&#x4EF6;&#x5305;&#x76F8;&#x5173;&#x6587;&#x4EF6;&#x4ECB;&#x7ECD;"></a>dpkg&#x8F6F;&#x4EF6;&#x5305;&#x76F8;&#x5173;&#x6587;&#x4EF6;&#x4ECB;&#x7ECD;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#其他"><span class="nav-text"><a href="#&#x5176;&#x4ED6;" class="headerlink" title="&#x5176;&#x4ED6;"></a>&#x5176;&#x4ED6;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apt-get"><span class="nav-text"><a href="#apt-get" class="headerlink" title="apt-get"></a>apt-get</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apt"><span class="nav-text"><a href="#apt" class="headerlink" title="apt"></a>apt</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#apt-软件包相关文件介绍"><span class="nav-text"><a href="#apt-&#x8F6F;&#x4EF6;&#x5305;&#x76F8;&#x5173;&#x6587;&#x4EF6;&#x4ECB;&#x7ECD;" class="headerlink" title="apt &#x8F6F;&#x4EF6;&#x5305;&#x76F8;&#x5173;&#x6587;&#x4EF6;&#x4ECB;&#x7ECD;"></a>apt &#x8F6F;&#x4EF6;&#x5305;&#x76F8;&#x5173;&#x6587;&#x4EF6;&#x4ECB;&#x7ECD;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#aptitude"><span class="nav-text"><a href="#aptitude" class="headerlink" title="aptitude"></a>aptitude</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apt-cache"><span class="nav-text"><a href="#apt-cache" class="headerlink" title="apt-cache"></a>apt-cache</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

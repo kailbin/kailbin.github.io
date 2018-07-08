@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Guava,缓存,Cache," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Guava Cache 可以是实现以下功能  LRU 回收 缓存超时 引用回收 缓存失效监听 缓存统计 权重 失效重新缓存 其他">
+<meta name="keywords" content="Guava,缓存,Cache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Guava Cache">
+<meta property="og:url" content="http://blog.kail.xyz/post/2017-01-02/java/guava-cache.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="Guava Cache 可以是实现以下功能  LRU 回收 缓存超时 引用回收 缓存失效监听 缓存统计 权重 失效重新缓存 其他">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-16T13:21:39.476Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Guava Cache">
+<meta name="twitter:description" content="Guava Cache 可以是实现以下功能  LRU 回收 缓存超时 引用回收 缓存失效监听 缓存统计 权重 失效重新缓存 其他">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2017-01-02/java/guava-cache.html"/>
+
+
+
+
+
+  <title>Guava Cache | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-02/java/guava-cache.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Guava Cache</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-02T00:00:00+08:00">
+                2017-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2017-01-02/java/guava-cache.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2017-01-02/java/guava-cache.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Guava Cache 可以是实现以下功能</p>
+<ul>
+<li>LRU 回收</li>
+<li>缓存超时</li>
+<li>引用回收</li>
+<li>缓存失效监听</li>
+<li>缓存统计</li>
+<li>权重</li>
+<li>失效重新缓存</li>
+<li>其他</li>
+</ul>
+<a id="more"></a>
+<h3 id="参数配置"><a href="#参数配置" class="headerlink" title="参数配置"></a>参数配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">Cache&lt;String, String&gt; cache = CacheBuilder.newBuilder()</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ❤ 缓存的最大容量，如果超过的话回使用 LRU(最近最少使用) 算法进行淘汰  </span></span><br><span class="line">    .maximumSize(<span class="number">100</span>)</span><br><span class="line">    .expireAfterAccess(<span class="number">10</span>, TimeUnit.SECONDS) <span class="comment">// 缓存项在给定时间内没有被读/写访问，则回收。请注意这种缓存的回收顺序和基于大小回收一样。  </span></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// ❤</span></span><br><span class="line">    .expireAfterWrite(<span class="number">10</span>, TimeUnit.SECONDS)  <span class="comment">// 缓存项在给定时间内没有被写访问（创建或覆盖），则回收。</span></span><br><span class="line">                                             <span class="comment">// 如果认为缓存数据总是在固定时候后变得陈旧不可用，这种回收方式是可取的。</span></span><br><span class="line">    .refreshAfterWrite(<span class="number">10</span>, TimeUnit.SECONDS) <span class="comment">// 可以为缓存增加自动定时刷新功能。</span></span><br><span class="line">                                             <span class="comment">// 和expireAfterWrite相反，refreshAfterWrite通过定时刷新可以让缓存项保持可用，</span></span><br><span class="line">                                             <span class="comment">// 但请注意：缓存项只有在被检索时才会真正刷新</span></span><br><span class="line">                                             <span class="comment">// （如果CacheLoader.refresh实现为异步，那么检索不会被刷新拖慢）。</span></span><br><span class="line">                                             <span class="comment">// 因此，如果你在缓存上同时声明expireAfterWrite和refreshAfterWrite，缓存并不会因为刷新盲目地定时重置，</span></span><br><span class="line">                                             <span class="comment">// 如果缓存项没有被检索，那刷新就不会真的发生，缓存项在过期时间后也变得可以回收。</span></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// ❤</span></span><br><span class="line">    .weakKeys()   <span class="comment">// 使用弱引用存储键。当键没有其它（强或软）引用时，缓存项可以被垃圾回收。</span></span><br><span class="line">                  <span class="comment">// 因为垃圾回收仅依赖恒等式（==），使用弱引用键的缓存用==而不是equals比较键。</span></span><br><span class="line">    .weakValues() <span class="comment">// 使用弱引用存储值。当值没有其它（强或软）引用时，缓存项可以被垃圾回收。</span></span><br><span class="line">                  <span class="comment">// 因为垃圾回收仅依赖恒等式（==），使用弱引用值的缓存用==而不是equals比较值。</span></span><br><span class="line">    .softValues() <span class="comment">// 使用软引用存储值。软引用只有在响应内存需要时，才按照全局最近最少使用的顺序回收。</span></span><br><span class="line">                  <span class="comment">// 考虑到使用软引用的性能影响，我们通常建议使用更有性能预测性的缓存大小限定（见上文，基于容量回收）。使用软引用值的缓存同样用==而不是</span></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 声明一个监听器，在缓存项被移除时做一些额外操作[RemovalListeners.asynchronous(RemovalListener,Executor); // 异步监听]</span></span><br><span class="line">    .removalListener(<span class="keyword">new</span> RemovalListener&lt;String, String&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onRemoval</span><span class="params">(RemovalNotification&lt;String, String&gt; notification)</span> </span>&#123;</span><br><span class="line">            System.out.println(notification.getKey() + <span class="string">":"</span> + notification.getValue());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    .recordStats() <span class="comment">// 开启缓存统计功能</span></span><br><span class="line">    .initialCapacity(<span class="number">10</span>) <span class="comment">// 缓存初始容量</span></span><br><span class="line">    .concurrencyLevel(<span class="number">10</span>) <span class="comment">// 允许的并发操作数，默认是4</span></span><br><span class="line">    .ticker(Ticker.systemTicker()) <span class="comment">// 执行时间源，默认是当前系统时间</span></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 设置键的权重信息</span></span><br><span class="line">    .maximumWeight(<span class="number">100</span>)</span><br><span class="line">    .weigher(<span class="keyword">new</span> Weigher&lt;String, String&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">weigh</span><span class="params">(String key, String value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// ❤ 如果没有缓存，从以下操作中获得</span></span><br><span class="line">    .build(<span class="keyword">new</span> CacheLoader&lt;String, String&gt;() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">load</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"123"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="通过字符串配置"><a href="#通过字符串配置" class="headerlink" title="通过字符串配置"></a>通过字符串配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过CacheBuilderSpec实例构造CacheBuilder实例</span></span><br><span class="line">Cache&lt;String, String&gt; cache = CacheBuilder.from(<span class="string">"maximumSize=10,expireAfterAccess=5m,softValues"</span>).build();</span><br></pre></td></tr></table></figure>
+<h4 id="可配置项"><a href="#可配置项" class="headerlink" title="可配置项"></a>可配置项</h4><p><code>CacheBuilderSpec</code> 代码片段</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ImmutableMap&lt;String, ValueParser&gt; VALUE_PARSERS =</span><br><span class="line">  ImmutableMap.&lt;String, ValueParser&gt;builder()</span><br><span class="line">      .put(<span class="string">"initialCapacity"</span>, <span class="keyword">new</span> InitialCapacityParser())</span><br><span class="line">      .put(<span class="string">"maximumSize"</span>, <span class="keyword">new</span> MaximumSizeParser())</span><br><span class="line">      .put(<span class="string">"maximumWeight"</span>, <span class="keyword">new</span> MaximumWeightParser())</span><br><span class="line">      .put(<span class="string">"concurrencyLevel"</span>, <span class="keyword">new</span> ConcurrencyLevelParser())</span><br><span class="line">      .put(<span class="string">"weakKeys"</span>, <span class="keyword">new</span> KeyStrengthParser(Strength.WEAK))</span><br><span class="line">      .put(<span class="string">"softValues"</span>, <span class="keyword">new</span> ValueStrengthParser(Strength.SOFT))</span><br><span class="line">      .put(<span class="string">"weakValues"</span>, <span class="keyword">new</span> ValueStrengthParser(Strength.WEAK))</span><br><span class="line">      .put(<span class="string">"recordStats"</span>, <span class="keyword">new</span> RecordStatsParser())</span><br><span class="line">      .put(<span class="string">"expireAfterAccess"</span>, <span class="keyword">new</span> AccessDurationParser())</span><br><span class="line">      .put(<span class="string">"expireAfterWrite"</span>, <span class="keyword">new</span> WriteDurationParser())</span><br><span class="line">      .put(<span class="string">"refreshAfterWrite"</span>, <span class="keyword">new</span> RefreshDurationParser())</span><br><span class="line">      .put(<span class="string">"refreshInterval"</span>, <span class="keyword">new</span> RefreshDurationParser())</span><br><span class="line">      .build();</span><br></pre></td></tr></table></figure>
+<h4 id="时间单位"><a href="#时间单位" class="headerlink" title="时间单位"></a>时间单位</h4><p><code>CacheBuilderSpec</code> 代码片段</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> (lastChar) &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="string">'d'</span>:</span><br><span class="line">    timeUnit = TimeUnit.DAYS;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  <span class="keyword">case</span> <span class="string">'h'</span>:</span><br><span class="line">    timeUnit = TimeUnit.HOURS;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  <span class="keyword">case</span> <span class="string">'m'</span>:</span><br><span class="line">    timeUnit = TimeUnit.MINUTES;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  <span class="keyword">case</span> <span class="string">'s'</span>:</span><br><span class="line">    timeUnit = TimeUnit.SECONDS;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  <span class="keyword">default</span>:</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">        format(</span><br><span class="line">            <span class="string">"key %s invalid format.  was %s, must end with one of [dDhHmMsS]"</span>, key, value));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><h4 id="获取缓存"><a href="#获取缓存" class="headerlink" title="获取缓存"></a>获取缓存</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">cache.get(<span class="string">"key"</span>); <span class="comment">// 该方法会有一个显式的 `ExecutionException` 异常</span></span><br><span class="line">  </span><br><span class="line">cache.getUnchecked(<span class="string">"key"</span>); <span class="comment">//该方法不需要捕获异常， 如果创建 `LoadingCache` 的时候，`CacheLoader.load` 没有抛出一个显式的异常，可以用该方法</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">// 类似于</span></span><br><span class="line"><span class="comment">// String value = map.get("key");</span></span><br><span class="line"><span class="comment">// if (null == value) &#123;</span></span><br><span class="line"><span class="comment">//     value = selectFromDb(); // 从其他地方查询数据</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line">cache.get(<span class="string">"key"</span>, <span class="keyword">new</span> Callable&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> selectFromDb(); <span class="comment">// 从其他地方查询数据</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 以上方法如果不存在会再从其他地方查询放入缓存， 一下方法如果不存直接返回null</span></span><br><span class="line">cache.getIfPresent(<span class="string">"key"</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cache.put(<span class="string">"key"</span>, <span class="string">"value"</span>); <span class="comment">// 设置缓存</span></span><br><span class="line">  </span><br><span class="line">ConcurrentMap&lt;String, String&gt; stringStringConcurrentMap = cache.asMap(); <span class="comment">// 缓存的 Map 形式</span></span><br><span class="line">  </span><br><span class="line">CacheStats stats = cache.stats(); <span class="comment">// 缓存的统计信息</span></span><br><span class="line">  </span><br><span class="line">cache.invalidate(<span class="string">"key"</span>); <span class="comment">// 移除指定的转存</span></span><br><span class="line">cache.invalidateAll(Arrays.asList(<span class="string">"key1"</span>, <span class="string">"key2"</span>)); <span class="comment">// 移除多个</span></span><br><span class="line">cache.invalidateAll(); <span class="comment">// 移除所有</span></span><br></pre></td></tr></table></figure>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><blockquote>
+<p><a href="http://ifeve.com/google-guava-cachesexplained/" target="_blank" rel="noopener">[Google Guava] 3-缓存</a></p>
+<p><a href="https://github.com/google/guava/wiki/CachesExplained" target="_blank" rel="noopener">CachesExplained</a>  </p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Guava/" rel="tag"># Guava</a>
+          
+            <a href="/tags/缓存/" rel="tag"># 缓存</a>
+          
+            <a href="/tags/Cache/" rel="tag"># Cache</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2017-01-01/theory-blocking_non-synch_async-concurrent_parallel.html" rel="next" title="阻塞/非阻塞、同步/异步、并发/并行 概念">
+                <i class="fa fa-chevron-left"></i> 阻塞/非阻塞、同步/异步、并发/并行 概念
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2017-01-04/zookeeper-acl.html" rel="prev" title="ZooKeeper ACL 权限控制">
+                ZooKeeper ACL 权限控制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数配置"><span class="nav-text"><a href="#&#x53C2;&#x6570;&#x914D;&#x7F6E;" class="headerlink" title="&#x53C2;&#x6570;&#x914D;&#x7F6E;"></a>&#x53C2;&#x6570;&#x914D;&#x7F6E;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过字符串配置"><span class="nav-text"><a href="#&#x901A;&#x8FC7;&#x5B57;&#x7B26;&#x4E32;&#x914D;&#x7F6E;" class="headerlink" title="&#x901A;&#x8FC7;&#x5B57;&#x7B26;&#x4E32;&#x914D;&#x7F6E;"></a>&#x901A;&#x8FC7;&#x5B57;&#x7B26;&#x4E32;&#x914D;&#x7F6E;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#可配置项"><span class="nav-text"><a href="#&#x53EF;&#x914D;&#x7F6E;&#x9879;" class="headerlink" title="&#x53EF;&#x914D;&#x7F6E;&#x9879;"></a>&#x53EF;&#x914D;&#x7F6E;&#x9879;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#时间单位"><span class="nav-text"><a href="#&#x65F6;&#x95F4;&#x5355;&#x4F4D;" class="headerlink" title="&#x65F6;&#x95F4;&#x5355;&#x4F4D;"></a>&#x65F6;&#x95F4;&#x5355;&#x4F4D;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作"><span class="nav-text"><a href="#&#x64CD;&#x4F5C;" class="headerlink" title="&#x64CD;&#x4F5C;"></a>&#x64CD;&#x4F5C;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#获取缓存"><span class="nav-text"><a href="#&#x83B7;&#x53D6;&#x7F13;&#x5B58;" class="headerlink" title="&#x83B7;&#x53D6;&#x7F13;&#x5B58;"></a>&#x83B7;&#x53D6;&#x7F13;&#x5B58;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他操作"><span class="nav-text"><a href="#&#x5176;&#x4ED6;&#x64CD;&#x4F5C;" class="headerlink" title="&#x5176;&#x4ED6;&#x64CD;&#x4F5C;"></a>&#x5176;&#x4ED6;&#x64CD;&#x4F5C;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
