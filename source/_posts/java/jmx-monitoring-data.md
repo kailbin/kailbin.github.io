@@ -598,6 +598,19 @@ public class JmxMetricsUtil {
 
 
             /**
+             * -XX:+UseSerialGC
+             */
+            EDEN_SPACE("Eden Space"),
+            /**
+             * -XX:+UseSerialGC
+             */
+            SURVIVOR_SPACE("Survivor Space"),
+            /**
+             * -XX:+UseSerialGC
+             */
+            TENURED_GEN("Tenured Gen"),
+
+            /**
              *
              */
             PS_EDEN_SPACE("PS Eden Space"),
@@ -609,18 +622,49 @@ public class JmxMetricsUtil {
              *
              */
             PS_OLD_GEN("PS Old Gen"),
+
+
+            /**
+             * -XX:+UseConcMarkSweepGC
+             */
+            PAR_EDEN_SPACE("Par Eden Space"),
+            /**
+             * -XX:+UseConcMarkSweepGC
+             */
+            PAR_SURVIVOR_SPACE("Par Survivor Space"),
+            /**
+             * -XX:+UseConcMarkSweepGC
+             */
+            CMS_OLD_GEN("CMS Old Gen"),
+
+
+            /**
+             * -XX:+UseG1GC
+             */
+            G1_EDEN_SPACE("G1 Eden Space"),
+            /**
+             * -XX:+UseG1GC
+             */
+            G1_SURVIVOR_SPACE("G1 Survivor Space"),
+            /**
+             * -XX:+UseG1GC
+             */
+            G1_OLD_GEN("G1 Old Gen"),
+
+
             /**
              *
              */
             META_SPACE("Metaspace"),
             /**
-             * @since 1.8
+             *
              */
-            COMPRESSED_CLASS_SPACE("Compressed Class Space"),
+            CODE_CACHE("Code Cache"),
             /**
              *
              */
-            CODE_CACHE("Code Cache"),;
+            COMPRESSED_CLASS_SPACE("Compressed Class Space"),
+            ;
 
             private String poolName;
 
@@ -641,8 +685,6 @@ public class JmxMetricsUtil {
                 }
                 return null;
             }
-
-
         }
 
         /**
@@ -894,12 +936,7 @@ public class JmxMetricsUtil {
     }
 
 }
-
 ```
-
-# 其他
-
-## 如何 Dump 出堆数据
 
 
 
