@@ -41,7 +41,7 @@ Sigar（System Information Gatherer And Reporter）是一个开源的工具，�
 - 删除无用的文件 `.sigar_shellrc`、`log4j.jar`、`sigar.jar`，
 - 重命名 `lib` 文件夹为 `sigar`
 
-```
+```bash
 resources/
 └── sigar
     ├── libsigar-amd64-freebsd-6.so
@@ -151,7 +151,7 @@ API 文档可以从 `hyperic-sigar-1.6.4/docs/javadoc` 找到
 启动方式: `java -jar hyperic-sigar-1.6.4/sigar-bin/lib/sigar.jar`
 
 支持的交互命令：
-``` 
+``` bash
 sigar> help
 Available commands:
 	alias          - Create alias command
