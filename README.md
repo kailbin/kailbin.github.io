@@ -27,3 +27,8 @@
 	  field: post  	  
 	  format: html	  
 	  limit: 10000
+
+# 自定义的地方
+- issue label 长度 : \themes\next\layout\_third-party\comments\gitment.swig
+- 动态背景 : themes/next/layout/_scripts/commons.swig
+- 自定义主题： themes/next/source/css/_custom/custom.styl
