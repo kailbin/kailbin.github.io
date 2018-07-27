@@ -21,9 +21,25 @@
 
     {% if page.comments %}
       <script type="text/javascript">
+      var page_id = "{{ page.id }}";
+      var page_source = "{{ page.source }}";
+      var path = window.location.pathname;
+
+      // page_id first
+      if(page_id) {
+        path = page_id;
+      }
+
+      // issues label length limit
+      if(path.length >= 50){
+        path = page_source.replace("_posts/", "");
+      }
+
+      // console.log(path)
+
       function renderGitment(){
         var gitment = new {{CommentsClass}}({
-            id: window.location.pathname, 
+            id: path, 
             owner: '{{ theme.gitment.github_user }}',
             repo: '{{ theme.gitment.github_repo }}',
             {% if theme.gitment.mint %}

@@ -5,6 +5,7 @@ tags:
 categories:
   - Java
 date: 2018-07-25
+id: java8-stream-quick-start
 ---
 
 
