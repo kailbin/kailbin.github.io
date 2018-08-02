@@ -213,6 +213,7 @@ public String append(String str1, String str2) {
 # 参考
 
 - [java对象结构](https://blog.csdn.net/zqz_zqz/article/details/70246212)
+- [Java对象内存布局](http://www.ideabuffer.cn/2017/05/06/Java%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80/)
 - [Java对象结构及大小计算](https://blog.csdn.net/lihuifeng/article/details/51681146)
 - [Java并发编程：Synchronized底层优化（偏向锁、轻量级锁）](http://www.cnblogs.com/paddix/p/5405678.html)
 - [java 中的锁 -- 偏向锁、轻量级锁、自旋锁、重量级锁](https://blog.csdn.net/zqz_zqz/article/details/70233767)
