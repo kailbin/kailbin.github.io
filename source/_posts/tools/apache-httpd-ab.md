@@ -4,7 +4,7 @@ date: 2017-01-15 00:00:00
 desc: apache httpd ab,压力测试
 
 tags: [apache,常用命令,测试,ab]
-
+categories: Tools
 ---
 
 ab 是 **Apache HTTP 服务器性能基准工具(Apache HTTP server benchmarking tool)**，可以进行简单的压力测试。 
