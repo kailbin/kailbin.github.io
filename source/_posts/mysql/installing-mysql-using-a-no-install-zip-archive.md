@@ -6,6 +6,9 @@ desc: 解压版MySQL 安装
 
 tags: [软件安装,MySQL]
 
+categories:
+  - MySQL
+id: installing-mysql-using-a-no-install-zip-archive
 ---
 
 ### 下载
