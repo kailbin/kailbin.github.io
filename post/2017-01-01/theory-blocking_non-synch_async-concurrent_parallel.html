@@ -489,7 +489,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -500,7 +500,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -511,7 +511,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -763,9 +763,25 @@
 
     
       <script type="text/javascript">
+      var page_id = "";
+      var page_source = "_posts/theory-blocking_non-synch_async-concurrent_parallel.md";
+      var path = window.location.pathname;
+
+      // page_id first
+      if(page_id) {
+        path = page_id;
+      }
+
+      // issues label length limit
+      if(path.length >= 50){
+        path = page_source.replace("_posts/", "");
+      }
+
+      // console.log(path)
+
       function renderGitment(){
         var gitment = new Gitmint({
-            id: window.location.pathname, 
+            id: path, 
             owner: 'kailbin',
             repo: 'comments',
             

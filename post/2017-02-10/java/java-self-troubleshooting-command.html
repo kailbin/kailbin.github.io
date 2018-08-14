@@ -85,7 +85,7 @@
 <meta property="og:site_name" content="Mr.Kail&#39;s Blog">
 <meta property="og:description" content="jcmd: 向 JVM 发送诊断命令jinfo: 获得 JVM 配置信息jmap: 主要用于打印Java进程的 堆 信息jhat: 方便析 Java 堆 的工具jstack: 主要用于打印Java进程的 栈 信息jsadebugd: 依附到一个Java进程或核心文件，担当一个调试服务器的作用 以上几个只有 jcmd 没有被官方说明为 Experimental(实验性的)。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-16T13:21:39.478Z">
+<meta property="og:updated_time" content="2018-08-14T15:17:26.154Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 内建&quot;故障排除&quot;工具 — jcmd、jinfo、jmap、jhat、jstack、jsadebugd">
 <meta name="twitter:description" content="jcmd: 向 JVM 发送诊断命令jinfo: 获得 JVM 配置信息jmap: 主要用于打印Java进程的 堆 信息jhat: 方便析 Java 堆 的工具jstack: 主要用于打印Java进程的 栈 信息jsadebugd: 依附到一个Java进程或核心文件，担当一个调试服务器的作用 以上几个只有 jcmd 没有被官方说明为 Experimental(实验性的)。">
@@ -640,7 +640,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -651,7 +651,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -662,7 +662,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -914,9 +914,25 @@
 
     
       <script type="text/javascript">
+      var page_id = "";
+      var page_source = "_posts/java/java-self-troubleshooting-command.md";
+      var path = window.location.pathname;
+
+      // page_id first
+      if(page_id) {
+        path = page_id;
+      }
+
+      // issues label length limit
+      if(path.length >= 50){
+        path = page_source.replace("_posts/", "");
+      }
+
+      // console.log(path)
+
       function renderGitment(){
         var gitment = new Gitmint({
-            id: window.location.pathname, 
+            id: path, 
             owner: 'kailbin',
             repo: 'comments',
             

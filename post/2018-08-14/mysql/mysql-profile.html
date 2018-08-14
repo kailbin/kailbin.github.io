@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="MySQL,Tuning," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="MySQL profile 可用来查询 SQL 执行状态，对定位一条语句的 I/O消耗 和CPU消耗 非常重要，SQL 语句执行所消耗的最大两部分资源就是 IO 和 CPU 。">
+<meta name="keywords" content="MySQL,Tuning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL PROFILE">
+<meta property="og:url" content="http://blog.kail.xyz/post/2018-08-14/mysql/mysql-profile.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="MySQL profile 可用来查询 SQL 执行状态，对定位一条语句的 I/O消耗 和CPU消耗 非常重要，SQL 语句执行所消耗的最大两部分资源就是 IO 和 CPU 。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-14T15:23:15.539Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL PROFILE">
+<meta name="twitter:description" content="MySQL profile 可用来查询 SQL 执行状态，对定位一条语句的 I/O消耗 和CPU消耗 非常重要，SQL 语句执行所消耗的最大两部分资源就是 IO 和 CPU 。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2018-08-14/mysql/mysql-profile.html"/>
+
+
+
+
+
+  <title>MySQL PROFILE | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2018-08-14/mysql/mysql-profile.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">MySQL PROFILE</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-14T00:00:00+08:00">
+                2018-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2018-08-14/mysql/mysql-profile.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2018-08-14/mysql/mysql-profile.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>MySQL profile 可用来查询 SQL 执行状态，对定位一条语句的 <strong>I/O消耗</strong> 和<strong>CPU消耗</strong> 非常重要，SQL 语句执行所消耗的最大两部分资源就是 <code>IO</code> 和 <code>CPU</code> 。</p>
+<a id="more"></a>
+<p>在 MySQL 5.7 之后，profile 信息将逐渐被废弃，推荐使用 <code>performance_schema</code>。</p>
+<blockquote>
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/performance-schema.html" target="_blank" rel="noopener">Chapter 25 MySQL Performance Schema</a></p>
+</blockquote>
+<h1 id="查看-profile-功能是否可用"><a href="#查看-profile-功能是否可用" class="headerlink" title="查看 profile 功能是否可用"></a>查看 profile 功能是否可用</h1><p>如果 <code>have_profiling</code> 为 <code>NO</code> 说明不可用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like '%profiling%';</span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line">| Variable_name  | Value |</span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line">| have_profiling | NO    |</span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span></span><br></pre></td></tr></table></figure>
+<p>以下输出说明可用：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like '%profiling%';</span><br><span class="line">+<span class="comment">------------------------+-------+</span></span><br><span class="line">| Variable_name          | Value |</span><br><span class="line">+<span class="comment">------------------------+-------+</span></span><br><span class="line">| have_profiling         | YES   |</span><br><span class="line">| profiling              | OFF   |</span><br><span class="line">| profiling_history_size | 15    |</span><br><span class="line">+<span class="comment">------------------------+-------+</span></span><br><span class="line">3 rows in <span class="keyword">set</span></span><br></pre></td></tr></table></figure>
+<h1 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 打开 profile</span></span><br><span class="line"><span class="keyword">set</span> profiling = <span class="number">1</span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">-- 执行查询语句</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">NOW</span>();</span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CURDATE</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查看执行的 SQL 编号</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">profiles</span>;</span><br><span class="line">+<span class="comment">----------+------------+------------------+</span></span><br><span class="line">| Query_ID | Duration   | Query            |</span><br><span class="line">+<span class="comment">----------+------------+------------------+</span></span><br><span class="line">|        1 |   0.000933 | <span class="keyword">SELECT</span> <span class="keyword">NOW</span>()     |</span><br><span class="line">|        <span class="number">2</span> | <span class="number">0.00063325</span> | <span class="keyword">SELECT</span> <span class="keyword">CURDATE</span>() |</span><br><span class="line">+<span class="comment">----------+------------+------------------+</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查看每个阶段的耗时</span></span><br><span class="line"><span class="keyword">show</span> profile <span class="keyword">for</span> <span class="keyword">query</span> <span class="number">1</span>;</span><br><span class="line"><span class="comment">-- 查看每个阶段 各个资源的使用情况</span></span><br><span class="line"><span class="keyword">show</span> profile ALL <span class="keyword">for</span> <span class="keyword">query</span> <span class="number">1</span>;</span><br><span class="line"><span class="comment">-- 查看 CPU 使用情况</span></span><br><span class="line"><span class="keyword">show</span> profile CPU <span class="keyword">for</span> <span class="keyword">query</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 关闭 profile </span></span><br><span class="line"><span class="keyword">set</span> profiling = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查看帮助</span></span><br><span class="line"><span class="keyword">help</span> <span class="string">'profile'</span>;</span><br><span class="line"><span class="keyword">help</span> <span class="string">'profiles'</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="指标"><a href="#指标" class="headerlink" title="指标"></a>指标</h1><table>
+<thead>
+<tr>
+<th>指标名</th>
+<th>指标描述</th>
+<th>英文描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ALL</td>
+<td>显示所有性能信息</td>
+<td>displays all information</td>
+</tr>
+<tr>
+<td><code>BLOCK IO</code></td>
+<td>显示 IO 的次数</td>
+<td>displays counts for block input and output operations</td>
+</tr>
+<tr>
+<td>CONTEXT SWITCHES</td>
+<td>上下文切换次数</td>
+<td>displays counts for voluntary and involuntary context switches</td>
+</tr>
+<tr>
+<td><code>CPU</code></td>
+<td>用户和系统 CPU 使用时间</td>
+<td>displays user and system CPU usage times</td>
+</tr>
+<tr>
+<td>IPC</td>
+<td>显示发送和接收的消息的计数</td>
+<td>displays counts for messages sent and received</td>
+</tr>
+<tr>
+<td>MEMORY</td>
+<td>暂未实现</td>
+<td>is not currently implemented</td>
+</tr>
+<tr>
+<td>PAGE FAULTS</td>
+<td>主/次 缺页数</td>
+<td>displays counts for major and minor page faults</td>
+</tr>
+<tr>
+<td>SOURCE</td>
+<td>使用的 函数、源码文件名、在文件的行数</td>
+<td>displays the names of functions from the source code, together with the name and line number of the file in which the function occurs</td>
+</tr>
+<tr>
+<td>SWAPS</td>
+<td>swap 次数</td>
+<td>displays swap counts</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 显示单个指标</span></span><br><span class="line"><span class="keyword">show</span> profile CPU <span class="keyword">for</span> <span class="keyword">query</span> <span class="number">1</span>; </span><br><span class="line"><span class="comment">-- 显示多个指标</span></span><br><span class="line"><span class="keyword">show</span> profile CPU,<span class="keyword">BLOCK</span> IO <span class="keyword">for</span> <span class="keyword">query</span> <span class="number">2</span>; </span><br><span class="line"><span class="comment">-- 显示第一行</span></span><br><span class="line"><span class="keyword">show</span> profile CPU <span class="keyword">for</span> <span class="keyword">query</span> <span class="number">2</span> <span class="keyword">limit</span> <span class="number">1</span>;</span><br><span class="line"><span class="comment">-- 显示第2、3行</span></span><br><span class="line"><span class="keyword">show</span> profile CPU <span class="keyword">for</span> <span class="keyword">query</span> <span class="number">2</span> <span class="keyword">limit</span> <span class="number">1</span>,<span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="ALL-的列"><a href="#ALL-的列" class="headerlink" title="ALL 的列"></a>ALL 的列</h2><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+<th>示例数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Status</td>
+<td>状态</td>
+<td>init 、executing、Sending data</td>
+</tr>
+<tr>
+<td>Duration</td>
+<td>耗时</td>
+<td>0.000006</td>
+</tr>
+<tr>
+<td><code>CPU_user</code></td>
+<td>用户态占用的 CPU 时长</td>
+<td>0.008999</td>
+</tr>
+<tr>
+<td><code>CPU_system</code></td>
+<td>内核占用的 CPU 时长</td>
+<td>0.003999</td>
+</tr>
+<tr>
+<td>Context_voluntary</td>
+<td>上下文主动切换 次数</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Context_involuntary</td>
+<td>上下文被动切换 次数</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>Block_ops_in</code></td>
+<td>阻塞输入操作</td>
+<td>8</td>
+</tr>
+<tr>
+<td><code>Block_ops_out</code></td>
+<td>阻塞输出操作</td>
+<td>32</td>
+</tr>
+<tr>
+<td>Messages_sent</td>
+<td>发送数</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Messages_received</td>
+<td>接收数</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Page_faults_major</td>
+<td>主 缺页数</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Page_faults_minor</td>
+<td>次 缺页数</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Swaps</td>
+<td>交换次数</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Source_function</td>
+<td>函数</td>
+<td>mysql_execute_command</td>
+</tr>
+<tr>
+<td>Source_file</td>
+<td>源文件</td>
+<td>sql_parse.cc</td>
+</tr>
+<tr>
+<td>Source_line</td>
+<td>源代码行</td>
+<td>4465</td>
+</tr>
+</tbody>
+</table>
+<h1 id="Status"><a href="#Status" class="headerlink" title="Status"></a>Status</h1><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>starting</td>
+<td>开始</td>
+</tr>
+<tr>
+<td>checking permissions</td>
+<td>检查权限</td>
+</tr>
+<tr>
+<td>Opening tables</td>
+<td>打开表</td>
+</tr>
+<tr>
+<td>init</td>
+<td>初始化</td>
+</tr>
+<tr>
+<td><code>System lock</code></td>
+<td>系统锁</td>
+</tr>
+<tr>
+<td>optimizing</td>
+<td>优化</td>
+</tr>
+<tr>
+<td><code>statistics</code></td>
+<td>统计</td>
+</tr>
+<tr>
+<td>preparing</td>
+<td>准备</td>
+</tr>
+<tr>
+<td><code>executing</code></td>
+<td>执行</td>
+</tr>
+<tr>
+<td><code>Sending data</code></td>
+<td>发送数据</td>
+</tr>
+<tr>
+<td><code>Sorting result</code></td>
+<td>排序</td>
+</tr>
+<tr>
+<td>end</td>
+<td>结束</td>
+</tr>
+<tr>
+<td>query end</td>
+<td>查询 结束</td>
+</tr>
+<tr>
+<td>closing tables</td>
+<td>关闭表 ／去除TMP 表</td>
+</tr>
+<tr>
+<td>freeing items</td>
+<td>释放物品</td>
+</tr>
+<tr>
+<td>cleaning up</td>
+<td>清理</td>
+</tr>
+</tbody>
+</table>
+<p><code>show processlist;</code> 的 <code>State</code> 列，可以看出当前 SQL 的执行状态</p>
+<h1 id="开启-profiling"><a href="#开启-profiling" class="headerlink" title="开启 profiling"></a>开启 profiling</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> performance_schema.setup_instruments <span class="keyword">SET</span> ENABLED = <span class="string">'YES'</span>, TIMED = <span class="string">'YES'</span> <span class="keyword">WHERE</span> <span class="keyword">NAME</span> <span class="keyword">LIKE</span> <span class="string">'statement/%'</span> <span class="keyword">OR</span> <span class="keyword">NAME</span> <span class="keyword">LIKE</span> <span class="string">'stage/%'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> performance_schema.setup_consumers <span class="keyword">SET</span> ENABLED = <span class="string">'YES'</span> <span class="keyword">WHERE</span> <span class="keyword">NAME</span> <span class="keyword">LIKE</span> <span class="string">'statement/%'</span> <span class="keyword">OR</span> <span class="keyword">NAME</span> <span class="keyword">LIKE</span> <span class="string">'stage/%'</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>—— 来自 <a href="https://www.percona.com/blog/2015/04/16/profiling-mysql-queries-from-performance-schema/" target="_blank" rel="noopener">Profiling MySQL queries from Performance Schema</a> 的留言部分，未验证</p>
+</blockquote>
+<h1 id="Read-More"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</h1><ul>
+<li>本文主要来自 —— <a href="https://blog.csdn.net/ty_hf/article/details/54895026" target="_blank" rel="noopener">Mysql分析-profile详解</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/show-profile.html" target="_blank" rel="noopener">13.7.5.30 SHOW PROFILE Syntax</a></li>
+<li><a href="https://www.percona.com/blog/2015/04/16/profiling-mysql-queries-from-performance-schema/" target="_blank" rel="noopener">Profiling MySQL queries from Performance Schema</a></li>
+<li><a href="https://yq.aliyun.com/articles/55820" target="_blank" rel="noopener">page fault带来的性能问题</a><ul>
+<li>PAGE FAULTS</li>
+<li>Swap</li>
+</ul>
+</li>
+<li><a href="https://zh.wikipedia.org/wiki/%E8%A1%8C%E7%A8%8B%E9%96%93%E9%80%9A%E8%A8%8A" target="_blank" rel="noopener">进程间通信</a><ul>
+<li>IPC: Inter-Process Communication</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+            <a href="/tags/Tuning/" rel="tag"># Tuning</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2018-08-13/mysql/mysql-explain.html" rel="next" title="MySQL EXPLAIN">
+                <i class="fa fa-chevron-left"></i> MySQL EXPLAIN
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">71</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#查看-profile-功能是否可用"><span class="nav-text"><a href="#&#x67E5;&#x770B;-profile-&#x529F;&#x80FD;&#x662F;&#x5426;&#x53EF;&#x7528;" class="headerlink" title="&#x67E5;&#x770B; profile &#x529F;&#x80FD;&#x662F;&#x5426;&#x53EF;&#x7528;"></a>&#x67E5;&#x770B; profile &#x529F;&#x80FD;&#x662F;&#x5426;&#x53EF;&#x7528;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用步骤"><span class="nav-text"><a href="#&#x4F7F;&#x7528;&#x6B65;&#x9AA4;" class="headerlink" title="&#x4F7F;&#x7528;&#x6B65;&#x9AA4;"></a>&#x4F7F;&#x7528;&#x6B65;&#x9AA4;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#指标"><span class="nav-text"><a href="#&#x6307;&#x6807;" class="headerlink" title="&#x6307;&#x6807;"></a>&#x6307;&#x6807;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式"><span class="nav-text"><a href="#&#x4F7F;&#x7528;&#x65B9;&#x5F0F;" class="headerlink" title="&#x4F7F;&#x7528;&#x65B9;&#x5F0F;"></a>&#x4F7F;&#x7528;&#x65B9;&#x5F0F;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ALL-的列"><span class="nav-text"><a href="#ALL-&#x7684;&#x5217;" class="headerlink" title="ALL &#x7684;&#x5217;"></a>ALL &#x7684;&#x5217;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Status"><span class="nav-text"><a href="#Status" class="headerlink" title="Status"></a>Status</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开启-profiling"><span class="nav-text"><a href="#&#x5F00;&#x542F;-profiling" class="headerlink" title="&#x5F00;&#x542F; profiling"></a>&#x5F00;&#x542F; profiling</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Read-More"><span class="nav-text"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      var page_id = "mysql-profile";
+      var page_source = "_posts/mysql/mysql-profile.md";
+      var path = window.location.pathname;
+
+      // page_id first
+      if(page_id) {
+        path = page_id;
+      }
+
+      // issues label length limit
+      if(path.length >= 50){
+        path = page_source.replace("_posts/", "");
+      }
+
+      // console.log(path)
+
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: path, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

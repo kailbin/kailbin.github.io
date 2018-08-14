@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在HotSpot虚拟机中，对象在内存中存储的布局可以分为3块区域：对象头（Header）、实例数据（Instance Data）和 对齐填充（Padding）。而 对象头中则存有 锁状态标示等各种信息，JVM 的锁优化既是基于此。">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Object Header 和 锁">
+<meta property="og:url" content="http://blog.kail.xyz/post/2018-08-01/java/java-object-header_and_lock.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="在HotSpot虚拟机中，对象在内存中存储的布局可以分为3块区域：对象头（Header）、实例数据（Instance Data）和 对齐填充（Padding）。而 对象头中则存有 锁状态标示等各种信息，JVM 的锁优化既是基于此。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-14T15:19:17.539Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Object Header 和 锁">
+<meta name="twitter:description" content="在HotSpot虚拟机中，对象在内存中存储的布局可以分为3块区域：对象头（Header）、实例数据（Instance Data）和 对齐填充（Padding）。而 对象头中则存有 锁状态标示等各种信息，JVM 的锁优化既是基于此。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2018-08-01/java/java-object-header_and_lock.html"/>
+
+
+
+
+
+  <title>Java Object Header 和 锁 | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2018-08-01/java/java-object-header_and_lock.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Java Object Header 和 锁</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-01T00:00:00+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2018-08-01/java/java-object-header_and_lock.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2018-08-01/java/java-object-header_and_lock.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在HotSpot虚拟机中，对象在内存中存储的布局可以分为3块区域：<strong>对象头（Header）</strong>、<strong>实例数据（Instance Data）</strong>和 <strong>对齐填充（Padding）</strong>。<br>而 <strong>对象头</strong>中则存有 锁状态标示等各种信息，JVM 的锁优化既是基于此。</p>
+<a id="more"></a>
+<h1 id="Java-对象内容分布"><a href="#Java-对象内容分布" class="headerlink" title="Java 对象内容分布"></a>Java 对象内容分布</h1><h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h2><p>HotSpot虚拟机的对象头包括两部分信息：</p>
+<p>第一部分<strong>markword</strong>,用于存储对象自身的运行时数据，如<em>哈希码（HashCode）</em>、<em>GC分代年龄</em>、<em>锁状态标志</em>、<em>偏向线程ID</em>、<em>偏向时间戳</em>等，这部分数据的长度在32位和64位的虚拟机（未开启压缩指针）中分别为32bit和64bit，官方称它为<code>MarkWord</code>。</p>
+<p>对象头的另外一部分是<strong>klass</strong>，类型指针，即<em>对象指向它的类元数据的指针</em>，虚拟机通过这个指针来确定这个对象是哪个类的实例.</p>
+<h2 id="实例数据"><a href="#实例数据" class="headerlink" title="实例数据"></a>实例数据</h2><p>实例数据部分是对象真正存储的有效信息，也是在程序代码中所定义的各种类型的字段内容。无论是从父类继承下来的，还是在子类中定义的，都需要记录起来。</p>
+<h2 id="对齐填充"><a href="#对齐填充" class="headerlink" title="对齐填充"></a>对齐填充</h2><p>第三部分对齐填充并不是必然存在的，也没有特别的含义，它仅仅起着占位符的作用。由于HotSpot VM的自动内存管理系统要求对象起始地址必须是8字节的整数倍，换句话说，就是<strong>对象的大小必须是8字节的整数倍</strong>。而对象头部分正好是8字节的倍数（1倍或者2倍），因此，当对象实例数据部分没有对齐时，就需要通过对齐填充来补全。</p>
+<blockquote>
+<p>codecraft —— <a href="https://segmentfault.com/a/1190000004574249" target="_blank" rel="noopener">Java对象结构及大小计算</a></p>
+</blockquote>
+<h1 id="Java-Object-Header-结构"><a href="#Java-Object-Header-结构" class="headerlink" title="Java Object Header 结构"></a>Java Object Header 结构</h1><blockquote>
+<p>以下内容来自: <a href="https://gist.github.com/arturmkrtchyan/43d6135e8a15798cc46c" target="_blank" rel="noopener">https://gist.github.com/arturmkrtchyan/43d6135e8a15798cc46c</a></p>
+</blockquote>
+<h2 id="32-位对象头"><a href="#32-位对象头" class="headerlink" title="32 位对象头"></a>32 位对象头</h2><p>在32位系统下，存放Class指针的空间大小是<strong>4字节</strong>，MarkWord是<strong>4字节</strong>，对象头为<strong>8字节</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">|----------------------------------------------------------------------------------------|--------------------|</span><br><span class="line">|                                    Object Header (64 bits)                             |        State       |</span><br><span class="line">|-------------------------------------------------------|--------------------------------|--------------------|</span><br><span class="line">|                  Mark Word (32 bits)                  |      Klass Word (32 bits)      |                    |</span><br><span class="line">|-------------------------------------------------------|--------------------------------|--------------------|</span><br><span class="line">| identity_hashcode:25 | age:4 | biased_lock:1 | lock:2 |      OOP to metadata object    |       Normal       |</span><br><span class="line">|-------------------------------------------------------|--------------------------------|--------------------|</span><br><span class="line">|  thread:23 | epoch:2 | age:4 | biased_lock:1 | lock:2 |      OOP to metadata object    |       Biased       |</span><br><span class="line">|-------------------------------------------------------|--------------------------------|--------------------|</span><br><span class="line">|               ptr_to_lock_record:30          | lock:2 |      OOP to metadata object    | Lightweight Locked |</span><br><span class="line">|-------------------------------------------------------|--------------------------------|--------------------|</span><br><span class="line">|               ptr_to_heavyweight_monitor:30  | lock:2 |      OOP to metadata object    | Heavyweight Locked |</span><br><span class="line">|-------------------------------------------------------|--------------------------------|--------------------|</span><br><span class="line">|                                              | lock:2 |      OOP to metadata object    |    Marked for GC   |</span><br><span class="line">|-------------------------------------------------------|--------------------------------|--------------------|</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><code>identity_hashcode</code>： 保存对象的哈希码</li>
+<li><code>age</code>： 保存对象的分代年龄</li>
+<li><code>biased_lock</code>： 偏向锁标识位</li>
+<li><code>lock</code>： 锁状态标识位</li>
+<li><code>thread</code>： 保存持有偏向锁的线程ID</li>
+<li><code>epoch</code>： 保存偏向时间戳</li>
+<li><code>OOP</code>: 普通对象指针(Ordinary Object Pointer)</li>
+</ul>
+</blockquote>
+<h2 id="64-位对象头"><a href="#64-位对象头" class="headerlink" title="64 位对象头"></a>64 位对象头</h2><p>在64位系统下，存放Class指针的空间大小是<strong>8字节</strong>，MarkWord是<strong>8字节</strong>，对象头为<strong>16字节</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">|------------------------------------------------------------------------------------------------------------|--------------------|</span><br><span class="line">|                                            Object Header (128 bits)                                        |        State       |</span><br><span class="line">|------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">|                                  Mark Word (64 bits)                         |    Klass Word (64 bits)     |                    |</span><br><span class="line">|------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">| unused:25 | identity_hashcode:31 | unused:1 | age:4 | biased_lock:1 | lock:2 |    OOP to metadata object   |       Normal       |</span><br><span class="line">|------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">| thread:54 |       epoch:2        | unused:1 | age:4 | biased_lock:1 | lock:2 |    OOP to metadata object   |       Biased       |</span><br><span class="line">|------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">|                       ptr_to_lock_record:62                         | lock:2 |    OOP to metadata object   | Lightweight Locked |</span><br><span class="line">|------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">|                     ptr_to_heavyweight_monitor:62                   | lock:2 |    OOP to metadata object   | Heavyweight Locked |</span><br><span class="line">|------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">|                                                                     | lock:2 |    OOP to metadata object   |    Marked for GC   |</span><br><span class="line">|------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br></pre></td></tr></table></figure>
+<h2 id="开启指针压缩的-64-位对象头"><a href="#开启指针压缩的-64-位对象头" class="headerlink" title="开启指针压缩的 64 位对象头"></a>开启指针压缩的 64 位对象头</h2><p>64位开启指针压缩的情况下，存放Class指针的空间大小是<strong>4字节</strong>，MarkWord是<strong>8字节</strong>，对象头为<strong>12字节</strong>。<br>指针压缩可以通过参数 <code>-XX:+UseCompressedOops</code> 开启。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">|--------------------------------------------------------------------------------------------------------------|--------------------|</span><br><span class="line">|                                            Object Header (96 bits)                                           |        State       |</span><br><span class="line">|--------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">|                                  Mark Word (64 bits)                           |    Klass Word (32 bits)     |                    |</span><br><span class="line">|--------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">| unused:25 | identity_hashcode:31 | cms_free:1 | age:4 | biased_lock:1 | lock:2 |    OOP to metadata object   |       Normal       |</span><br><span class="line">|--------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">| thread:54 |       epoch:2        | cms_free:1 | age:4 | biased_lock:1 | lock:2 |    OOP to metadata object   |       Biased       |</span><br><span class="line">|--------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">|                         ptr_to_lock_record                            | lock:2 |    OOP to metadata object   | Lightweight Locked |</span><br><span class="line">|--------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">|                     ptr_to_heavyweight_monitor                        | lock:2 |    OOP to metadata object   | Heavyweight Locked |</span><br><span class="line">|--------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br><span class="line">|                                                                       | lock:2 |    OOP to metadata object   |    Marked for GC   |</span><br><span class="line">|--------------------------------------------------------------------------------|-----------------------------|--------------------|</span><br></pre></td></tr></table></figure>
+<h2 id="各个状态下的对象头"><a href="#各个状态下的对象头" class="headerlink" title="各个状态下的对象头"></a>各个状态下的对象头</h2><table>
+<thead>
+<tr>
+<th>锁状态</th>
+<th>存储内容</th>
+<th style="text-align:center">偏向锁标示位</th>
+<th style="text-align:center">锁标示位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无锁</td>
+<td>对象哈希码、对象分代年龄</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">01</td>
+</tr>
+<tr>
+<td>偏向锁</td>
+<td>偏向线程ID、偏向时间戳、对象分代年龄</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">01</td>
+</tr>
+<tr>
+<td>轻量级锁</td>
+<td>指向锁记录的指针</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">00</td>
+</tr>
+<tr>
+<td>重量级锁</td>
+<td>执行重量级锁定的指针</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">10</td>
+</tr>
+<tr>
+<td>GC标志</td>
+<td>无</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">11</td>
+</tr>
+</tbody>
+</table>
+<h1 id="锁升级过程"><a href="#锁升级过程" class="headerlink" title="锁升级过程"></a>锁升级过程</h1><p>JDK中对<code>Synchronized</code>做的种种优化，其核心都是为了减少获得锁和释放锁所带来的性能消耗，因此引入了<strong>偏向锁</strong>和<strong>轻量级锁</strong>，但是<strong>锁的升级是单向的</strong>，也就是说只能从低到高升级，不会出现锁的降级。</p>
+<h2 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h2><p>大多数情况，对象不仅不存在多线程竞争，而且<strong>总是由同一线程多次获得</strong>，为了让线程获得锁的代价更低而引入了偏向锁，场景是只有一个线程多次访问同步块。原理是通过CAS把线程ID写入锁对象的<code>Mark Word</code>中，当下次获取锁时发现线程ID相同时，则无需同步，否则撤销偏向，根据情况进入轻量级锁。</p>
+<h3 id="获取偏向锁"><a href="#获取偏向锁" class="headerlink" title="获取偏向锁"></a>获取偏向锁</h3><ol>
+<li>线程要获取某个对象的锁时，访问<code>Mark Word</code>中偏向锁的标识是否设置成<code>1</code>，锁标志位是否为<code>01</code>，确认是否为可偏向状态。</li>
+<li>如果为可偏向状态，则比对线程ID是否指向当前线程，如果是，进入<em>步骤5</em>，否则进入<em>步骤3</em>。</li>
+<li>如果线程ID并未指向当前线程，则通过CAS操作竞争锁。如果竞争成功，则将Mark Word中线程ID设置为当前线程ID，然后执行<em>步骤5</em>；如果竞争失败，执行<em>步骤4</em>。</li>
+<li>如果CAS获取偏向锁失败，则表示有竞争。当到达全局安全点（<code>safepoint</code>）时获得偏向锁的线程被挂起，偏向锁升级为轻量级锁，然后被阻塞在安全点的线程继续往下执行同步代码。（撤销偏向锁的时候会导致stop the word）</li>
+<li>执行同步代码。</li>
+</ol>
+<h3 id="释放偏向锁"><a href="#释放偏向锁" class="headerlink" title="释放偏向锁"></a>释放偏向锁</h3><p>偏向锁的撤销在上述第四步骤中有提到。偏向锁只有遇到其他线程尝试竞争偏向锁时，持有偏向锁的线程才会释放锁，线程不会主动去释放偏向锁。偏向锁的撤销，需要等待全局安全点（在这个时间点上没有字节码正在执行），它会首先暂停拥有偏向锁的线程，判断锁对象是否处于被锁定状态，撤销偏向锁后恢复到未锁定（标志位为<code>01</code>）或轻量级锁（标志位为<code>00</code>）的状态。</p>
+<h3 id="偏向锁参数"><a href="#偏向锁参数" class="headerlink" title="偏向锁参数"></a>偏向锁参数</h3><ul>
+<li><code>-XX:+UseBiasedLocking</code> 开启偏向锁</li>
+<li><code>-XX:BiasedLockingStartupDelay=0</code> 设置虚拟机一启动就启动偏向锁模式，默认情况下，虚拟机启动4s之后才会启动偏向锁模式</li>
+<li><code>-XX:-UseBiasedLocking</code> 关闭偏向锁</li>
+</ul>
+<h2 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h2><p>轻量级锁是由偏向所升级而来，在一个线程进入同步块的情况下（该线程占有偏向锁），当第二个线程加入锁争用的时候，偏向锁就会升级为轻量级锁。轻量级锁适合多个线程轮流进入同步块的情况。</p>
+<h3 id="轻量级锁的加锁过程"><a href="#轻量级锁的加锁过程" class="headerlink" title="轻量级锁的加锁过程"></a>轻量级锁的加锁过程</h3><ol>
+<li>在代码进入同步块的时候，如果同步对象锁状态为无锁状态（锁标志位为<code>01</code>状态，是否为偏向锁为<code>0</code>），虚拟机首先将在当前线程的栈帧中建立一个名为锁记录（<code>Lock Record</code>）的空间，用于存储锁对象目前的<code>Mark Word</code>的拷贝，官方称之为 <code>Displaced Mark Word</code>。</li>
+<li>拷贝锁对象头中的<code>Mark Word</code>复制到锁记录中</li>
+<li>拷贝成功后，虚拟机将使用CAS操作尝试将锁对象的<code>Mark Word</code>更新为指向<code>Lock Record</code>的指针，并将<code>Lock Record</code>里的<code>owner</code>指针指向锁对象的<code>Mark Word</code>。如果更新成功，则执行<em>步骤4</em>，否则执行<em>步骤5</em>。</li>
+<li>如果这个更新动作成功了，那么这个线程就拥有了该对象的锁，并且对象Mark Word的锁标志位设置为<code>00</code>，即表示此对象处于轻量级锁定状态。</li>
+<li>如果这个更新操作失败了，虚拟机首先会检查锁对象的 Mark Word 是否指向当前线程的栈帧，如果是就说明当前线程已经拥有了这个对象的锁，那就可以直接进入同步块继续执行。否则说明多个线程竞争锁，轻量级锁就要膨胀为重量级锁，锁标志的状态值变为<code>10</code>，Mark Word中存储的就是指向重量级锁（互斥量）的指针，后面等待锁的线程也要进入阻塞状态。 而当前线程便尝试使用自旋来获取锁，自旋就是为了不让线程阻塞，而采用循环去获取锁的过程。</li>
+</ol>
+<h3 id="轻量级锁的释放"><a href="#轻量级锁的释放" class="headerlink" title="轻量级锁的释放"></a>轻量级锁的释放</h3><ol>
+<li>通过CAS操作尝试把线程中复制的<code>Displaced Mark Word</code>对象替换当前的<code>Mark Word</code></li>
+<li>如果替换成功，整个同步过程就完成了</li>
+<li>如果替换失败，说明有其他线程尝试过获取该锁（此时锁已膨胀），那就要在释放锁的同时，唤醒被挂起的线程。</li>
+</ol>
+<h2 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h2><p><code>Synchronized</code>是通过对象内部的一个叫做<strong>监视器锁（monitor）</strong>来实现的。但是监视器锁本质又是依赖于<strong>底层的操作系统的<code>Mutex Lock</code>来实现</strong>的。而操作系统实现线程之间的切换这就需要从用户态转换到核心态，这个成本非常高，状态之间的转换需要相对比较长的时间，这就是为什么<code>Synchronized</code>效率低的原因。这种依赖于操作系统<code>Mutex Lock</code>所实现的锁我们称之为<strong>重量级锁</strong>。</p>
+<h1 id="其它锁优化"><a href="#其它锁优化" class="headerlink" title="其它锁优化"></a>其它锁优化</h1><h2 id="适应性自旋（Adaptive-Spinning）"><a href="#适应性自旋（Adaptive-Spinning）" class="headerlink" title="适应性自旋（Adaptive Spinning）"></a>适应性自旋（Adaptive Spinning）</h2><p>从轻量级锁获取的流程中我们知道，当线程在获取轻量级锁的过程中执行CAS操作失败时，是要通过自旋来获取重量级锁的。问题在于，自旋是需要消耗CPU的，如果一直获取不到锁的话，那该线程就一直处在自旋状态，白白浪费CPU资源。解决这个问题最简单的办法就是指定自旋的次数，例如让其循环10次，如果还没获取到锁就进入阻塞状态。但是JDK采用了更聪明的方式——<strong>适应性自旋</strong>，简单来说就是<strong>线程如果自旋成功了，则下次自旋的次数会更多，如果自旋失败了，则自旋的次数就会减少</strong>。</p>
+<h2 id="锁粗化（Lock-Coarsening）"><a href="#锁粗化（Lock-Coarsening）" class="headerlink" title="锁粗化（Lock Coarsening）"></a>锁粗化（Lock Coarsening）</h2><p>锁粗化的概念应该比较好理解，就是将多次连接在一起的加锁、解锁操作合并为一次，将多个连续的锁扩展成一个范围更大的锁。如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">StringBuffer stringBuffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">stringBuffer.append(<span class="string">"a"</span>);</span><br><span class="line">stringBuffer.append(<span class="string">"b"</span>);</span><br><span class="line">stringBuffer.append(<span class="string">"c"</span>);</span><br></pre></td></tr></table></figure>
+<p>这里每次调用<code>stringBuffer.append</code>方法都需要加锁和解锁，如果虚拟机检测到有一系列连串的对同一个对象加锁和解锁操作，就会将其合并成一次范围更大的加锁和解锁操作，即在第一次append方法时进行加锁，最后一次append方法结束后进行解锁。</p>
+<h2 id="锁消除（-XX-EliminateLocks）"><a href="#锁消除（-XX-EliminateLocks）" class="headerlink" title="锁消除（-XX:+EliminateLocks）"></a>锁消除（-XX:+EliminateLocks）</h2><p>锁消除即删除不必要的加锁操作。根据 代码逃逸分析技术(<code>-XX:+DoEscapeAnalysis</code>)，如果判断到一段代码中，堆上的数据不会逃逸出当前线程，那么可以认为这段代码是线程安全的，不必要加锁。看下面这段程序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">append</span><span class="params">(String str1, String str2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> StringBuffer().append(str1).append(str2).toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然<code>StringBuffer</code>的<code>append</code>是一个同步方法，但是这段程序中的<code>StringBuffer</code>属于一个局部变量，并且不会从该方法中逃逸出去，所以其实这过程是线程安全的，可以将锁消除。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://blog.csdn.net/zqz_zqz/article/details/70246212" target="_blank" rel="noopener">java对象结构</a></li>
+<li><a href="http://www.ideabuffer.cn/2017/05/06/Java%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80/" target="_blank" rel="noopener">Java对象内存布局</a></li>
+<li><a href="https://blog.csdn.net/lihuifeng/article/details/51681146" target="_blank" rel="noopener">Java对象结构及大小计算</a></li>
+<li><a href="http://www.cnblogs.com/paddix/p/5405678.html" target="_blank" rel="noopener">Java并发编程：Synchronized底层优化（偏向锁、轻量级锁）</a></li>
+<li><a href="https://blog.csdn.net/zqz_zqz/article/details/70233767" target="_blank" rel="noopener">java 中的锁 – 偏向锁、轻量级锁、自旋锁、重量级锁</a></li>
+<li><a href="https://www.zhihu.com/question/27963717" target="_blank" rel="noopener">逃逸分析为何不能在编译期进行？</a></li>
+<li><a href="https://www.zhihu.com/question/55075763" target="_blank" rel="noopener">Java 的偏向锁是怎么实现的？</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2018-07-25/java/java8-stream-quick-start.html" rel="next" title="Java8 Stream 快速入门">
+                <i class="fa fa-chevron-left"></i> Java8 Stream 快速入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2018-08-06/tools/jsonde.html" rel="prev" title="Jsonde">
+                Jsonde <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">71</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-对象内容分布"><span class="nav-text"><a href="#Java-&#x5BF9;&#x8C61;&#x5185;&#x5BB9;&#x5206;&#x5E03;" class="headerlink" title="Java &#x5BF9;&#x8C61;&#x5185;&#x5BB9;&#x5206;&#x5E03;"></a>Java &#x5BF9;&#x8C61;&#x5185;&#x5BB9;&#x5206;&#x5E03;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象头"><span class="nav-text"><a href="#&#x5BF9;&#x8C61;&#x5934;" class="headerlink" title="&#x5BF9;&#x8C61;&#x5934;"></a>&#x5BF9;&#x8C61;&#x5934;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例数据"><span class="nav-text"><a href="#&#x5B9E;&#x4F8B;&#x6570;&#x636E;" class="headerlink" title="&#x5B9E;&#x4F8B;&#x6570;&#x636E;"></a>&#x5B9E;&#x4F8B;&#x6570;&#x636E;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对齐填充"><span class="nav-text"><a href="#&#x5BF9;&#x9F50;&#x586B;&#x5145;" class="headerlink" title="&#x5BF9;&#x9F50;&#x586B;&#x5145;"></a>&#x5BF9;&#x9F50;&#x586B;&#x5145;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Object-Header-结构"><span class="nav-text"><a href="#Java-Object-Header-&#x7ED3;&#x6784;" class="headerlink" title="Java Object Header &#x7ED3;&#x6784;"></a>Java Object Header &#x7ED3;&#x6784;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#32-位对象头"><span class="nav-text"><a href="#32-&#x4F4D;&#x5BF9;&#x8C61;&#x5934;" class="headerlink" title="32 &#x4F4D;&#x5BF9;&#x8C61;&#x5934;"></a>32 &#x4F4D;&#x5BF9;&#x8C61;&#x5934;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#64-位对象头"><span class="nav-text"><a href="#64-&#x4F4D;&#x5BF9;&#x8C61;&#x5934;" class="headerlink" title="64 &#x4F4D;&#x5BF9;&#x8C61;&#x5934;"></a>64 &#x4F4D;&#x5BF9;&#x8C61;&#x5934;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开启指针压缩的-64-位对象头"><span class="nav-text"><a href="#&#x5F00;&#x542F;&#x6307;&#x9488;&#x538B;&#x7F29;&#x7684;-64-&#x4F4D;&#x5BF9;&#x8C61;&#x5934;" class="headerlink" title="&#x5F00;&#x542F;&#x6307;&#x9488;&#x538B;&#x7F29;&#x7684; 64 &#x4F4D;&#x5BF9;&#x8C61;&#x5934;"></a>&#x5F00;&#x542F;&#x6307;&#x9488;&#x538B;&#x7F29;&#x7684; 64 &#x4F4D;&#x5BF9;&#x8C61;&#x5934;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各个状态下的对象头"><span class="nav-text"><a href="#&#x5404;&#x4E2A;&#x72B6;&#x6001;&#x4E0B;&#x7684;&#x5BF9;&#x8C61;&#x5934;" class="headerlink" title="&#x5404;&#x4E2A;&#x72B6;&#x6001;&#x4E0B;&#x7684;&#x5BF9;&#x8C61;&#x5934;"></a>&#x5404;&#x4E2A;&#x72B6;&#x6001;&#x4E0B;&#x7684;&#x5BF9;&#x8C61;&#x5934;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#锁升级过程"><span class="nav-text"><a href="#&#x9501;&#x5347;&#x7EA7;&#x8FC7;&#x7A0B;" class="headerlink" title="&#x9501;&#x5347;&#x7EA7;&#x8FC7;&#x7A0B;"></a>&#x9501;&#x5347;&#x7EA7;&#x8FC7;&#x7A0B;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#偏向锁"><span class="nav-text"><a href="#&#x504F;&#x5411;&#x9501;" class="headerlink" title="&#x504F;&#x5411;&#x9501;"></a>&#x504F;&#x5411;&#x9501;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取偏向锁"><span class="nav-text"><a href="#&#x83B7;&#x53D6;&#x504F;&#x5411;&#x9501;" class="headerlink" title="&#x83B7;&#x53D6;&#x504F;&#x5411;&#x9501;"></a>&#x83B7;&#x53D6;&#x504F;&#x5411;&#x9501;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#释放偏向锁"><span class="nav-text"><a href="#&#x91CA;&#x653E;&#x504F;&#x5411;&#x9501;" class="headerlink" title="&#x91CA;&#x653E;&#x504F;&#x5411;&#x9501;"></a>&#x91CA;&#x653E;&#x504F;&#x5411;&#x9501;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#偏向锁参数"><span class="nav-text"><a href="#&#x504F;&#x5411;&#x9501;&#x53C2;&#x6570;" class="headerlink" title="&#x504F;&#x5411;&#x9501;&#x53C2;&#x6570;"></a>&#x504F;&#x5411;&#x9501;&#x53C2;&#x6570;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#轻量级锁"><span class="nav-text"><a href="#&#x8F7B;&#x91CF;&#x7EA7;&#x9501;" class="headerlink" title="&#x8F7B;&#x91CF;&#x7EA7;&#x9501;"></a>&#x8F7B;&#x91CF;&#x7EA7;&#x9501;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#轻量级锁的加锁过程"><span class="nav-text"><a href="#&#x8F7B;&#x91CF;&#x7EA7;&#x9501;&#x7684;&#x52A0;&#x9501;&#x8FC7;&#x7A0B;" class="headerlink" title="&#x8F7B;&#x91CF;&#x7EA7;&#x9501;&#x7684;&#x52A0;&#x9501;&#x8FC7;&#x7A0B;"></a>&#x8F7B;&#x91CF;&#x7EA7;&#x9501;&#x7684;&#x52A0;&#x9501;&#x8FC7;&#x7A0B;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#轻量级锁的释放"><span class="nav-text"><a href="#&#x8F7B;&#x91CF;&#x7EA7;&#x9501;&#x7684;&#x91CA;&#x653E;" class="headerlink" title="&#x8F7B;&#x91CF;&#x7EA7;&#x9501;&#x7684;&#x91CA;&#x653E;"></a>&#x8F7B;&#x91CF;&#x7EA7;&#x9501;&#x7684;&#x91CA;&#x653E;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重量级锁"><span class="nav-text"><a href="#&#x91CD;&#x91CF;&#x7EA7;&#x9501;" class="headerlink" title="&#x91CD;&#x91CF;&#x7EA7;&#x9501;"></a>&#x91CD;&#x91CF;&#x7EA7;&#x9501;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其它锁优化"><span class="nav-text"><a href="#&#x5176;&#x5B83;&#x9501;&#x4F18;&#x5316;" class="headerlink" title="&#x5176;&#x5B83;&#x9501;&#x4F18;&#x5316;"></a>&#x5176;&#x5B83;&#x9501;&#x4F18;&#x5316;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#适应性自旋（Adaptive-Spinning）"><span class="nav-text"><a href="#&#x9002;&#x5E94;&#x6027;&#x81EA;&#x65CB;&#xFF08;Adaptive-Spinning&#xFF09;" class="headerlink" title="&#x9002;&#x5E94;&#x6027;&#x81EA;&#x65CB;&#xFF08;Adaptive Spinning&#xFF09;"></a>&#x9002;&#x5E94;&#x6027;&#x81EA;&#x65CB;&#xFF08;Adaptive Spinning&#xFF09;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁粗化（Lock-Coarsening）"><span class="nav-text"><a href="#&#x9501;&#x7C97;&#x5316;&#xFF08;Lock-Coarsening&#xFF09;" class="headerlink" title="&#x9501;&#x7C97;&#x5316;&#xFF08;Lock Coarsening&#xFF09;"></a>&#x9501;&#x7C97;&#x5316;&#xFF08;Lock Coarsening&#xFF09;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁消除（-XX-EliminateLocks）"><span class="nav-text"><a href="#&#x9501;&#x6D88;&#x9664;&#xFF08;-XX-EliminateLocks&#xFF09;" class="headerlink" title="&#x9501;&#x6D88;&#x9664;&#xFF08;-XX:+EliminateLocks&#xFF09;"></a>&#x9501;&#x6D88;&#x9664;&#xFF08;-XX:+EliminateLocks&#xFF09;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      var page_id = "java-object-header_and_lock";
+      var page_source = "_posts/java/java-object-header_and_lock.md";
+      var path = window.location.pathname;
+
+      // page_id first
+      if(page_id) {
+        path = page_id;
+      }
+
+      // issues label length limit
+      if(path.length >= 50){
+        path = page_source.replace("_posts/", "");
+      }
+
+      // console.log(path)
+
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: path, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

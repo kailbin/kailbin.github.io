@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="常用命令,git," />
+  <meta name="keywords" content="git,常用命令," />
 
 
 
@@ -78,7 +78,7 @@
 
 
 <meta name="description" content="全局设置 设置用户、邮箱$ git config --global user.name &amp;quot;&amp;lt;用户名&amp;gt;&amp;quot;$ git config --global user.email &amp;quot;&amp;lt;电子邮件&amp;gt;&amp;quot;  以下命令能让Git以彩色显示。$ git config --global color.ui auto">
-<meta name="keywords" content="常用命令,git">
+<meta name="keywords" content="git,常用命令">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git 常用命令">
 <meta property="og:url" content="http://blog.kail.xyz/post/2016-06-10/git-make-simple.html">
@@ -489,9 +489,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/常用命令/" rel="tag"># 常用命令</a>
-          
             <a href="/tags/git/" rel="tag"># git</a>
+          
+            <a href="/tags/常用命令/" rel="tag"># 常用命令</a>
           
         </div>
       
@@ -604,7 +604,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -615,7 +615,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -626,7 +626,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -878,9 +878,25 @@
 
     
       <script type="text/javascript">
+      var page_id = "";
+      var page_source = "_posts/git-make-simple.md";
+      var path = window.location.pathname;
+
+      // page_id first
+      if(page_id) {
+        path = page_id;
+      }
+
+      // issues label length limit
+      if(path.length >= 50){
+        path = page_source.replace("_posts/", "");
+      }
+
+      // console.log(path)
+
       function renderGitment(){
         var gitment = new Gitmint({
-            id: window.location.pathname, 
+            id: path, 
             owner: 'kailbin',
             repo: 'comments',
             

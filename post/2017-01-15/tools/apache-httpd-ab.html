@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="apache,常用命令,测试,ab," />
+  <meta name="keywords" content="常用命令,测试,apache,ab," />
 
 
 
@@ -78,14 +78,14 @@
 
 
 <meta name="description" content="ab 是 Apache HTTP 服务器性能基准工具(Apache HTTP server benchmarking tool)，可以进行简单的压力测试。">
-<meta name="keywords" content="apache,常用命令,测试,ab">
+<meta name="keywords" content="常用命令,测试,apache,ab">
 <meta property="og:type" content="article">
 <meta property="og:title" content="apache httpd ab">
-<meta property="og:url" content="http://blog.kail.xyz/post/2017-01-15/apache-httpd-ab.html">
+<meta property="og:url" content="http://blog.kail.xyz/post/2017-01-15/tools/apache-httpd-ab.html">
 <meta property="og:site_name" content="Mr.Kail&#39;s Blog">
 <meta property="og:description" content="ab 是 Apache HTTP 服务器性能基准工具(Apache HTTP server benchmarking tool)，可以进行简单的压力测试。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-16T13:21:39.470Z">
+<meta property="og:updated_time" content="2018-08-14T15:19:17.541Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="apache httpd ab">
 <meta name="twitter:description" content="ab 是 Apache HTTP 服务器性能基准工具(Apache HTTP server benchmarking tool)，可以进行简单的压力测试。">
@@ -118,7 +118,7 @@
 
 
 
-  <link rel="canonical" href="http://blog.kail.xyz/post/2017-01-15/apache-httpd-ab.html"/>
+  <link rel="canonical" href="http://blog.kail.xyz/post/2017-01-15/tools/apache-httpd-ab.html"/>
 
 
 
@@ -251,7 +251,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-15/apache-httpd-ab.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-15/tools/apache-httpd-ab.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="杨凯彬">
@@ -291,6 +291,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tools/" itemprop="url" rel="index">
+                    <span itemprop="name">Tools</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -299,8 +321,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/post/2017-01-15/apache-httpd-ab.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2017-01-15/apache-httpd-ab.html" itemprop="commentsCount"></span>
+                <a href="/post/2017-01-15/tools/apache-httpd-ab.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2017-01-15/tools/apache-httpd-ab.html" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -381,11 +403,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/apache/" rel="tag"># apache</a>
-          
             <a href="/tags/常用命令/" rel="tag"># 常用命令</a>
           
             <a href="/tags/测试/" rel="tag"># 测试</a>
+          
+            <a href="/tags/apache/" rel="tag"># apache</a>
           
             <a href="/tags/ab/" rel="tag"># ab</a>
           
@@ -410,7 +432,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/post/2017-02-05/embedded-mysql-in-java-with-connector-mxj.html" rel="prev" title="使用 MySQL Connector/MXJ 在 Java 中嵌入 MySQL 进行测试">
+              <a href="/post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html" rel="prev" title="使用 MySQL Connector/MXJ 在 Java 中嵌入 MySQL 进行测试">
                 使用 MySQL Connector/MXJ 在 Java 中嵌入 MySQL 进行测试 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -500,7 +522,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -511,7 +533,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -522,7 +544,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -774,9 +796,25 @@
 
     
       <script type="text/javascript">
+      var page_id = "";
+      var page_source = "_posts/tools/apache-httpd-ab.md";
+      var path = window.location.pathname;
+
+      // page_id first
+      if(page_id) {
+        path = page_id;
+      }
+
+      // issues label length limit
+      if(path.length >= 50){
+        path = page_source.replace("_posts/", "");
+      }
+
+      // console.log(path)
+
       function renderGitment(){
         var gitment = new Gitmint({
-            id: window.location.pathname, 
+            id: path, 
             owner: 'kailbin',
             repo: 'comments',
             

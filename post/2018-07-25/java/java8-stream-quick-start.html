@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Java 8 中的 Stream 是对集合（Collection）对象功能的增强，它专注于对集合进行各种便利、高效的聚合操作（aggregate operation），或者大批量数据操作 (bulk data operation)。 很多数据处理的场景不得不脱离 RDBMS，或者以底层返回的数据为基础进行更上层的数据统计。而以前 Java 的集合 API 中，仅仅有极少量的辅助型方法，更多的时候是">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java8 Stream 快速入门">
+<meta property="og:url" content="http://blog.kail.xyz/post/2018-07-25/java/java8-stream-quick-start.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="Java 8 中的 Stream 是对集合（Collection）对象功能的增强，它专注于对集合进行各种便利、高效的聚合操作（aggregate operation），或者大批量数据操作 (bulk data operation)。 很多数据处理的场景不得不脱离 RDBMS，或者以底层返回的数据为基础进行更上层的数据统计。而以前 Java 的集合 API 中，仅仅有极少量的辅助型方法，更多的时候是">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-14T15:19:17.539Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java8 Stream 快速入门">
+<meta name="twitter:description" content="Java 8 中的 Stream 是对集合（Collection）对象功能的增强，它专注于对集合进行各种便利、高效的聚合操作（aggregate operation），或者大批量数据操作 (bulk data operation)。 很多数据处理的场景不得不脱离 RDBMS，或者以底层返回的数据为基础进行更上层的数据统计。而以前 Java 的集合 API 中，仅仅有极少量的辅助型方法，更多的时候是">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2018-07-25/java/java8-stream-quick-start.html"/>
+
+
+
+
+
+  <title>Java8 Stream 快速入门 | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2018-07-25/java/java8-stream-quick-start.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Java8 Stream 快速入门</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T00:00:00+08:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2018-07-25/java/java8-stream-quick-start.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2018-07-25/java/java8-stream-quick-start.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Java 8 中的 <strong>Stream 是对集合（Collection）对象功能的增强</strong>，它专注于对集合进行各种便利、高效的<strong>聚合操作</strong>（aggregate operation），或者<strong>大批量数据操作</strong> (bulk data operation)。</p>
+<p>很多数据处理的场景不得不脱离 RDBMS，或者以底层返回的数据为基础进行更上层的数据统计。而以前 Java 的集合 API 中，仅仅有极少量的辅助型方法，更多的时候是程序员需要用 Iterator 来遍历集合，完成相关的聚合应用逻辑。这是一种远不够高效、笨拙的方法。</p>
+<p>Stream API 借助于 Lambda 表达式，极大的提高编程效率。同时它提供<strong>串行</strong>和<strong>并行</strong>两种模式进行汇聚操作，并发模式能够充分利用多核处理器的优势，使用 <strong>fork/join</strong> 并行方式来拆分任务和加速处理过程。</p>
+<a id="more"></a>
+<p>Stream 不是一种数据结构，并不保存数据，其更像一种高级的迭代器（Iterator），阮一峰老师的 <a href="http://www.ruanyifeng.com/blog/2015/07/monad.html" target="_blank" rel="noopener">图解 Monad</a> 会更有助于理解 Stream。</p>
+<h1 id="创建-Stream"><a href="#创建-Stream" class="headerlink" title="创建 Stream"></a>创建 Stream</h1><ul>
+<li>从 Stream 创建<ul>
+<li><code>Stream.of()</code><ul>
+<li><code>IntStream</code></li>
+<li><code>LongStream</code></li>
+<li><code>DoubleStream</code></li>
+</ul>
+</li>
+<li><code>Stream.builder().add().build()</code></li>
+<li>遍历1~3: <code>Stream.iterate(1, i -&gt; ++i).limit(3)</code></li>
+<li>连接两个Stream: <code>Stream.concat(Stream&lt;? extends T&gt; a, Stream&lt;? extends T&gt; b)</code></li>
+<li><code>Stream.empty()</code></li>
+</ul>
+</li>
+<li>从 Collection 和 数组 创建<ul>
+<li><code>collection.stream()</code></li>
+<li><code>collection.parallelStream()</code></li>
+<li><code>Arrays.stream(T array)</code></li>
+</ul>
+</li>
+<li>自己构建<ul>
+<li><code>java.util.Spliterator</code></li>
+</ul>
+</li>
+<li>其它<ul>
+<li><code>java.io.BufferedReader.lines()</code></li>
+<li><code>java.nio.file.Files.walk()</code></li>
+<li><code>Random.ints()</code></li>
+<li><code>BitSet.stream()</code></li>
+<li><code>Pattern.splitAsStream(java.lang.CharSequence)</code></li>
+<li><code>JarFile.stream()</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="操作类型"><a href="#操作类型" class="headerlink" title="操作类型"></a>操作类型</h1><h2 id="中间转换操作-Intermediate"><a href="#中间转换操作-Intermediate" class="headerlink" title="中间转换操作(Intermediate)"></a>中间转换操作(Intermediate)</h2><p>一个流可以后面跟随零个或多个 intermediate 操作。其目的主要是打开流，做出某种程度的数据映射/过滤，然后返回一个新的流，交给下一个操作使用。这类操作都是惰性化的（<code>lazy</code>），就是说，仅仅调用到这类方法，并没有真正开始流的遍历</p>
+<ul>
+<li>无状态操作<ul>
+<li><code>map</code>: 处理迭代过程中的每个元素，每个输入元素，都按照规则转换成为另外<strong>一个</strong>元素</li>
+<li><code>flatMap</code>: 与Map的区别在于可以把多维集合压平成另一个Stream进行输出，可以理解为嵌套循环处理，如：在每个字母后面追加<code>,</code>并打印 <code>Stream.of(&quot;Hello&quot;, &quot;World&quot;).flatMap(w -&gt; Stream.of(w.split(&quot;&quot;))).map(c -&gt; c + &#39;,&#39;).forEach(System.out::println);</code></li>
+<li><code>filter</code>: 如果返回 true ，元素被留下进行后续操作</li>
+<li><code>distinct</code>: 滤重</li>
+<li><code>peek</code>: 与 map 的不同在于其没有返回值，可以处理每个元素，但是结果不会传递下去</li>
+<li><code>skip</code>: 跳过前几个元素</li>
+<li><code>limit</code>: 限制只处理几个元素</li>
+<li><code>parallel</code>: 标记后续操作为并行处理</li>
+<li><code>sequential</code>: 标记后续操作为串行处理</li>
+<li><code>unordered</code>: 无序的流</li>
+</ul>
+</li>
+<li>有状态操作<ul>
+<li><code>sorted</code>: 排序，该操作会把并行流前后的无状态操作进行分割，降低并行性</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>一个操作可能会影响流的有序,比如<code>map</code>方法，它会用不同的值甚至类型替换流中的元素，所以输入元素的有序性已经变得没有意义了；但是对于<code>filter</code>方法来说，它只是丢弃掉一些值而已，输入元素的有序性还是保障的。</p>
+<p>对于串行流，流有序与否不会影响其性能，只是会影响确定性(determinism)，无序流在多次执行的时候结果可能是不一样的。对于并行流，去掉有序这个约束可能会提供性能，比如<code>distinct</code>、<code>groupingBy</code>这些聚合操作。</p>
+<p>–鸟窝 《<a href="http://colobu.com/2016/03/02/Java-Stream/#%E6%8E%92%E5%BA%8F_Ordering" target="_blank" rel="noopener">Java Stream 详解</a>》</p>
+</blockquote>
+<h2 id="Terminal-终止操作"><a href="#Terminal-终止操作" class="headerlink" title="Terminal 终止操作"></a>Terminal 终止操作</h2><p>一个流只能有一个 terminal 操作，当这个操作执行后，流就被使用“光”了，无法再被操作。所以这必定是流的最后一个操作。Terminal 操作的执行，才会真正开始流的遍历，并且会生成一个结果。</p>
+<ul>
+<li><code>forEach</code>: 遍历</li>
+<li><code>forEachOrdered</code>: 并不是排序后输出，而是在<code>parallel</code>情况下保证按照集合按照原始顺序输出， <code>forEach</code>在<code>parallel</code>无法保证顺序</li>
+<li><code>toArray</code>: 结果存入数组</li>
+<li><code>collect</code>: 结果存入集合</li>
+<li><code>iterator</code>: 返回迭代器</li>
+<li><code>min</code>: 求最小值</li>
+<li><code>max</code>: 求最大值</li>
+<li><code>count</code>: 计数</li>
+<li><code>reduce</code>(<code>min</code>/<code>max</code>/<code>count</code>/… 都是特殊的 reduce)<ul>
+<li>计数: <code>Stream.of(1, 2, 3).reduce(0, (reslut, b) -&gt; ++reslut);</code></li>
+<li>求最小: <code>Stream.of(1, 2, 3).reduce(Integer.MAX_VALUE, Math::min);</code></li>
+<li>求最大: <code>Stream.of(1, 2, 3).reduce(Integer.MIN_VALUE, Math::max);</code></li>
+<li>求和: <code>Stream.of(1, 2, 3).reduce(0, (reslut, b) -&gt; reslut + b);</code></li>
+<li>求平均: <code>DoubleStream.of(1, 2, 3).reduce(0, (reslut, b) -&gt; (reslut + b / 2));</code></li>
+<li>取第一: <code>Stream.of(1, 2, 3).reduce((reslut, b) -&gt; reslut).get();</code></li>
+<li>取最后: <code>Stream.of(1, 2, 3).reduce((reslut, b) -&gt; b).get();</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="short-circuiting-短路操作"><a href="#short-circuiting-短路操作" class="headerlink" title="short-circuiting 短路操作"></a>short-circuiting 短路操作</h2><p>当 Stream 是一个无限大的集合的时候，就需要一个短路操作来使Stream 返回一个有限的结果集。</p>
+<ul>
+<li><code>anyMatch</code>: 只要有一个元素符合条件就返回 true</li>
+<li><code>allMatch</code>: 所有元素读符合条件才返回true</li>
+<li><code>noneMatch</code>: 所有元素都不符合条件才返回true</li>
+<li><code>findFirst</code>: 获取第一个元素</li>
+<li><code>findAny</code>: 串行的情况还是返回第一个，并行的情况就不确定了，可能返回任意一个</li>
+<li><code>limit</code>: 限制只处理几个元素</li>
+</ul>
+<h1 id="收集器（Collectors）"><a href="#收集器（Collectors）" class="headerlink" title="收集器（Collectors）"></a>收集器（Collectors）</h1><p>辅助对象，便于演示<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Long id;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(Long id, String name, Integer age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Person&#123;"</span> +</span><br><span class="line">                <span class="string">"id="</span> + id +</span><br><span class="line">                <span class="string">", name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", age="</span> + age +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Stream<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;Person&gt; personStream = Stream.of(</span><br><span class="line">        <span class="keyword">new</span> Person(<span class="number">1L</span>, <span class="string">"张三"</span>, <span class="number">18</span>),</span><br><span class="line">        <span class="keyword">new</span> Person(<span class="number">2L</span>, <span class="string">"张六"</span>, <span class="number">18</span>),</span><br><span class="line">        <span class="keyword">new</span> Person(<span class="number">3L</span>, <span class="string">"李四"</span>, <span class="number">23</span>),</span><br><span class="line">        <span class="keyword">new</span> Person(<span class="number">4L</span>, <span class="string">"赵五"</span>, <span class="number">26</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<h2 id="常规用法"><a href="#常规用法" class="headerlink" title="常规用法"></a>常规用法</h2><ul>
+<li><code>Collectors.toList()</code>: 结果存入 <code>ArrayList</code></li>
+<li><code>Collectors.toSet()</code>: 结果存入 <code>HashSet</code></li>
+<li><code>personStream.map(p -&gt; p.name).collect(Collectors.joining(&quot;,&quot;))</code>: 姓名以<code>,</code>分割</li>
+<li><code>Collectors.counting()</code>: 计数</li>
+<li><code>Collectors.averagingInt(p -&gt; p.age)</code>: 求平均年龄<ul>
+<li><code>averagingInt</code></li>
+<li><code>averagingLong</code></li>
+<li><code>averagingDouble</code></li>
+</ul>
+</li>
+<li><code>Collectors.summingInt(p -&gt; p.age)</code>: 求和，等于<code>mapToInt(p -&gt; p.age).sum()</code><ul>
+<li><code>summingInt</code></li>
+<li><code>summingLong</code></li>
+<li><code>summingDouble</code></li>
+</ul>
+</li>
+<li><code>Collectors.summarizingInt(i -&gt; i.age)</code>: 统计(<code>count</code>,<code>sum</code>,<code>min</code>,<code>average</code>,<code>max</code>)<ul>
+<li><code>summarizingInt</code></li>
+<li><code>summarizingLong</code></li>
+<li><code>summarizingDouble</code></li>
+</ul>
+</li>
+<li><code>Collectors.maxBy(Comparator.comparing(p -&gt; p.age))</code>: 年龄最大的人</li>
+<li><code>Collectors.minBy(Comparator.comparing(p -&gt; p.age))</code>: 年龄最小的人</li>
+</ul>
+<h2 id="toCollection"><a href="#toCollection" class="headerlink" title="toCollection"></a>toCollection</h2><ul>
+<li><code>Collectors.toCollection(LinkedHashSet::new)</code></li>
+<li><code>Collectors.toCollection(TreeSet::new)</code></li>
+<li>…</li>
+</ul>
+<h2 id="toMap-toConcurrentMap"><a href="#toMap-toConcurrentMap" class="headerlink" title="toMap / toConcurrentMap"></a>toMap / toConcurrentMap</h2><ol>
+<li>Key 是 age，Value 是 name，Key重复的情况下 Value用 <code>,</code> 分割</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &#123;18=张三,张六, 23=李四, 26=赵五&#125;</span></span><br><span class="line">personStream.collect(Collectors.toMap(</span><br><span class="line">        p -&gt; p.age,</span><br><span class="line">        p -&gt; p.name,</span><br><span class="line">        (result, current) -&gt; result + <span class="string">","</span> + current</span><br><span class="line">));</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>获取ID与对象的映射关系</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Long, Person&gt; idPersonMapping = personStream.collect(Collectors.toMap(</span><br><span class="line">        p -&gt; p.id, </span><br><span class="line">        p -&gt; p</span><br><span class="line">));</span><br></pre></td></tr></table></figure>
+<p>如果 Key 重复会报异常 <code>java.lang.IllegalStateException: Duplicate key xxx</code></p>
+<h2 id="分组-groupingBy-groupingByConcurrent"><a href="#分组-groupingBy-groupingByConcurrent" class="headerlink" title="分组 (groupingBy / groupingByConcurrent)"></a>分组 (groupingBy / groupingByConcurrent)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Map&lt;Integer, List&lt;Person&gt;&gt; 按照性别分组</span></span><br><span class="line">personStream.collect(Collectors.groupingBy(p -&gt; p.age))</span><br><span class="line"></span><br><span class="line"><span class="comment">// Map&lt;String, List&lt;Person&gt;&gt; 多字段分组</span></span><br><span class="line">personStream.collect(Collectors.groupingBy(p -&gt; p.id + p.name))</span><br></pre></td></tr></table></figure>
+<h2 id="分区（partitioningBy）"><a href="#分区（partitioningBy）" class="headerlink" title="分区（partitioningBy）"></a>分区（partitioningBy）</h2><p>满足条件的分为一组，不满足条件的分为另外一组<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Map&lt;Boolean, List&lt;Person&gt;&gt; 大于20分为一组，小于等于20的分为另外一组</span></span><br><span class="line">personStream.collect(Collectors.partitioningBy(p -&gt; p.age &gt; <span class="number">20</span>))</span><br></pre></td></tr></table></figure></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Collector&lt;Person, StringJoiner, String&gt; personNameCollector =</span><br><span class="line">    Collector.of(</span><br><span class="line">            () -&gt; <span class="keyword">new</span> StringJoiner(<span class="string">" | "</span>), <span class="comment">// supplier</span></span><br><span class="line">            (j, p) -&gt; j.add(p.name),       <span class="comment">// accumulator</span></span><br><span class="line">            StringJoiner::merge,           <span class="comment">// combiner</span></span><br><span class="line">            StringJoiner::toString         <span class="comment">// finisher</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">String names = personStream.collect(personNameCollector);</span><br><span class="line"></span><br><span class="line">System.out.println(names);  <span class="comment">// 张三 | 张六 | 李四 | 赵五</span></span><br></pre></td></tr></table></figure>
+<h1 id="Read-More"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</h1><ul>
+<li><a href="https://www.ibm.com/developerworks/cn/java/j-lo-java8streamapi/" target="_blank" rel="noopener">Java 8 中的 Streams API 详解</a></li>
+<li><a href="https://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/" target="_blank" rel="noopener">Java 8 Stream Tutorial</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2018-07-15/java/use-sigar-monitor-system.html" rel="next" title="使用 SIGAR 获取操作系统信息">
+                <i class="fa fa-chevron-left"></i> 使用 SIGAR 获取操作系统信息
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2018-08-01/java/java-object-header_and_lock.html" rel="prev" title="Java Object Header 和 锁">
+                Java Object Header 和 锁 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">71</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建-Stream"><span class="nav-text"><a href="#&#x521B;&#x5EFA;-Stream" class="headerlink" title="&#x521B;&#x5EFA; Stream"></a>&#x521B;&#x5EFA; Stream</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作类型"><span class="nav-text"><a href="#&#x64CD;&#x4F5C;&#x7C7B;&#x578B;" class="headerlink" title="&#x64CD;&#x4F5C;&#x7C7B;&#x578B;"></a>&#x64CD;&#x4F5C;&#x7C7B;&#x578B;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#中间转换操作-Intermediate"><span class="nav-text"><a href="#&#x4E2D;&#x95F4;&#x8F6C;&#x6362;&#x64CD;&#x4F5C;-Intermediate" class="headerlink" title="&#x4E2D;&#x95F4;&#x8F6C;&#x6362;&#x64CD;&#x4F5C;(Intermediate)"></a>&#x4E2D;&#x95F4;&#x8F6C;&#x6362;&#x64CD;&#x4F5C;(Intermediate)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Terminal-终止操作"><span class="nav-text"><a href="#Terminal-&#x7EC8;&#x6B62;&#x64CD;&#x4F5C;" class="headerlink" title="Terminal &#x7EC8;&#x6B62;&#x64CD;&#x4F5C;"></a>Terminal &#x7EC8;&#x6B62;&#x64CD;&#x4F5C;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#short-circuiting-短路操作"><span class="nav-text"><a href="#short-circuiting-&#x77ED;&#x8DEF;&#x64CD;&#x4F5C;" class="headerlink" title="short-circuiting &#x77ED;&#x8DEF;&#x64CD;&#x4F5C;"></a>short-circuiting &#x77ED;&#x8DEF;&#x64CD;&#x4F5C;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#收集器（Collectors）"><span class="nav-text"><a href="#&#x6536;&#x96C6;&#x5668;&#xFF08;Collectors&#xFF09;" class="headerlink" title="&#x6536;&#x96C6;&#x5668;&#xFF08;Collectors&#xFF09;"></a>&#x6536;&#x96C6;&#x5668;&#xFF08;Collectors&#xFF09;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常规用法"><span class="nav-text"><a href="#&#x5E38;&#x89C4;&#x7528;&#x6CD5;" class="headerlink" title="&#x5E38;&#x89C4;&#x7528;&#x6CD5;"></a>&#x5E38;&#x89C4;&#x7528;&#x6CD5;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toCollection"><span class="nav-text"><a href="#toCollection" class="headerlink" title="toCollection"></a>toCollection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toMap-toConcurrentMap"><span class="nav-text"><a href="#toMap-toConcurrentMap" class="headerlink" title="toMap / toConcurrentMap"></a>toMap / toConcurrentMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组-groupingBy-groupingByConcurrent"><span class="nav-text"><a href="#&#x5206;&#x7EC4;-groupingBy-groupingByConcurrent" class="headerlink" title="&#x5206;&#x7EC4; (groupingBy / groupingByConcurrent)"></a>&#x5206;&#x7EC4; (groupingBy / groupingByConcurrent)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分区（partitioningBy）"><span class="nav-text"><a href="#&#x5206;&#x533A;&#xFF08;partitioningBy&#xFF09;" class="headerlink" title="&#x5206;&#x533A;&#xFF08;partitioningBy&#xFF09;"></a>&#x5206;&#x533A;&#xFF08;partitioningBy&#xFF09;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-text"><a href="#&#x5176;&#x4ED6;" class="headerlink" title="&#x5176;&#x4ED6;"></a>&#x5176;&#x4ED6;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Read-More"><span class="nav-text"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      var page_id = "java8-stream-quick-start";
+      var page_source = "_posts/java/java8-stream-quick-start.md";
+      var path = window.location.pathname;
+
+      // page_id first
+      if(page_id) {
+        path = page_id;
+      }
+
+      // issues label length limit
+      if(path.length >= 50){
+        path = page_source.replace("_posts/", "");
+      }
+
+      // console.log(path)
+
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: path, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
