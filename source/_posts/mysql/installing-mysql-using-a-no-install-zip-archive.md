@@ -110,3 +110,4 @@ Version: '5.7.13'  socket: ''  port: 3307
 > 详请查看官网文档：  
 >
 > [Installing MySQL on Microsoft Windows Using a noinstall Zip Archive](http://dev.mysql.com/doc/refman/5.7/en/windows-install-archive.html)
+> [在线生成 my.ini / my.conf](https://tools.percona.com/wizard)
