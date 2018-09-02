@@ -250,6 +250,282 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-09-15/git-source-install.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/post/2016-09-15/git-source-install.html" itemprop="url">Git 源码方式安装</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-15T00:00:00+08:00">
+                2016-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>默认使用 yum 或者 apt 安装Git 的时候，版本会比较老，所以这里使用源码方式进行安装。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/post/2016-09-15/git-source-install.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-09-10/git-recovery-and-restore.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/post/2016-09-10/git-recovery-and-restore.html" itemprop="url">Git 恢复和还原</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-10T00:00:00+08:00">
+                2016-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="删除未被跟踪的文件"><a href="#删除未被跟踪的文件" class="headerlink" title="删除未被跟踪的文件"></a>删除未被跟踪的文件</h3><p><code>$ git clean [param]</code></p>
+<pre><code>`-n` 仅显示需要删除的文件，并不进行删除   
+`-d` 删除文件和目录  
+`-f` 强制删除  
+`-x` 删除忽略和为忽略的文件  
+`-X` 仅删除忽略的文件  
+</code></pre><p>显示哪些文件可以删除 ： <code>$ git clean -n</code><br>强制删除文件夹和文件 ： <code>$ git clean -dfx</code></p>
+<h3 id="检出一个分支上的某一次提交"><a href="#检出一个分支上的某一次提交" class="headerlink" title="检出一个分支上的某一次提交"></a>检出一个分支上的某一次提交</h3><p><code>$ git cherry-pick [commit_hash]</code></p>
+<p>cherry-pick比较好的使用场景是在<code>一个分支上想要另一个分支的单独的某个特性</code>。这个命令经常会引起冲突，所以需要小心使用。</p>
+<h3 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h3><p><code>$ git checkout -- &lt;file&gt;</code> 撤销对工作区修改<br><code>$ git reset HEAD -- &lt;file&gt;</code> 这个命令仅改变暂存区，并不改变工作区，这意味着<code>在无任何其他操作的情况下，工作区中的实际文件同该命令运行之前无任何变化</code>   </p>
+<h3 id="暂存"><a href="#暂存" class="headerlink" title="暂存"></a>暂存</h3><p><code>$ git stash</code>  备份当前的工作区的内容，将当前的工作区内容保存到Git栈中<br><code>$ git stash pop</code>  从Git栈中读取最近一次保存的内容，恢复工作区的相关内容<br><code>$ git stash list</code>  显示Git栈内的所有备份<br><code>$ git stash clear</code>  清空Git栈  </p>
+<h3 id="不保留提交记录，还原到某次提交"><a href="#不保留提交记录，还原到某次提交" class="headerlink" title="不保留提交记录，还原到某次提交"></a>不保留提交记录，还原到某次提交</h3><ul>
+<li><code>$ git reset –-hard [commit_hash]</code><br>工作区和暂存区都会恢复到指定的版本  </li>
+</ul>
+<ul>
+<li><code>$ git reset -–mixed [commit_hash]</code><br>此为默认方式，只保留源码，回退暂存区信息<br>此时再执行 <code>$ git checkout -- .</code>，就相当于执行了<code>–-hard</code>模式。<br>相当于<code>-–mixed</code> 之后那些修改文件还没有纳入版本管理，不想恢复了可以再 <code>add</code> 、<code>commit</code></li>
+</ul>
+<ul>
+<li><code>$ git reset -–soft [commit_hash]</code><br>回退到某个版本，只回退了本地仓库的信息，不会恢复暂存区信息。<br>此时再执行<code>$ git reset HEAD</code> 和 <code>git checkout -- .</code>，就相当于执行了<code>–-hard</code>模式<br>相当于<code>-–soft</code> 之后那些修改文件已经纳入版本管理，但是还没有提交到本次仓库，不想恢复了可以直接<code>commit</code></li>
+</ul>
+<p>还原之后，由于本地版本落后于远端分支版本，push 的时候需要加上 -f 参数强制push，强制push有可能会把别的提交也覆盖掉，造成代码丢失，所有不建议用强制push。<br>可以在本地当前的版本上再建一个分支，推送到远端分支。</p>
+<h3 id="恢复产生新的提交"><a href="#恢复产生新的提交" class="headerlink" title="恢复产生新的提交"></a>恢复产生新的提交</h3><p><code>$ git revert [commit_hash]</code><br>恢复到某次提交之前的状态，并产生一次新提交，保留原来的提交记录。</p>
+<p>当·revert·到的那次提交是合并产生的时候，会·revert·失败，并且提示需要加上一个·-m·参数，因为该提交有两个父提交，只要指定恢复后要保留那个父提交。<br><code>$ git revert -m 1 [commit_hash]</code><br>如果是从其他分支合并到的主干分支，<code>-m 1</code>即是保留主干分支信息。这样操作也会产生一次新的提交，这时候由于·主干的历史中还保留的有合并之前的历史，所有再合并的时候就无法进行合并了·。</p>
+<blockquote>
+<p>Undoing Merges : <a href="https://git-scm.com/blog/2010/03/02/undoing-merges.html" target="_blank" rel="noopener">https://git-scm.com/blog/2010/03/02/undoing-merges.html</a></p>
+</blockquote>
+<h3 id="查看丢失的提交记录并还原"><a href="#查看丢失的提交记录并还原" class="headerlink" title="查看丢失的提交记录并还原"></a>查看丢失的提交记录并还原</h3><p><code>$ git reflog</code> 查看你所有的提交记录，包含<code>reset</code>后丢失的提交</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">6517ed3 HEAD@&#123;1&#125;: commit message                                                                                                                                                                                                                                      </span><br><span class="line">e836a60 HEAD@&#123;2&#125;: commit message   </span><br><span class="line">7827000 HEAD@&#123;3&#125;: commit message   </span><br><span class="line">……</span><br><span class="line">8aff630 HEAD@&#123;n&#125;: commit message</span><br></pre></td></tr></table></figure>
+<p><code>$ git show [commit_hash]</code> 查看提交的内容    </p>
+<p><code>$ git merge [commit_hash]</code> 合并其中一次提交   </p>
+<p>尽管reflog是一种检查丢失提交的方法，大型的库里却不太实用。这个时候，应该用fsck（文件系统检查）命令。</p>
+<p><code>$ git fsck --lost-found</code></p>
+<p>git fsck跟reflog命令相比有一个优点。假设你删除了一个远程分支，然后clone了这个库。用fsck命令你可以找到并且恢复这个删除的远程分支。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-08-24/design-pattern.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1975,7 +2251,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">74</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1986,7 +2262,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1997,7 +2273,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
