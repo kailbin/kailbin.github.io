@@ -5,7 +5,7 @@ date: 2016-12-16
 desc: Redis 安装部署
 
 tags: [Redis,软件安装]
-
+categories: [Redis]
 ---
 
 

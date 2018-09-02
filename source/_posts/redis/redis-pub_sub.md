@@ -5,7 +5,7 @@ date: 2016-12-18
 desc: Redis Pub Sub,发布,订阅
 
 tags: [Redis]
-
+categories: [Redis]
 ---
 
 　Redis的 `发布/订阅` 功能可用于构建即时通信应用，比如网络聊天室、实时广播、实时提醒等。
