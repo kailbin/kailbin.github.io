@@ -5,7 +5,7 @@ desc:  婚礼
 categories: Other
 ---------------
 <center>
-    <image alt='婚纱照' src='//pic01.kail.xyz/images/other/wedding/1.jpg' style='width:260px; border: 3px solid #666;margin-bottom: -20px;'>
+    <image alt='婚纱照' src='/images/other/wedding/1.jpg' style='width:260px; border: 3px solid #666;margin-bottom: -20px;'>
     <sup>今天是我们的婚礼</sup>
 </center>
 

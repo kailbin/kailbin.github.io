@@ -128,7 +128,7 @@ public class StartMain {
 
 如下图所示，可以查看 MBean 中定义的属性，点击 Value 值即可编辑。
 
-![jvisualVM 设置属性](//pic01.kail.xyz/images/java5-jmx-remote-monitor-and-mbean/1.png)
+![jvisualVM 设置属性](/images/java/java5-jmx-remote-monitor-and-mbean/1.png)
 
 ## 运行操作
 
@@ -136,7 +136,7 @@ public class StartMain {
 
 运行之后在 StartMain 控制台查看输出。效果跟直接调用本地方式是一样的。
 
-![jvisualVM 运行操作](//pic01.kail.xyz/images/java5-jmx-remote-monitor-and-mbean/2.png)
+![jvisualVM 运行操作](/images/java/java5-jmx-remote-monitor-and-mbean/2.png)
 
 
 

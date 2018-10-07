@@ -50,7 +50,7 @@ $ cat .ssh/id_rsa.pub
 ```
 把公钥告诉git托管服务(`码云`、`github`)即可。如下图所示:
 
-![github 免密码登陆](//pic01.kail.xyz/images/ssh-no-password/1.jpg)
+![github 免密码登陆](/images/linux/ssh-no-password/1.jpg)
 
 不过目前好像不太建议这种方式，OSC的说明是：  
 
