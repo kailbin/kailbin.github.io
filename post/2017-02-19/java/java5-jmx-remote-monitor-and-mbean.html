@@ -85,13 +85,13 @@
 <meta property="og:site_name" content="Mr.Kail&#39;s Blog">
 <meta property="og:description" content="JMX(Java Management Extensions) 是 Java管理扩展，MBean(Managed Beans) 是 被管理的Beans。  一个MBean是一个被管理的Java对象，有点类似于JavaBean，一个设备、一个应用或者任何资源都可以被表示为MBean，MBean会对外暴露一个接口，这个接口可以读取或者写入一些对象中的属性。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://pic01.kail.xyz/images/java5-jmx-remote-monitor-and-mbean/1.png">
-<meta property="og:image" content="http://pic01.kail.xyz/images/java5-jmx-remote-monitor-and-mbean/2.png">
-<meta property="og:updated_time" content="2018-06-16T13:21:39.479Z">
+<meta property="og:image" content="http://blog.kail.xyz/images/java/java5-jmx-remote-monitor-and-mbean/1.png">
+<meta property="og:image" content="http://blog.kail.xyz/images/java/java5-jmx-remote-monitor-and-mbean/2.png">
+<meta property="og:updated_time" content="2018-10-07T15:29:59.948Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JMX 远程监控 与 MBean">
 <meta name="twitter:description" content="JMX(Java Management Extensions) 是 Java管理扩展，MBean(Managed Beans) 是 被管理的Beans。  一个MBean是一个被管理的Java对象，有点类似于JavaBean，一个设备、一个应用或者任何资源都可以被表示为MBean，MBean会对外暴露一个接口，这个接口可以读取或者写入一些对象中的属性。">
-<meta name="twitter:image" content="http://pic01.kail.xyz/images/java5-jmx-remote-monitor-and-mbean/1.png">
+<meta name="twitter:image" content="http://blog.kail.xyz/images/java/java5-jmx-remote-monitor-and-mbean/1.png">
 
 
 
@@ -368,10 +368,10 @@
 <h2 id="注册-MBean"><a href="#注册-MBean" class="headerlink" title="注册 MBean"></a>注册 MBean</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> xyz.kail.blog.jmx;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.management.MBeanServer;</span><br><span class="line"><span class="keyword">import</span> javax.management.ObjectName;</span><br><span class="line"><span class="keyword">import</span> java.lang.management.ManagementFactory;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by kail on 2017/2/19.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StartMain</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取 MBeanServer</span></span><br><span class="line">        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 注册 MBean</span></span><br><span class="line">        mbs.registerMBean(<span class="keyword">new</span> HelloWorld(), <span class="keyword">new</span> ObjectName(HelloWorldMBean.TYPE_HELLO_WORLD));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 结束程序的时候在控制台随便输入点什么</span></span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="jvisualVM-中的-MBean"><a href="#jvisualVM-中的-MBean" class="headerlink" title="jvisualVM 中的 MBean"></a>jvisualVM 中的 MBean</h1><p><code>jvisualVM</code> 默认没有 MBean 的 tab，不过 <code>jvisualVM</code> 可以安装插件，选择 菜单 &gt; 工具 &gt; 插件 &gt; 可用插件 &gt; VisualVM-MBeans &gt; 安装即可。</p>
 <h2 id="设置属性"><a href="#设置属性" class="headerlink" title="设置属性"></a>设置属性</h2><p>如下图所示，可以查看 MBean 中定义的属性，点击 Value 值即可编辑。</p>
-<p><img src="//pic01.kail.xyz/images/java5-jmx-remote-monitor-and-mbean/1.png" alt="jvisualVM 设置属性"></p>
+<p><img src="/images/java/java5-jmx-remote-monitor-and-mbean/1.png" alt="jvisualVM 设置属性"></p>
 <h2 id="运行操作"><a href="#运行操作" class="headerlink" title="运行操作"></a>运行操作</h2><p>如下图所示，MBean 中定义的方法名是一个按钮，点击即可运行。</p>
 <p>运行之后在 StartMain 控制台查看输出。效果跟直接调用本地方式是一样的。</p>
-<p><img src="//pic01.kail.xyz/images/java5-jmx-remote-monitor-and-mbean/2.png" alt="jvisualVM 运行操作"></p>
+<p><img src="/images/java/java5-jmx-remote-monitor-and-mbean/2.png" alt="jvisualVM 运行操作"></p>
 <h1 id="开启远程监控"><a href="#开启远程监控" class="headerlink" title="开启远程监控"></a>开启远程监控</h1><p>开启之后，可以用 <code>jconsole</code> 或 <code>jvisualVM</code> 等，在本地 通过JMX的方式 对远程应用进行监控和分析，以下是无认证方式：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-Dcom.sun.management.jmxremote=true             </span><br><span class="line">-Dcom.sun.management.jmxremote.port=&lt;port&gt;              # 监控端口</span><br><span class="line">-Dcom.sun.management.jmxremote.ssl=false                </span><br><span class="line">-Dcom.sun.management.jmxremote.authenticate=false</span><br></pre></td></tr></table></figure>
 <p>添加到远程应用的 JVM 启动参数上即可。</p>
