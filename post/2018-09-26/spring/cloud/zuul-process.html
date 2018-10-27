@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring Cloud," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="从 ZuulServletFilter 或 ZuulServlet 可以看出 Zuul 的整体执行流程（坐标：com.netflix.zuul:zuul-core:1.3.1）。">
+<meta name="keywords" content="Spring Cloud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zuul 处理流程">
+<meta property="og:url" content="http://blog.kail.xyz/post/2018-09-26/spring/cloud/zuul-process.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="从 ZuulServletFilter 或 ZuulServlet 可以看出 Zuul 的整体执行流程（坐标：com.netflix.zuul:zuul-core:1.3.1）。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-10-08T14:37:50.121Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zuul 处理流程">
+<meta name="twitter:description" content="从 ZuulServletFilter 或 ZuulServlet 可以看出 Zuul 的整体执行流程（坐标：com.netflix.zuul:zuul-core:1.3.1）。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2018-09-26/spring/cloud/zuul-process.html"/>
+
+
+
+
+
+  <title>Zuul 处理流程 | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2018-09-26/spring/cloud/zuul-process.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Zuul 处理流程</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-26T00:00:00+08:00">
+                2018-09-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring-Cloud/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring Cloud</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2018-09-26/spring/cloud/zuul-process.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2018-09-26/spring/cloud/zuul-process.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从 <code>ZuulServletFilter</code> 或 <code>ZuulServlet</code> 可以看出 Zuul 的整体执行流程（坐标：<code>com.netflix.zuul:zuul-core:1.3.1</code>）。</p>
+<a id="more"></a>
+<h1 id="ZuulServlet"><a href="#ZuulServlet" class="headerlink" title="ZuulServlet"></a>ZuulServlet</h1><p>Zuul 官方示例 和 Spring Cloud Zuul 都是通过 <code>Servlet</code> 的形式而不是 <code>Servlet Filter</code> 的形式进行启动的，以下也以 Servlet 的流程举例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        init((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);</span><br><span class="line"></span><br><span class="line">        RequestContext context = RequestContext.getCurrentContext();</span><br><span class="line">        <span class="comment">// 把这个请求标记为 Zuul 引擎处理</span></span><br><span class="line">        context.setZuulEngineRan();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// per</span></span><br><span class="line">            preRoute();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">            error(e); <span class="comment">// errooooooooooooor</span></span><br><span class="line">            postRoute(); <span class="comment">// !!!</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// route</span></span><br><span class="line">            route();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">            error(e); <span class="comment">// errooooooooooooor</span></span><br><span class="line">            postRoute(); <span class="comment">// !!!</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// post</span></span><br><span class="line">            postRoute();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">            error(e); <span class="comment">// errooooooooooooor</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">        <span class="comment">// errooooooooooooor</span></span><br><span class="line">        error(<span class="keyword">new</span> ZuulException(e, <span class="number">500</span>, <span class="string">"UNHANDLED_EXCEPTION_"</span> + e.getClass().getName()));</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        RequestContext.getCurrentContext().unset();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Zuul-过滤器的执行流程"><a href="#Zuul-过滤器的执行流程" class="headerlink" title="Zuul 过滤器的执行流程"></a>Zuul 过滤器的执行流程</h1><h2 id="FilterProcessor-runFilters"><a href="#FilterProcessor-runFilters" class="headerlink" title="FilterProcessor # runFilters"></a>FilterProcessor # runFilters</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">runFilters</span><span class="params">(String sType)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 从 Zuul FilterRegistry 中获取所有指定类型的过滤器，按照 filterOrder 正序排序</span></span><br><span class="line">    List&lt;ZuulFilter&gt; list = FilterLoader.getInstance().getFiltersByType(sType);</span><br><span class="line">    <span class="keyword">if</span> (list != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; list.size(); i++) &#123;</span><br><span class="line">            ZuulFilter zuulFilter = list.get(i);</span><br><span class="line">            <span class="comment">// FilterProcessor # processZuulFilter</span></span><br><span class="line">            <span class="comment">// 遍历指定类型的过滤器(如：所有的 per) 一个一个执行</span></span><br><span class="line">            Object result = processZuulFilter(zuulFilter);</span><br><span class="line">            <span class="keyword">if</span> (result != <span class="keyword">null</span> &amp;&amp; result <span class="keyword">instanceof</span> Boolean) &#123;</span><br><span class="line">                bResult |= ((Boolean) result);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bResult;</span><br></pre></td></tr></table></figure>
+<h2 id="FilterProcessor-processZuulFilter"><a href="#FilterProcessor-processZuulFilter" class="headerlink" title="FilterProcessor # processZuulFilter"></a>FilterProcessor # processZuulFilter</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">processZuulFilter</span><span class="params">(ZuulFilter filter)</span> <span class="keyword">throws</span> ZuulException </span>&#123;</span><br><span class="line">	...</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Throwable t = <span class="keyword">null</span>;</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// ZuulFilter # runFilter</span></span><br><span class="line">        ZuulFilterResult result = filter.runFilter();</span><br><span class="line">        ExecutionStatus s = result.getStatus();</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// 根据 过滤器的执行状态，记录概要到上下文</span></span><br><span class="line">        <span class="keyword">switch</span> (s) &#123;</span><br><span class="line">            <span class="keyword">case</span> FAILED:</span><br><span class="line">                <span class="comment">// 如果执行失败，保存异常对象</span></span><br><span class="line">                t = result.getException();</span><br><span class="line">                ctx.addFilterExecutionSummary(filterName, ExecutionStatus.FAILED.name(), execTime);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> SUCCESS:</span><br><span class="line">                o = result.getResult();</span><br><span class="line">                ctx.addFilterExecutionSummary(filterName, ExecutionStatus.SUCCESS.name(), execTime);</span><br><span class="line">                ...</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">	</span><br><span class="line">        <span class="comment">// 如果有异常 抛出异样</span></span><br><span class="line">        <span class="keyword">if</span> (t != <span class="keyword">null</span>) <span class="keyword">throw</span> t;</span><br><span class="line"></span><br><span class="line">        usageNotifier.notify(filter, s);</span><br><span class="line">        <span class="keyword">return</span> o;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">        <span class="comment">// 把异常包装成 ZuulException 抛出</span></span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ZuulFilter-runFilter"><a href="#ZuulFilter-runFilter" class="headerlink" title="ZuulFilter # runFilter"></a>ZuulFilter # runFilter</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ZuulFilterResult <span class="title">runFilter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ZuulFilterResult zr = <span class="keyword">new</span> ZuulFilterResult();</span><br><span class="line">    <span class="comment">// Filter 不可用，直接返回 zr</span></span><br><span class="line">    <span class="keyword">if</span> (!isFilterDisabled()) &#123;</span><br><span class="line">        <span class="comment">// Filter 不应该执行，标记 状态为 SKIPPED 然后返回</span></span><br><span class="line">        <span class="keyword">if</span> (shouldFilter()) &#123;</span><br><span class="line">            Tracer t = TracerFactory.instance().startMicroTracer(<span class="string">"ZUUL::"</span> + <span class="keyword">this</span>.getClass().getSimpleName());</span><br><span class="line">            <span class="comment">// 执行 Filter run() 方法，根据是否抛出异常，标记为成功或者失败状态</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Object res = run();</span><br><span class="line">                <span class="comment">// 标记成功状态</span></span><br><span class="line">                zr = <span class="keyword">new</span> ZuulFilterResult(res, ExecutionStatus.SUCCESS);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">                t.setName(<span class="string">"ZUUL::"</span> + <span class="keyword">this</span>.getClass().getSimpleName() + <span class="string">" failed"</span>);</span><br><span class="line">                <span class="comment">// 标记失败状态</span></span><br><span class="line">                zr = <span class="keyword">new</span> ZuulFilterResult(ExecutionStatus.FAILED);</span><br><span class="line">                zr.setException(e);</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                t.stopAndLog();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            zr = <span class="keyword">new</span> ZuulFilterResult(ExecutionStatus.SKIPPED);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> zr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="如何中断-Zuul-过滤流程"><a href="#如何中断-Zuul-过滤流程" class="headerlink" title="如何中断 Zuul 过滤流程"></a>如何中断 Zuul 过滤流程</h1><h2 id="抛异常"><a href="#抛异常" class="headerlink" title="抛异常"></a>抛异常</h2><p>从上面 Zuul 的执行流程可以看出，<strong>抛异常是可以终止 同一个类型 的过滤器执行的</strong>，因为在 <code>FilterProcessor # runFilters</code> 循环执行某个指定类型的过滤器的时候，并没有捕捉异常，这时候如果有异常，循环就直接终止了。</p>
+<h2 id="ctx-setSendZuulResponse-false"><a href="#ctx-setSendZuulResponse-false" class="headerlink" title="ctx.setSendZuulResponse(false);"></a>ctx.setSendZuulResponse(false);</h2><p>但是从 Zuul Filter 的整个生命周期(<code>ZuulServlet</code>)来看，在 <code>pre</code> 和 <code>route</code> 这两个阶段 抛异常， <code>post</code> 类型的过滤器，仍然会执行。从 <code>ZuulFilter # runFilter</code> 中可以看出，除了抛异常外，<code>shouldFilter()</code> 返回 <code>false</code> 过滤器也是不执行的。</p>
+<p>查看 Spring Cloud 内置 <code>RibbonRoutingFilter</code> 和 <code>SimpleHostRoutingFilter</code> 的 <code>shouldFilter()</code> 方法，里面都有一段这样的逻辑 <code>(...) &amp;&amp; ctx.sendZuulResponse()</code> ， 所以把 sendZuulResponse 标记为 false，就不会转发到 Origin 了。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>自定义的过滤器的时候，最常实现的过滤器类型是 <code>pre</code> 和 <code>post</code>，<code>pre</code> 常用来用来进行权限校验等，如果校验失败，并且 <code>post</code> 写的不好的， <code>抛异常</code> 和 <code>设置ctx.setSendZuulResponse(false)</code> 都是无法阻止 <code>post</code> 型过滤器执行的。</p>
+<p>建议：</p>
+<ul>
+<li>一定要注意 过滤器的执行顺序，留意是在内置过滤器之前还是之后执行</li>
+<li><code>shouldFilter()</code> 的实现，粒度一定经要细，建议 都加上 <code>(...) &amp;&amp; ctx.sendZuulResponse()</code> 的逻辑，同时抛出异常，终止内置过滤器 和 自定义过滤器 的执行</li>
+<li>如果要重定向 ，进行以下设置，这时候 内置过滤器 <code>LocationRewriteFilter</code> 会进行处理 <ul>
+<li><code>ctx.setSendZuulResponse(false);</code></li>
+<li><code>ctx.setResponseStatusCode(301);</code></li>
+<li><code>ctx.addZuulResponseHeader(&quot;Location&quot;, &quot;xxx&quot;);</code></li>
+</ul>
+</li>
+</ul>
+<p>个人感觉 <strong>Netflix Zuul 其实是只是一个 框架，还不算一个真正意义上的网关</strong>，zuul-core 并没有实现具体的Filter逻辑；Spring Cloud Zuul 内置了一些的 Filter 实现，具有的基础的代理、转发、重定向 等简单的功能；但是如果要作为一个真正的网关，如统一权限校验、流量控制、缓存、监控等功能，都需要我们自己实现。 </p>
+<h1 id="Read-More"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</h1><ul>
+<li><a href="http://blog.kail.xyz/docsify/docs/spring-cloud/#/zuul/inner-filter">Spring Cloud Zuul 内置过滤器</a></li>
+<li><a href="http://blog.kail.xyz/docsify/docs/spring-cloud/#/zuul/faq/break-filter">如何中断 Zuul 过滤流程</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring-Cloud/" rel="tag"># Spring Cloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2018-09-24/qa/jacoco-simple.html" rel="next" title="使用 JaCoCo 生成代码覆盖率报告">
+                <i class="fa fa-chevron-left"></i> 使用 JaCoCo 生成代码覆盖率报告
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/2018-10-08/cncf/prometheus-file-sd.html" rel="prev" title="Prometheus 基于文件的服务发现 集成 Eureka">
+                Prometheus 基于文件的服务发现 集成 Eureka <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">78</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ZuulServlet"><span class="nav-text"><a href="#ZuulServlet" class="headerlink" title="ZuulServlet"></a>ZuulServlet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Zuul-过滤器的执行流程"><span class="nav-text"><a href="#Zuul-&#x8FC7;&#x6EE4;&#x5668;&#x7684;&#x6267;&#x884C;&#x6D41;&#x7A0B;" class="headerlink" title="Zuul &#x8FC7;&#x6EE4;&#x5668;&#x7684;&#x6267;&#x884C;&#x6D41;&#x7A0B;"></a>Zuul &#x8FC7;&#x6EE4;&#x5668;&#x7684;&#x6267;&#x884C;&#x6D41;&#x7A0B;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FilterProcessor-runFilters"><span class="nav-text"><a href="#FilterProcessor-runFilters" class="headerlink" title="FilterProcessor # runFilters"></a>FilterProcessor # runFilters</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FilterProcessor-processZuulFilter"><span class="nav-text"><a href="#FilterProcessor-processZuulFilter" class="headerlink" title="FilterProcessor # processZuulFilter"></a>FilterProcessor # processZuulFilter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZuulFilter-runFilter"><span class="nav-text"><a href="#ZuulFilter-runFilter" class="headerlink" title="ZuulFilter # runFilter"></a>ZuulFilter # runFilter</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何中断-Zuul-过滤流程"><span class="nav-text"><a href="#&#x5982;&#x4F55;&#x4E2D;&#x65AD;-Zuul-&#x8FC7;&#x6EE4;&#x6D41;&#x7A0B;" class="headerlink" title="&#x5982;&#x4F55;&#x4E2D;&#x65AD; Zuul &#x8FC7;&#x6EE4;&#x6D41;&#x7A0B;"></a>&#x5982;&#x4F55;&#x4E2D;&#x65AD; Zuul &#x8FC7;&#x6EE4;&#x6D41;&#x7A0B;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#抛异常"><span class="nav-text"><a href="#&#x629B;&#x5F02;&#x5E38;" class="headerlink" title="&#x629B;&#x5F02;&#x5E38;"></a>&#x629B;&#x5F02;&#x5E38;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ctx-setSendZuulResponse-false"><span class="nav-text"><a href="#ctx-setSendZuulResponse-false" class="headerlink" title="ctx.setSendZuulResponse(false);"></a>ctx.setSendZuulResponse(false);</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-text"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Read-More"><span class="nav-text"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      var page_id = "spring/cloud/zuul-process";
+      var page_source = "_posts/spring/cloud/zuul-process.md";
+      var path = window.location.pathname;
+
+      // page_id first
+      if(page_id) {
+        path = page_id;
+      }
+
+      // issues label length limit
+      if(path.length >= 50){
+        path = page_source.replace("_posts/", "");
+      }
+
+      // console.log(path)
+
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: path, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
