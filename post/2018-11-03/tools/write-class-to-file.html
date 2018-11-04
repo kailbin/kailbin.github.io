@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="kail, MrKail, kail blog, 杨凯彬" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这里说的 把Java类写入到.class文件 不是 Java对象序列化  ObjectOutputStream ，Java对象序列化写入的是类中的数据，并不是类本身。 这里说的是如果在运行过程中把类本身字节码写入到文件中，便于反编译查看类的结构信息。 如果类本身就是从文件中加载，直接读取类文件即可，或者根本就不用读取在写入新的文件，因为类文件本身就存在。但是如果一个类是运行中生成的，如果把这种动态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="把Java类写入到.class文件">
+<meta property="og:url" content="http://blog.kail.xyz/post/2018-11-03/tools/write-class-to-file.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="这里说的 把Java类写入到.class文件 不是 Java对象序列化  ObjectOutputStream ，Java对象序列化写入的是类中的数据，并不是类本身。 这里说的是如果在运行过程中把类本身字节码写入到文件中，便于反编译查看类的结构信息。 如果类本身就是从文件中加载，直接读取类文件即可，或者根本就不用读取在写入新的文件，因为类文件本身就存在。但是如果一个类是运行中生成的，如果把这种动态">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-04T07:36:46.617Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="把Java类写入到.class文件">
+<meta name="twitter:description" content="这里说的 把Java类写入到.class文件 不是 Java对象序列化  ObjectOutputStream ，Java对象序列化写入的是类中的数据，并不是类本身。 这里说的是如果在运行过程中把类本身字节码写入到文件中，便于反编译查看类的结构信息。 如果类本身就是从文件中加载，直接读取类文件即可，或者根本就不用读取在写入新的文件，因为类文件本身就存在。但是如果一个类是运行中生成的，如果把这种动态">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2018-11-03/tools/write-class-to-file.html"/>
+
+
+
+
+
+  <title>把Java类写入到.class文件 | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2018-11-03/tools/write-class-to-file.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">把Java类写入到.class文件</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-03T00:00:00+08:00">
+                2018-11-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tools/" itemprop="url" rel="index">
+                    <span itemprop="name">Tools</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tools/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2018-11-03/tools/write-class-to-file.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2018-11-03/tools/write-class-to-file.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这里说的 把Java类写入到.class文件 <strong>不是</strong> Java对象序列化  <code>ObjectOutputStream</code> ，Java对象序列化写入的是类中的数据，并不是类本身。</p>
+<p>这里说的是如果在运行过程中把类本身字节码写入到文件中，便于反编译查看类的结构信息。</p>
+<p>如果类本身就是从文件中加载，直接读取类文件即可，或者根本就不用读取在写入新的文件，因为类文件本身就存在。但是<strong>如果一个类是运行中生成的，如果把这种动态生成的类写入到磁盘呢？</strong></p>
+<a id="more"></a>
+<h1 id="1-Java-Agent"><a href="#1-Java-Agent" class="headerlink" title="1. Java Agent"></a>1. Java Agent</h1><h2 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> xyz.kail.demo.agent;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> xyz.kail.demo.agent.transformer.ClassToFileTransformer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.instrument.Instrumentation;</span><br><span class="line"><span class="keyword">import</span> java.util.Collections;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Agent</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 在Java SE5时代，Instrument只提供了premain 一种方式，即在main方法启动前启动一个代理程序</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">premain</span><span class="params">(String args, Instrumentation instrumentation)</span> </span>&#123;</span><br><span class="line">        Map&lt;String, String&gt; params = parseArgs(args);</span><br><span class="line">        <span class="keyword">if</span> (params.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * 启用Transformer</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> != params.get(<span class="string">"ClassToFileTransformer"</span>)) &#123;</span><br><span class="line">            instrumentation.addTransformer(<span class="keyword">new</span> ClassToFileTransformer(params), <span class="keyword">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * key1=value1;key2=value2  --&gt; &#123;key1:value1, key2:value2&#125;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">static</span> Map&lt;String, String&gt; <span class="title">parseArgs</span><span class="params">(String args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == args) &#123;</span><br><span class="line">            <span class="keyword">return</span> Collections.emptyMap();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Map&lt;String, String&gt; argsMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        String[] kvs = args.split(<span class="string">";"</span>);</span><br><span class="line">        <span class="keyword">for</span> (String kv : kvs) &#123;</span><br><span class="line">            String[] kvArr = kv.split(<span class="string">"="</span>);</span><br><span class="line">            argsMap.put(kvArr[<span class="number">0</span>], kvArr[<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> argsMap;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ClassFileTransformer"><a href="#ClassFileTransformer" class="headerlink" title="ClassFileTransformer"></a>ClassFileTransformer</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> xyz.kail.demo.agent.transformer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.instrument.ClassFileTransformer;</span><br><span class="line"><span class="keyword">import</span> java.lang.instrument.IllegalClassFormatException;</span><br><span class="line"><span class="keyword">import</span> java.nio.file.Files;</span><br><span class="line"><span class="keyword">import</span> java.nio.file.Path;</span><br><span class="line"><span class="keyword">import</span> java.nio.file.Paths;</span><br><span class="line"><span class="keyword">import</span> java.nio.file.StandardOpenOption;</span><br><span class="line"><span class="keyword">import</span> java.security.ProtectionDomain;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 把加载的类，写入到文件</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassToFileTransformer</span> <span class="keyword">implements</span> <span class="title">ClassFileTransformer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Map&lt;String, String&gt; args;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ClassToFileTransformer</span><span class="params">(Map&lt;String, String&gt; args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.args = args;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> className       类名</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> classfileBuffer 类的字节码</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">byte</span>[] transform(ClassLoader loader, String className, Class&lt;?&gt; classBeingRedefined, ProtectionDomain protectionDomain, <span class="keyword">byte</span>[] classfileBuffer) <span class="keyword">throws</span> IllegalClassFormatException &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> != args.get(<span class="string">"debug"</span>)) &#123;</span><br><span class="line">            System.out.println(className);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String regex = args.get(<span class="string">"regex"</span>);</span><br><span class="line">        <span class="comment">// 如果传入正则，但是不匹配，不进行操作</span></span><br><span class="line">        <span class="keyword">if</span> (!(<span class="keyword">null</span> != regex &amp;&amp; Pattern.matches(regex, className))) &#123;</span><br><span class="line">            <span class="keyword">return</span> classfileBuffer;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Path path = Paths.get(<span class="string">"classes/"</span> + className + <span class="string">".class"</span>);</span><br><span class="line">            <span class="keyword">if</span> (!Files.exists(path)) &#123;</span><br><span class="line">                Files.createDirectories(path.getParent());</span><br><span class="line">            &#125;</span><br><span class="line">            Files.write(path, classfileBuffer, StandardOpenOption.CREATE);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable ignored) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">null</span> != args.get(<span class="string">"debug"</span>)) &#123;</span><br><span class="line">                ignored.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> classfileBuffer;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Maven-打包-plugin"><a href="#Maven-打包-plugin" class="headerlink" title="Maven 打包 plugin"></a>Maven 打包 plugin</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-jar-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">archive</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--自动添加META-INF/MANIFEST.MF --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">manifest</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">addClasspath</span>&gt;</span>true<span class="tag">&lt;/<span class="name">addClasspath</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">manifestEntries</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">Main-Class</span>&gt;</span>xyz.kail.demo.agent.AgentTest<span class="tag">&lt;/<span class="name">Main-Class</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!-- Premain-Class: xyz.kail.demo.agent.Agent --&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">Premain-Class</span>&gt;</span>xyz.kail.demo.agent.Agent<span class="tag">&lt;/<span class="name">Premain-Class</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">manifestEntries</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">archive</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="启动时加入-java-agent-参数"><a href="#启动时加入-java-agent-参数" class="headerlink" title="启动时加入 java agent 参数"></a>启动时加入 java agent 参数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java -jar \ </span><br><span class="line">-javaagent:agent.jar=ClassToFileTransformer=<span class="literal">true</span>;debug=<span class="literal">true</span>;regex=xyz.+ \</span><br><span class="line">xxx.jar</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="https://blogs.oracle.com/ouchina/javaagent" target="_blank" rel="noopener">如何指导编写一个javaagent</a></p>
+</blockquote>
+<h1 id="2-运行时添加-Java-Agent"><a href="#2-运行时添加-Java-Agent" class="headerlink" title="2. 运行时添加 Java Agent"></a>2. 运行时添加 Java Agent</h1><p>上面 <code>premain</code> 类型的 Java Agent 只能在程序运行前，在启动命令中指定 javaagent 参数 才能生效。</p>
+<p>Java SE 6 新特性改变了这种情况，通过 Java Tool API 中的 attach 方式，我们可以很方便地在运行过程中动态地设置加载代理类。</p>
+<h2 id="Agent-1"><a href="#Agent-1" class="headerlink" title="Agent"></a>Agent</h2><p>在 Agent 类中新增 <code>agentmain</code> 方法，参数和 <code>premain</code> 中的是一样的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Agent</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 运行时 Agent</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">agentmain</span><span class="params">(String args, Instrumentation instrumentation)</span> <span class="keyword">throws</span> UnmodifiableClassException, IllegalAccessException, InstantiationException </span>&#123;</span><br><span class="line">        Map&lt;String, String&gt; params = parseArgs(args);</span><br><span class="line">        <span class="keyword">if</span> (params.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * 调用 premain 注册 Transformer</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        premain(args, instrumentation);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        String regex = params.get(<span class="string">"regex"</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == regex) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取所有已加载的 Class</span></span><br><span class="line">        Class[] allLoadedClasses = instrumentation.getAllLoadedClasses();</span><br><span class="line">        <span class="keyword">for</span> (Class clazz : allLoadedClasses) &#123;</span><br><span class="line">            <span class="comment">// 因为是 attach 到运行中的 JVM 进程，类已经加载的内存了，这里需要重新转换类</span></span><br><span class="line">            <span class="keyword">if</span> (Pattern.matches(regex, clazz.getName())) &#123;</span><br><span class="line">                instrumentation.retransformClasses(clazz);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="依赖-tools-包"><a href="#依赖-tools-包" class="headerlink" title="依赖 tools 包"></a>依赖 tools 包</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.sun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>tools<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>system<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">systemPath</span>&gt;</span>$&#123;java.home&#125;/../lib/tools.jar<span class="tag">&lt;/<span class="name">systemPath</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Maven-打包-plugin-1"><a href="#Maven-打包-plugin-1" class="headerlink" title="Maven 打包 plugin"></a>Maven 打包 plugin</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-jar-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">archive</span>&gt;</span></span><br><span class="line">            ...</span><br><span class="line">            <span class="tag">&lt;<span class="name">manifestEntries</span>&gt;</span></span><br><span class="line">                ... META-INF/MANIFEST.MF 中新加入以下连个属性</span><br><span class="line">                <span class="tag">&lt;<span class="name">Agent-Class</span>&gt;</span>xyz.kail.demo.agent.Agent<span class="tag">&lt;/<span class="name">Agent-Class</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">Can-Retransform-Classes</span>&gt;</span>true<span class="tag">&lt;/<span class="name">Can-Retransform-Classes</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">manifestEntries</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">archive</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Attach"><a href="#Attach" class="headerlink" title="Attach"></a>Attach</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.sun.tools.attach.VirtualMachine;</span><br><span class="line"><span class="keyword">import</span> com.sun.tools.attach.VirtualMachineDescriptor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AgentTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        List&lt;VirtualMachineDescriptor&gt; vmDescriptors = VirtualMachine.list();</span><br><span class="line">        <span class="keyword">for</span> (VirtualMachineDescriptor vm : vmDescriptors) &#123;</span><br><span class="line">            System.out.println(vm.id() + <span class="string">" : "</span> + vm.displayName());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        VirtualMachine vm = VirtualMachine.attach(<span class="string">"pid"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            vm.loadAgent(<span class="string">"agent-1.0.0.jar"</span>,<span class="string">"ClassToFileTransformer=true;debug=true;regex=proxy.+"</span>);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            vm.detach();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或 通过 jar 运行上面的 AgentTest.main 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Xbootclasspath/a:$&#123;JAVA_HOME&#125;lib/tools.jar -jar target/agent-<span class="number">1.0</span>.0.jar</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="https://www.ibm.com/developerworks/cn/java/j-lo-jse61/index.html" target="_blank" rel="noopener">Java SE 6 新特性 Instrumentation 新功能</a></p>
+</blockquote>
+<h1 id="3-HSDB"><a href="#3-HSDB" class="headerlink" title="3. HSDB"></a>3. HSDB</h1><p>HSDB(Hotspot Debugger) 是 <code>${JAVA_HOME}/lib/sa-jdi.jar</code> 中提供的一个图形化界面工具，可以查看Java对象的oops、查看类信息、线程栈信息、堆信息、方法字节码 和 JIT编译后的汇编代码 等，可以说非常底层全面。</p>
+<p>sa 全称 Serviceability Agent ，原本是Sun公司用来debug Hotspot的工具，后来开放给Hotspot使用者，能够查看Java的内部数据结构等信息，它可以直接观察一个JVM 进程。</p>
+<p><strong>步骤</strong></p>
+<ul>
+<li>启动图形化界面：<code>sudo java -cp ${JAVA_HOME}/lib/sa-jdi.jar sun.jvm.hotspot.HSDB</code></li>
+<li>Attach JVM 进程：菜单 -&gt; File -&gt; Attach to HotSpot process</li>
+<li>查看所有运行中的类：菜单 -&gt; Tools -&gt; Class Browser</li>
+<li>下载类字节码到文件： 搜索指定的类，点击 “Create .class for all classes” 就会下载指定的类到类路径下</li>
+</ul>
+<blockquote>
+<p><a href="http://rednaxelafx.iteye.com/blog/1847971" target="_blank" rel="noopener">借HSDB来探索HotSpot VM的运行时数据</a></p>
+<p><a href="http://lovestblog.cn/blog/2014/06/28/hsdb-string/" target="_blank" rel="noopener">通过HSDB来了解String值的真身在哪里</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2018-10-28/tools/h2-connect-model.html" rel="next" title="h2 几种连接模式">
+                <i class="fa fa-chevron-left"></i> h2 几种连接模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Java-Agent"><span class="nav-text"><a href="#1-Java-Agent" class="headerlink" title="1. Java Agent"></a>1. Java Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Agent"><span class="nav-text"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ClassFileTransformer"><span class="nav-text"><a href="#ClassFileTransformer" class="headerlink" title="ClassFileTransformer"></a>ClassFileTransformer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Maven-打包-plugin"><span class="nav-text"><a href="#Maven-&#x6253;&#x5305;-plugin" class="headerlink" title="Maven &#x6253;&#x5305; plugin"></a>Maven &#x6253;&#x5305; plugin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动时加入-java-agent-参数"><span class="nav-text"><a href="#&#x542F;&#x52A8;&#x65F6;&#x52A0;&#x5165;-java-agent-&#x53C2;&#x6570;" class="headerlink" title="&#x542F;&#x52A8;&#x65F6;&#x52A0;&#x5165; java agent &#x53C2;&#x6570;"></a>&#x542F;&#x52A8;&#x65F6;&#x52A0;&#x5165; java agent &#x53C2;&#x6570;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-运行时添加-Java-Agent"><span class="nav-text"><a href="#2-&#x8FD0;&#x884C;&#x65F6;&#x6DFB;&#x52A0;-Java-Agent" class="headerlink" title="2. &#x8FD0;&#x884C;&#x65F6;&#x6DFB;&#x52A0; Java Agent"></a>2. &#x8FD0;&#x884C;&#x65F6;&#x6DFB;&#x52A0; Java Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Agent-1"><span class="nav-text"><a href="#Agent-1" class="headerlink" title="Agent"></a>Agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖-tools-包"><span class="nav-text"><a href="#&#x4F9D;&#x8D56;-tools-&#x5305;" class="headerlink" title="&#x4F9D;&#x8D56; tools &#x5305;"></a>&#x4F9D;&#x8D56; tools &#x5305;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Maven-打包-plugin-1"><span class="nav-text"><a href="#Maven-&#x6253;&#x5305;-plugin-1" class="headerlink" title="Maven &#x6253;&#x5305; plugin"></a>Maven &#x6253;&#x5305; plugin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Attach"><span class="nav-text"><a href="#Attach" class="headerlink" title="Attach"></a>Attach</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-HSDB"><span class="nav-text"><a href="#3-HSDB" class="headerlink" title="3. HSDB"></a>3. HSDB</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      var page_id = "java/write-class-to-file";
+      var page_source = "_posts/tools/write-class-to-file.md";
+      var path = window.location.pathname;
+
+      // page_id first
+      if(page_id) {
+        path = page_id;
+      }
+
+      // issues label length limit
+      if(path.length >= 50){
+        path = page_source.replace("_posts/", "");
+      }
+
+      // console.log(path)
+
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: path, 
+            owner: 'kailbin',
+            repo: 'comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
+            
+                client_id: '6689d68a7079c896119f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
