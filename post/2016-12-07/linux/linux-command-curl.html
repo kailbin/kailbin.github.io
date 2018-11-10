@@ -322,7 +322,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/post/2016-12-07/linux/linux-command-curl.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/post/2016-12-07/linux/linux-command-curl.html" itemprop="commentsCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="post/2016-12-07/linux/linux-command-curl.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -331,11 +332,6 @@
           
           
 
-          
-            <span class="post-meta-divider">|</span>
-            <span class="page-pv"><i class="fa fa-file-o"></i>
-            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
-            </span>
           
 
           
@@ -516,9 +512,12 @@ Content-Type: text/html
 
   
     <div class="comments" id="comments">
-      
-        <div id="gitment-container"></div>
-      
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
     </div>
 
   
@@ -672,26 +671,6 @@ Content-Type: text/html
 
 
         
-<div class="busuanzi-count">
-  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-  
-    <span class="site-uv">
-      <i class="fa fa-user"></i>
-      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
-      
-    </span>
-  
-
-  
-    <span class="site-pv">
-      <i class="fa fa-eye"></i>
-      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
-      
-    </span>
-  
-</div>
-
 
 
 
@@ -812,6 +791,26 @@ Content-Type: text/html
 
   
 
+    
+      <script id="dsq-count-scr" src="https://kailbin.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.kail.xyz/post/2016-12-07/linux/linux-command-curl.html';
+          this.page.identifier = 'post/2016-12-07/linux/linux-command-curl.html';
+          this.page.title = 'curl 命令常见用法';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://kailbin.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -827,65 +826,8 @@ Content-Type: text/html
 
 
 
-  
 
 
-
-
-
-
-
-<!-- LOCAL: You can save these files to your site and update links -->
-    
-        
-        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
-        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
-    
-<!-- END LOCAL -->
-
-    
-
-    
-      <script type="text/javascript">
-      var page_id = "";
-      var page_source = "_posts/linux/linux-command-curl.md";
-      var path = window.location.pathname;
-
-      // page_id first
-      if(page_id) {
-        path = page_id;
-      }
-
-      // issues label length limit
-      if(path.length >= 50){
-        path = page_source.replace("_posts/", "");
-      }
-
-      // console.log(path)
-
-      function renderGitment(){
-        var gitment = new Gitmint({
-            id: path, 
-            owner: 'kailbin',
-            repo: 'comments',
-            
-            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
-            
-            oauth: {
-            
-            
-                client_secret: '3f3e595f734a1d66a3422ef7025314fc4f1abcdc',
-            
-                client_id: '6689d68a7079c896119f'
-            }});
-        gitment.render('gitment-container');
-      }
-
-      
-      renderGitment();
-      
-      </script>
-    
 
 
 
