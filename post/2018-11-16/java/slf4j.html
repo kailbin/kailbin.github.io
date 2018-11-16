@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="kail, MrKail, kail blog, 杨凯彬" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="slf4j 全称 Simple Logging Facede for Java，是 Java 日志的简易门面类库。可以使用统一的输出接口，根据底层依赖的不同，使用不同的日志框架。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="slf4j">
+<meta property="og:url" content="http://blog.kail.xyz/post/2018-11-16/java/slf4j.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="slf4j 全称 Simple Logging Facede for Java，是 Java 日志的简易门面类库。可以使用统一的输出接口，根据底层依赖的不同，使用不同的日志框架。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-16T13:01:11.175Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="slf4j">
+<meta name="twitter:description" content="slf4j 全称 Simple Logging Facede for Java，是 Java 日志的简易门面类库。可以使用统一的输出接口，根据底层依赖的不同，使用不同的日志框架。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2018-11-16/java/slf4j.html"/>
+
+
+
+
+
+  <title>slf4j | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-gitbooks">
+          <a href="//blog.kail.xyz/docsify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Docs
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2018-11-16/java/slf4j.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">slf4j</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-16T00:00:00+08:00">
+                2018-11-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2018-11-16/java/slf4j.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="post/2018-11-16/java/slf4j.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>slf4j 全称 Simple Logging Facede for Java，是 Java 日志的简易门面类库。可以使用统一的输出接口，根据底层依赖的不同，使用不同的日志框架。</p>
+<a id="more"></a>
+<h1 id="slf4j-是如何适配日志框架"><a href="#slf4j-是如何适配日志框架" class="headerlink" title="slf4j 是如何适配日志框架"></a>slf4j 是如何适配日志框架</h1><p>当项目只有 <code>slf4j-api</code> 的依赖时，在 <code>Logger logger = LoggerFactory.getLogger(xxx.class)</code> 获取 <code>Logger</code> 的时候会报以下错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SLF4J: Failed to load class &quot;org.slf4j.impl.StaticLoggerBinder&quot;.</span><br><span class="line">SLF4J: Defaulting to no-operation (NOP) logger implementation</span><br><span class="line">SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.</span><br></pre></td></tr></table></figure></p>
+<p>该错误提示无法加载 <code>org.slf4j.impl.StaticLoggerBinder</code> 类，并且把文档的地址也提示出来了: <a href="http://www.slf4j.org/codes.html#StaticLoggerBinder" target="_blank" rel="noopener">http://www.slf4j.org/codes.html#StaticLoggerBinder</a>。解决方法是 添加 <code>slf4j-nop.jar</code> <code>slf4j-simple.jar</code>、<code>slf4j-log4j12.jar</code>、<code>logback-classic.jar</code> 等任何日志框架中的 <strong>任何一个</strong> 到类路径中。</p>
+<blockquote>
+<p>注意：SLF4J 1.6, 默认使用 no-operation (NOP) 的日志实现，并且不会有任何提示。</p>
+</blockquote>
+<p><code>slf4j-api</code> 目的是提供了统一的日志访问接口， <code>org.slf4j.impl.StaticLoggerBinder</code> 类才是适配底层日志框架的关键。</p>
+<p>可以添加 <code>slf4j-log4j12</code>（间接依赖 <code>log4j</code>） 依赖，查看 jar 包的文件，会在 <code>slf4j-log4j12.jar</code> 中找到，<code>org.slf4j.impl.StaticLoggerBinder</code> 类。同理 <code>slf4j-simple.jar</code>、<code>logback-classic.jar</code>等 底层日志实现的包内也都能找到 <strong>全路径名完全一致</strong>的 <code>org.slf4j.impl.StaticLoggerBinder</code>类。虽然 <strong>全路径名完全一致</strong>，但是具体实现各有不同，这就可以达到：<strong>通过修改底层依赖来切换不同的日志框架</strong>。</p>
+<h1 id="当项目依赖了多个日志框架时"><a href="#当项目依赖了多个日志框架时" class="headerlink" title="当项目依赖了多个日志框架时"></a>当项目依赖了多个日志框架时</h1><p>当 封装jar包的提供服务时，理论上只应该暴露 <code>slf4j-api</code> 的间接依赖，具体实现应该有调用方来指定。</p>
+<p>但是由于各种原因，项目的间接依赖会出现各种日志的实现方式。比如 <code>slf4j-log4j12</code> 和 <code>logback-classic</code> 同时存在于类路径下时，这时会报以下提示，原因是 <code>slf4j-log4j12</code> 和 <code>logback-classic</code> 都存在 <code>org.slf4j.impl.StaticLoggerBinder</code> 类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SLF4J: Class path contains multiple SLF4J bindings.</span><br><span class="line">SLF4J: Found binding in [jar:file:~/.m2/repository/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br><span class="line">SLF4J: Found binding in [jar:file:~/.m2/repository/org/slf4j/slf4j-log4j12/1.7.25/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br><span class="line">SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.</span><br><span class="line">SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]</span><br></pre></td></tr></table></figure>
+<p>详见 多种底层绑定 的说明文档：<a href="http://www.slf4j.org/codes.html#multiple_bindings" target="_blank" rel="noopener">http://www.slf4j.org/codes.html#multiple_bindings</a></p>
+<p>存在多个绑定时，slf4j 也会选择其中一个日志记录框架并与之绑定，具体选择绑定的方式是由 JVM 的类加载顺序决定的，可认为完全是随机的。</p>
+<p>常见解决方案是 <strong>排除到不需要的底层绑定</strong>，只留下一个，比如把 <code>slf4j-log4j12</code> 排除掉。</p>
+<blockquote>
+<p>不同jar包名 相同类路径下，实际上 JVM 的加载也是有顺序的：<strong>Classloader在加载资源时，查找资源的位置顺序与 <code>-classpath</code> 中指定的顺序一致</strong>。这就表现为不同的环境 slf4j 绑定的具体实现是不同的。比如：</p>
+<ul>
+<li>在 IDEA 中，就表现为，pom 文件哪个依赖写在前面，slf4j 就使用哪个，原因是 IDEA 执行的时候会把 pom 文件依赖的数据作为 -classpath 参数的顺序</li>
+<li>打成 jar 包 或者 Web 容器的下运行，可能又是其他的效果，因为不同的运行方式，加载顺序不同。<br>所以官方说：可以认为是随机的。 所以建议手动把不需要的排除掉。</li>
+</ul>
+<p><a href="https://blog.csdn.net/hongxingxiaonan/article/details/50486997" target="_blank" rel="noopener">Java利用classloader从classpath加载资源</a></p>
+</blockquote>
+<h1 id="旧项目没有使用-slf4j-API-怎么办"><a href="#旧项目没有使用-slf4j-API-怎么办" class="headerlink" title="旧项目没有使用 slf4j API 怎么办"></a>旧项目没有使用 slf4j API 怎么办</h1><p>有些遗留项目不是通过 slf4j API 使用日志框架的，比如这种： <code>org.apache.log4j.Logger.getLogger(XXX.class);</code> 直接调用的 Log4j 的 API。</p>
+<p>这种情况下，如果想把日志从 Log4j 切换到 logback，除了修改代码 把所有直接使用 Log4j API 的地方改成使用 slf4j API 外，还可以使用 slf4j 提供的转换工具 <code>log4j-over-slf4j</code>，该工具的主要作用是通过 log4j 形式的接口把日志 转发到 slf4j，再通过 slf4j 适配底层日志框架。</p>
+<p>查看 <code>log4j-over-slf4j</code> jar 包内的代码会发现，jar 包内 类的全路径名与 log4j 几乎是一致的，即 log4j 的接口没有变，但是具体的实现全部变了。</p>
+<p>需要注意的是： 需要把原来类路径下 log4j 的 jar 先包排除掉</p>
+<h1 id="检查-Logger-的名称是否与实际调用的类匹配"><a href="#检查-Logger-的名称是否与实际调用的类匹配" class="headerlink" title="检查 Logger 的名称是否与实际调用的类匹配"></a>检查 Logger 的名称是否与实际调用的类匹配</h1><p>该功能是默认是关闭的，可通过设置系统属性 <code>System.setProperty(&quot;slf4j.detectLoggerNameMismatch&quot;, &quot;true&quot;);</code> 或者 启动参数 <code>-Dslf4j.detectLoggerNameMismatch=true</code> 开启，示例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 开始 Logger 名不匹配提示</span></span><br><span class="line">        System.setProperty(<span class="string">"slf4j.detectLoggerNameMismatch"</span>, <span class="string">"true"</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 因为 调用方是 Main.class , 但是获取的是 Logger.class 的 Logger，</span></span><br><span class="line">        <span class="comment">// 这种使用方式会对排查文件造成误导，会进行提示</span></span><br><span class="line">        Logger logger = LoggerFactory.getLogger(Logger.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于不规范的代码，会进行以下提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SLF4J: Detected logger name mismatch. Given name: &quot;org.slf4j.Logger&quot;; computed name: &quot;log.Main&quot;.</span><br><span class="line">SLF4J: See http://www.slf4j.org/codes.html#loggerNameMismatch for an explanation</span><br></pre></td></tr></table></figure></p>
+<p>可查看官方文档，详细了解：<a href="http://www.slf4j.org/codes.html#loggerNameMismatch" target="_blank" rel="noopener">http://www.slf4j.org/codes.html#loggerNameMismatch</a></p>
+<h1 id="相关-Jar-包介绍"><a href="#相关-Jar-包介绍" class="headerlink" title="相关 Jar 包介绍"></a>相关 Jar 包介绍</h1><h2 id="slf4j-接口"><a href="#slf4j-接口" class="headerlink" title="slf4j 接口"></a>slf4j 接口</h2><ul>
+<li>slf4j-api： 写日志的时候，都使用该 jar 包内的接口</li>
+</ul>
+<h2 id="适配器绑定"><a href="#适配器绑定" class="headerlink" title="适配器绑定"></a>适配器绑定</h2><p>适配器的主要功能是与具体的日志框架绑定，因其 jar 包内都有 <code>org.slf4j.impl.StaticLoggerBinder</code> 类，为避免冲突，只能有一个。</p>
+<ul>
+<li>slf4j-nop ： 空的实现，什么也不输出</li>
+<li>slf4j-simple ：适配  System.out | System.err 实现</li>
+<li>slf4j-log4j12 ： 适配 log4j 实现</li>
+<li>slf4j-jdk14 ： 适配 java.util.logging 实现</li>
+<li>logback-classic ： 适配 logback 实现</li>
+<li>slf4j-jcl ： 适配 commons-logging 实现</li>
+<li>…</li>
+</ul>
+<h2 id="桥接器"><a href="#桥接器" class="headerlink" title="桥接器"></a>桥接器</h2><ul>
+<li>jcl-over-slf4j ： commons-logging 转发到 slf4j</li>
+<li>log4j-over-slf4j： log4j 转发到 slf4j</li>
+<li>jul-to-slf4j： java.util.logging 桥接 slf4j</li>
+<li>…</li>
+</ul>
+<h1 id="Read-More"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</h1><ul>
+<li><a href="https://www.slf4j.org/manual.html" target="_blank" rel="noopener">SLF4J user manual</a></li>
+<li><a href="https://www.slf4j.org/legacy.html" target="_blank" rel="noopener">Bridging legacy APIs</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2018-11-03/tools/write-class-to-file.html" rel="next" title="把Java类写入到.class文件">
+                <i class="fa fa-chevron-left"></i> 把Java类写入到.class文件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬" />
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">80</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#slf4j-是如何适配日志框架"><span class="nav-text"><a href="#slf4j-&#x662F;&#x5982;&#x4F55;&#x9002;&#x914D;&#x65E5;&#x5FD7;&#x6846;&#x67B6;" class="headerlink" title="slf4j &#x662F;&#x5982;&#x4F55;&#x9002;&#x914D;&#x65E5;&#x5FD7;&#x6846;&#x67B6;"></a>slf4j &#x662F;&#x5982;&#x4F55;&#x9002;&#x914D;&#x65E5;&#x5FD7;&#x6846;&#x67B6;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#当项目依赖了多个日志框架时"><span class="nav-text"><a href="#&#x5F53;&#x9879;&#x76EE;&#x4F9D;&#x8D56;&#x4E86;&#x591A;&#x4E2A;&#x65E5;&#x5FD7;&#x6846;&#x67B6;&#x65F6;" class="headerlink" title="&#x5F53;&#x9879;&#x76EE;&#x4F9D;&#x8D56;&#x4E86;&#x591A;&#x4E2A;&#x65E5;&#x5FD7;&#x6846;&#x67B6;&#x65F6;"></a>&#x5F53;&#x9879;&#x76EE;&#x4F9D;&#x8D56;&#x4E86;&#x591A;&#x4E2A;&#x65E5;&#x5FD7;&#x6846;&#x67B6;&#x65F6;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#旧项目没有使用-slf4j-API-怎么办"><span class="nav-text"><a href="#&#x65E7;&#x9879;&#x76EE;&#x6CA1;&#x6709;&#x4F7F;&#x7528;-slf4j-API-&#x600E;&#x4E48;&#x529E;" class="headerlink" title="&#x65E7;&#x9879;&#x76EE;&#x6CA1;&#x6709;&#x4F7F;&#x7528; slf4j API &#x600E;&#x4E48;&#x529E;"></a>&#x65E7;&#x9879;&#x76EE;&#x6CA1;&#x6709;&#x4F7F;&#x7528; slf4j API &#x600E;&#x4E48;&#x529E;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#检查-Logger-的名称是否与实际调用的类匹配"><span class="nav-text"><a href="#&#x68C0;&#x67E5;-Logger-&#x7684;&#x540D;&#x79F0;&#x662F;&#x5426;&#x4E0E;&#x5B9E;&#x9645;&#x8C03;&#x7528;&#x7684;&#x7C7B;&#x5339;&#x914D;" class="headerlink" title="&#x68C0;&#x67E5; Logger &#x7684;&#x540D;&#x79F0;&#x662F;&#x5426;&#x4E0E;&#x5B9E;&#x9645;&#x8C03;&#x7528;&#x7684;&#x7C7B;&#x5339;&#x914D;"></a>&#x68C0;&#x67E5; Logger &#x7684;&#x540D;&#x79F0;&#x662F;&#x5426;&#x4E0E;&#x5B9E;&#x9645;&#x8C03;&#x7528;&#x7684;&#x7C7B;&#x5339;&#x914D;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关-Jar-包介绍"><span class="nav-text"><a href="#&#x76F8;&#x5173;-Jar-&#x5305;&#x4ECB;&#x7ECD;" class="headerlink" title="&#x76F8;&#x5173; Jar &#x5305;&#x4ECB;&#x7ECD;"></a>&#x76F8;&#x5173; Jar &#x5305;&#x4ECB;&#x7ECD;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#slf4j-接口"><span class="nav-text"><a href="#slf4j-&#x63A5;&#x53E3;" class="headerlink" title="slf4j &#x63A5;&#x53E3;"></a>slf4j &#x63A5;&#x53E3;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#适配器绑定"><span class="nav-text"><a href="#&#x9002;&#x914D;&#x5668;&#x7ED1;&#x5B9A;" class="headerlink" title="&#x9002;&#x914D;&#x5668;&#x7ED1;&#x5B9A;"></a>&#x9002;&#x914D;&#x5668;&#x7ED1;&#x5B9A;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#桥接器"><span class="nav-text"><a href="#&#x6865;&#x63A5;&#x5668;" class="headerlink" title="&#x6865;&#x63A5;&#x5668;"></a>&#x6865;&#x63A5;&#x5668;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Read-More"><span class="nav-text"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://kailbin.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.kail.xyz/post/2018-11-16/java/slf4j.html';
+          this.page.identifier = 'post/2018-11-16/java/slf4j.html';
+          this.page.title = 'slf4j';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://kailbin.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

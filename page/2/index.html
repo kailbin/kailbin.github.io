@@ -250,6 +250,164 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2018-03-21/hbase/hfile-pretty-printer.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/favicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/post/2018-03-21/hbase/hfile-pretty-printer.html" itemprop="url">通过 “HFile Tool” 查看 HFile文件内容</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-21T00:00:00+08:00">
+                2018-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/HBase/" itemprop="url" rel="index">
+                    <span itemprop="name">HBase</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/post/2018-03-21/hbase/hfile-pretty-printer.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="post/2018-03-21/hbase/hfile-pretty-printer.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>查看 HFile 内容的文本版本, 你可以使用<code>org.apache.hadoop.hbase.io.hfile.HFile</code>工具。输入以下命令查看使用帮助。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ hbase org.apache.hadoop.hbase.io.hfile.HFile</span><br><span class="line"></span><br><span class="line">usage: HFile [-a] [-b] [-e] [-f &lt;arg&gt; | -r &lt;arg&gt;] [-h] [-k] [-m] [-p] [-s] [-v] [-w &lt;arg&gt;]</span><br><span class="line"></span><br><span class="line">    -a,--checkfamily         Enable family check</span><br><span class="line">    -b,--printblocks         Print block index meta data</span><br><span class="line">    -e,--printkey            Print keys</span><br><span class="line">    -f,--file &lt;arg&gt;          File to scan. Pass full-path; e.g. hdfs://a:9000/hbase/hbase:meta/12/34</span><br><span class="line">    -h,--printblockheaders   Print block headers <span class="keyword">for</span> each block.</span><br><span class="line">    -k,--checkrow            Enable row order check; looks <span class="keyword">for</span> out-of-order keys</span><br><span class="line">    -m,--printmeta           Print meta data of file</span><br><span class="line">    -p,--printkv             Print key/value pairs</span><br><span class="line">    -r,--region &lt;arg&gt;        Region to scan. Pass region name; e.g. <span class="string">'hbase:meta,,1'</span></span><br><span class="line">    -s,--stats               Print statistics</span><br><span class="line">    -v,--verbose             Verbose output; emits file and meta data delimiters</span><br><span class="line">    -w,--seekToRow &lt;arg&gt;     Seek to this row and <span class="built_in">print</span> all the kvs <span class="keyword">for</span> this row only</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/post/2018-03-21/hbase/hfile-pretty-printer.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2018-03-20/hbase/filter.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3258,169 +3416,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-03-14/spring/spring-boot-rose.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/post/2017-03-14/spring/spring-boot-rose.html" itemprop="url">Spring Boot 集成 paoding-rose-jade</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-14T00:00:00+08:00">
-                2017-03-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/post/2017-03-14/spring/spring-boot-rose.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-03-14/spring/spring-boot-rose.html" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>paoding-rose 是一个开源框架, 它可以简化 web 应用和 RDMS 应用的开发。</p>
-</blockquote>
-<p>因为公司的原因，所以才有幸接触到了这个小众且‘古老’的框架。其依赖 Spring 的一套体系，主要对 Controller 和 DAO 层提供支持。</p>
-<p>Controller 跟 Spring MVC 比较类似，但是相对Spring MVC来说功能稍弱一点，自我感觉可以完全被 Spring MVC 替代掉；<br>DAO 又跟 MyBatis 比较类似，相对轻量一些，实际上是对 JdbcTemplate 的封装，并添加注解/SQL自定义标签等支持，使用起来很方便。</p>
-<p>paoding-rose 跟其他主流框架如此类似，为什么还会选择它呢？<br>个人感觉可能是跟它的很多“强制限制”有关，paoding-rose 规定 Controller 层 类必须以<code>Controller</code>结尾，必须写在 <code>controller</code>包下面；<br>DAO 层都是接口，命名必须以 <code>DAO</code> 结尾，必须写在 <code>dao</code> 包下面等等一些强制的要求，否者项目就跑不起来。<br>跟<code>约定大于配置</code>这个概念有点类似，但是其又不提供配置，必须按照要求来，这些强制的编码要求使开发相对来说规范起来，对后期维护是有益的。</p>
-<p>这里在 Spring Boot 中引入 paoding-rose-jade(DAO支持)模块，本文作为记录。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-03-14/spring/spring-boot-rose.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3475,7 +3470,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-count">80</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
