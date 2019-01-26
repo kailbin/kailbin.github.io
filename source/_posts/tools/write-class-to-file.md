@@ -2,6 +2,7 @@
 title: 把Java类写入到.class文件
 categories:
   - Tools
+tags:
   - Java
 date: 2018-11-03
 id: java/write-class-to-file

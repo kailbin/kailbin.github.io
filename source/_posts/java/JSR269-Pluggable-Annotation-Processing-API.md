@@ -1,7 +1,7 @@
 ---
 title: Pluggable Annotation Processing API
 categories:
-  - Java,JSR
+  - Java
 date: 2018-12-01
 id: jsr269
 ---
