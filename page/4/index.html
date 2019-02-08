@@ -3,23 +3,21 @@
 
 
 
+
+
+
+
+
+
+
+
+
 <html class="theme-next mist" lang="zh-CN">
 <head>
   <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
 
 
 
@@ -34,50 +32,69 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
 
 
   
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
 
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
-
-
-  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="kail, MrKail, kail blog, 杨凯彬" />
-
-
-
-
-
-
-
-
-
-
-<meta name="description" content="菜鸟会飞">
+  <meta name="description" content="菜鸟会飞">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mr.Kail&#39;s Blog">
 <meta property="og:url" content="http://blog.kail.xyz/page/4/index.html">
@@ -90,29 +107,6 @@
 
 
 
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
 
 
 
@@ -120,7 +114,11 @@
 
 
 
-
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
 
   <title>Mr.Kail's Blog</title>
   
@@ -132,6 +130,35 @@
 
 
 
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -141,29 +168,28 @@
     
   
 
-  <div class="container sidebar-position-left 
+  <div class="container sidebar-position-right 
   page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
+  <div class="site-meta">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Mr.Kail's Blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <h1 class="site-subtitle" itemprop="description"></h1>
-      
+    
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -171,55 +197,89 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
-            
-            标签
-          </a>
-        </li>
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
         
-        <li class="menu-item menu-item-gitbooks">
-          <a href="//blog.kail.xyz/docsify" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
-            
-            Docs
-          </a>
-        </li>
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-docs">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="http://blog.kail.xyz/docsify" rel="section"><i class="menu-item-icon fa fa-fw fa-github"></i> <br/>Docs</a>
+
+  </li>
 
       
+      
     </ul>
+  
+
+  
+    
+
   
 
   
@@ -227,12 +287,20 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
@@ -245,21 +313,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-18/redis/redis-pub_sub.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-18/redis/redis-pub_sub.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -269,11 +339,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-12-18/redis/redis-pub_sub.html" itemprop="url">Redis Pub/Sub</a></h2>
+                
+                <a href="/post/2016-12-18/redis/redis-pub_sub.html" class="post-title-link" itemprop="url">Redis Pub/Sub</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -281,18 +360,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-18T00:00:00+08:00">
-                2016-12-18
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-12-18 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-18T00:00:00+08:00">2016-12-18</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-02 22:04:50" itemprop="dateModified" datetime="2018-09-02T22:04:50+08:00">2018-09-02</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -303,11 +399,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a></span>
 
                 
                 
@@ -317,14 +409,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-12-18/redis/redis-pub_sub.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-12-18/redis/redis-pub_sub.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-12-18/redis/redis-pub_sub.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -355,21 +450,29 @@
         
           <p>　Redis的 <code>发布/订阅</code> 功能可用于构建即时通信应用，比如网络聊天室、实时广播、实时提醒等。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-12-18/redis/redis-pub_sub.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-12-18/redis/redis-pub_sub.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -402,21 +505,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-17/js-flowchart.js.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-17/js-flowchart.js.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -426,11 +531,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-12-17/js-flowchart.js.html" itemprop="url">flowchart.js 绘制流程图</a></h2>
+                
+                <a href="/post/2016-12-17/js-flowchart.js.html" class="post-title-link" itemprop="url">flowchart.js 绘制流程图</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -438,13 +552,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-17T00:00:00+08:00">
-                2016-12-17
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-12-17 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-17T00:00:00+08:00">2016-12-17</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
@@ -452,14 +583,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-12-17/js-flowchart.js.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-12-17/js-flowchart.js.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-12-17/js-flowchart.js.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -493,21 +627,29 @@
 <p>Draws simple SVG flow chart diagrams from textual representation of the diagram</p>
 </blockquote>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-12-17/js-flowchart.js.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-12-17/js-flowchart.js.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -540,21 +682,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-16/redis/redis-install.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-16/redis/redis-install.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -564,11 +708,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-12-16/redis/redis-install.html" itemprop="url">Redis 安装部署</a></h2>
+                
+                <a href="/post/2016-12-16/redis/redis-install.html" class="post-title-link" itemprop="url">Redis 安装部署</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -576,18 +729,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-16T00:00:00+08:00">
-                2016-12-16
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-12-16 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-16T00:00:00+08:00">2016-12-16</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-02 22:04:54" itemprop="dateModified" datetime="2018-09-02T22:04:54+08:00">2018-09-02</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -598,11 +768,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a></span>
 
                 
                 
@@ -612,14 +778,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-12-16/redis/redis-install.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-12-16/redis/redis-install.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-12-16/redis/redis-install.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -651,21 +820,29 @@
           <h1 id="快速安装"><a href="#快速安装" class="headerlink" title="快速安装"></a>快速安装</h1><p>下面是最基本的安装步骤，便于快速上手操作,操作环境在为 windows bash</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget http://download.redis.io/releases/redis-3.2.6.tar.gz</span><br><span class="line">tar zxvf redis-3.2.6.tar.gz</span><br><span class="line"><span class="built_in">cd</span> redis-3.2.6</span><br><span class="line">make</span><br><span class="line"><span class="comment"># cd src &amp;&amp; make install</span></span><br></pre></td></tr></table></figure>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-12-16/redis/redis-install.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-12-16/redis/redis-install.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -698,21 +875,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-13/java/java-spi.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-13/java/java-spi.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -722,11 +901,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-12-13/java/java-spi.html" itemprop="url">Java SPI</a></h2>
+                
+                <a href="/post/2016-12-13/java/java-spi.html" class="post-title-link" itemprop="url">Java SPI</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -734,18 +922,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-13T00:00:00+08:00">
-                2016-12-13
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-12-13 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-13T00:00:00+08:00">2016-12-13</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -756,11 +961,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -770,14 +971,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-12-13/java/java-spi.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-12-13/java/java-spi.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-12-13/java/java-spi.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -810,21 +1014,29 @@
 <p>系统里抽象的各个模块，往往有很多不同的实现方案，比如<code>jdbc</code>模块的方案等。为了实现在模块装配的时候，能不在程序里动态指明，这就需要一种服务发现机制。 </p>
 <p><strong>java spi就是提供这样的一个机制：为某个接口寻找服务实现的机制。</strong></p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-12-13/java/java-spi.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-12-13/java/java-spi.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -857,21 +1069,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-11/maven-custom-plugin-by-hand.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-11/maven-custom-plugin-by-hand.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -881,11 +1095,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-12-11/maven-custom-plugin-by-hand.html" itemprop="url">手写 maven 插件</a></h2>
+                
+                <a href="/post/2016-12-11/maven-custom-plugin-by-hand.html" class="post-title-link" itemprop="url">手写 maven 插件</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -893,13 +1116,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-11T00:00:00+08:00">
-                2016-12-11
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-12-11 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-11T00:00:00+08:00">2016-12-11</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
@@ -907,14 +1147,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-12-11/maven-custom-plugin-by-hand.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-12-11/maven-custom-plugin-by-hand.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-12-11/maven-custom-plugin-by-hand.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -945,21 +1188,29 @@
         
           <p>本文主要通过编写一个插件来加深对<code>maven插件机制</code> <code>生命周期</code> <code>插件目标</code> <code>插件解析机制</code> 等概念的理解，插件本身并没有实际功能，只是输出一句 <code>Hello World</code>。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-12-11/maven-custom-plugin-by-hand.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-12-11/maven-custom-plugin-by-hand.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -992,21 +1243,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-07/linux/linux-command-curl.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-07/linux/linux-command-curl.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1016,11 +1269,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-12-07/linux/linux-command-curl.html" itemprop="url">curl 命令常见用法</a></h2>
+                
+                <a href="/post/2016-12-07/linux/linux-command-curl.html" class="post-title-link" itemprop="url">curl 命令常见用法</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1028,18 +1290,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-07T00:00:00+08:00">
-                2016-12-07
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-12-07 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-07T00:00:00+08:00">2016-12-07</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -1050,11 +1329,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -1064,14 +1339,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-12-07/linux/linux-command-curl.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-12-07/linux/linux-command-curl.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-12-07/linux/linux-command-curl.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1107,21 +1385,29 @@
 <div style="text-align: right;">来自: <a href="http://man.linuxde.net/curl" target="_blank" rel="noopener">http://man.linuxde.net/curl</a></div>
 </blockquote>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-12-07/linux/linux-command-curl.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-12-07/linux/linux-command-curl.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1154,21 +1440,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-06/linux/linux-command-base64-and-jq.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-06/linux/linux-command-base64-and-jq.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1178,11 +1466,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-12-06/linux/linux-command-base64-and-jq.html" itemprop="url">base64 和 jq 命令</a></h2>
+                
+                <a href="/post/2016-12-06/linux/linux-command-base64-and-jq.html" class="post-title-link" itemprop="url">base64 和 jq 命令</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1190,18 +1487,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-06T00:00:00+08:00">
-                2016-12-06
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-12-06 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-06T00:00:00+08:00">2016-12-06</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -1212,11 +1526,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -1226,14 +1536,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-12-06/linux/linux-command-base64-and-jq.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-12-06/linux/linux-command-base64-and-jq.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-12-06/linux/linux-command-base64-and-jq.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1264,21 +1577,29 @@
         
           <p>base64 一般会默认安装，可以进行 base64 编码和解码。<br>jq 可以对json进行解析、选择、格式化、高亮等，需要通过 <code>apt-get install jq</code> 进行安装。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-12-06/linux/linux-command-base64-and-jq.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-12-06/linux/linux-command-base64-and-jq.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1311,21 +1632,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-04/linux/linux-dpkg-and-apt-get.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-04/linux/linux-dpkg-and-apt-get.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1335,11 +1658,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-12-04/linux/linux-dpkg-and-apt-get.html" itemprop="url">dpkg 和 apt-get</a></h2>
+                
+                <a href="/post/2016-12-04/linux/linux-dpkg-and-apt-get.html" class="post-title-link" itemprop="url">dpkg 和 apt-get</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1347,18 +1679,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-04T00:00:00+08:00">
-                2016-12-04
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-12-04 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-04T00:00:00+08:00">2016-12-04</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -1369,11 +1718,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -1383,14 +1728,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-12-04/linux/linux-dpkg-and-apt-get.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-12-04/linux/linux-dpkg-and-apt-get.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-12-04/linux/linux-dpkg-and-apt-get.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1421,21 +1769,29 @@
         
           <p>dpkg 是一种的软件包管理工具，apt-get 是 dpkg 的一个前端程序，apt-get 最主要的功能是解决软件包的依赖性问题。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-12-04/linux/linux-dpkg-and-apt-get.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-12-04/linux/linux-dpkg-and-apt-get.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1468,21 +1824,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-01/linux/linux-source-install.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-01/linux/linux-source-install.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1492,11 +1850,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-12-01/linux/linux-source-install.html" itemprop="url">源码软件包编译安装方式</a></h2>
+                
+                <a href="/post/2016-12-01/linux/linux-source-install.html" class="post-title-link" itemprop="url">源码软件包编译安装方式</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1504,18 +1871,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-01T00:00:00+08:00">
-                2016-12-01
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-12-01 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-01T00:00:00+08:00">2016-12-01</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -1526,11 +1910,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -1540,14 +1920,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-12-01/linux/linux-source-install.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-12-01/linux/linux-source-install.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-12-01/linux/linux-source-install.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1578,21 +1961,29 @@
         
           <p>通常编译可以获得该软件的最新版本，但是源码安装通常安装比较麻烦，特别是解决依赖经常会出现问题。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-12-01/linux/linux-source-install.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-12-01/linux/linux-source-install.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1625,21 +2016,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-09-15/git-source-install.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-09-15/git-source-install.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1649,11 +2042,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-09-15/git-source-install.html" itemprop="url">Git 源码方式安装</a></h2>
+                
+                <a href="/post/2016-09-15/git-source-install.html" class="post-title-link" itemprop="url">Git 源码方式安装</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1661,13 +2063,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-15T00:00:00+08:00">
-                2016-09-15
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-09-15 00:00:00" itemprop="dateCreated datePublished" datetime="2016-09-15T00:00:00+08:00">2016-09-15</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
@@ -1675,14 +2094,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-09-15/git-source-install.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-09-15/git-source-install.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-09-15/git-source-install.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1713,21 +2135,29 @@
         
           <p>默认使用 yum 或者 apt 安装Git 的时候，版本会比较老，所以这里使用源码方式进行安装。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-09-15/git-source-install.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-09-15/git-source-install.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1760,21 +2190,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-09-10/git-recovery-and-restore.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-09-10/git-recovery-and-restore.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1784,11 +2216,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-09-10/git-recovery-and-restore.html" itemprop="url">Git 恢复和还原</a></h2>
+                
+                <a href="/post/2016-09-10/git-recovery-and-restore.html" class="post-title-link" itemprop="url">Git 恢复和还原</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1796,13 +2237,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-10T00:00:00+08:00">
-                2016-09-10
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-09-10 00:00:00" itemprop="dateCreated datePublished" datetime="2016-09-10T00:00:00+08:00">2016-09-10</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
@@ -1810,14 +2268,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-09-10/git-recovery-and-restore.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-09-10/git-recovery-and-restore.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-09-10/git-recovery-and-restore.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1885,12 +2346,18 @@
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1923,21 +2390,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-08-24/design-pattern.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-08-24/design-pattern.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1947,11 +2416,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-08-24/design-pattern.html" itemprop="url">设计模式</a></h2>
+                
+                <a href="/post/2016-08-24/design-pattern.html" class="post-title-link" itemprop="url">设计模式</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1959,13 +2437,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-24T00:00:00+08:00">
-                2016-08-24
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-08-24 00:00:00" itemprop="dateCreated datePublished" datetime="2016-08-24T00:00:00+08:00">2016-08-24</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
@@ -1973,14 +2468,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-08-24/design-pattern.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-08-24/design-pattern.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-08-24/design-pattern.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2061,12 +2559,18 @@
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2099,21 +2603,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-08-22/other/marry.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-08-22/other/marry.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2123,11 +2629,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-08-22/other/marry.html" itemprop="url">结婚</a></h2>
+                
+                <a href="/post/2016-08-22/other/marry.html" class="post-title-link" itemprop="url">结婚</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2135,18 +2650,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-22T00:00:00+08:00">
-                2016-08-22
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-08-22 00:00:00" itemprop="dateCreated datePublished" datetime="2016-08-22T00:00:00+08:00">2016-08-22</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-07 23:27:52" itemprop="dateModified" datetime="2018-10-07T23:27:52+08:00">2018-10-07</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -2157,11 +2689,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Other/" itemprop="url" rel="index">
-                    <span itemprop="name">Other</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Other/" itemprop="url" rel="index"><span itemprop="name">Other</span></a></span>
 
                 
                 
@@ -2171,14 +2699,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-08-22/other/marry.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-08-22/other/marry.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-08-22/other/marry.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2214,12 +2745,18 @@
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2252,21 +2789,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-08-11/linux/vim-common-commands.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-08-11/linux/vim-common-commands.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2276,11 +2815,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-08-11/linux/vim-common-commands.html" itemprop="url">vim 常用命令</a></h2>
+                
+                <a href="/post/2016-08-11/linux/vim-common-commands.html" class="post-title-link" itemprop="url">vim 常用命令</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2288,18 +2836,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-11T00:00:00+08:00">
-                2016-08-11
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-08-11 00:00:00" itemprop="dateCreated datePublished" datetime="2016-08-11T00:00:00+08:00">2016-08-11</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -2310,11 +2875,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -2324,14 +2885,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-08-11/linux/vim-common-commands.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-08-11/linux/vim-common-commands.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-08-11/linux/vim-common-commands.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2408,12 +2972,18 @@
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2446,21 +3016,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-08-06/spring/spring-loaded-use-in-hot-loaded.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-08-06/spring/spring-loaded-use-in-hot-loaded.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2470,11 +3042,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-08-06/spring/spring-loaded-use-in-hot-loaded.html" itemprop="url">Spring Loaded 热部署</a></h2>
+                
+                <a href="/post/2016-08-06/spring/spring-loaded-use-in-hot-loaded.html" class="post-title-link" itemprop="url">Spring Loaded 热部署</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2482,18 +3063,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-06T00:00:00+08:00">
-                2016-08-06
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-08-06 00:00:00" itemprop="dateCreated datePublished" datetime="2016-08-06T00:00:00+08:00">2016-08-06</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -2504,11 +3102,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a></span>
 
                 
                 
@@ -2518,14 +3112,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-08-06/spring/spring-loaded-use-in-hot-loaded.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-08-06/spring/spring-loaded-use-in-hot-loaded.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-08-06/spring/spring-loaded-use-in-hot-loaded.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2556,21 +3153,29 @@
         
           <p>在玩 JRebel 的时候发现了 Spring Loaded，相比JRebel来说，Spring Loaded最大的优势就是免费。<br>而且其挂在<a href="https://github.com/spring-projects" target="_blank" rel="noopener">spring-projects</a>下面，也算是有个强大的后盾。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-08-06/spring/spring-loaded-use-in-hot-loaded.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-08-06/spring/spring-loaded-use-in-hot-loaded.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2603,21 +3208,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-07-24/nginx-use-in-local-develop.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-07-24/nginx-use-in-local-develop.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2627,11 +3234,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-07-24/nginx-use-in-local-develop.html" itemprop="url">使用Nginx反向代理协助本地开发</a></h2>
+                
+                <a href="/post/2016-07-24/nginx-use-in-local-develop.html" class="post-title-link" itemprop="url">使用Nginx反向代理协助本地开发</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2639,13 +3255,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-24T00:00:00+08:00">
-                2016-07-24
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-07-24 00:00:00" itemprop="dateCreated datePublished" datetime="2016-07-24T00:00:00+08:00">2016-07-24</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
@@ -2653,14 +3286,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-07-24/nginx-use-in-local-develop.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-07-24/nginx-use-in-local-develop.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-07-24/nginx-use-in-local-develop.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2691,21 +3327,29 @@
         
           <p>有时候本地需要启动多个项目，模拟线上的访问环境，用不同的域名定到不同的项目，又不能加端口，这时候Nginx的反向代理即可帮助到我们。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-07-24/nginx-use-in-local-develop.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-07-24/nginx-use-in-local-develop.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2738,21 +3382,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-07-09/mysql/installing-mysql-using-a-no-install-zip-archive.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-07-09/mysql/installing-mysql-using-a-no-install-zip-archive.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2762,11 +3408,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-07-09/mysql/installing-mysql-using-a-no-install-zip-archive.html" itemprop="url">解压版MySQL 安装</a></h2>
+                
+                <a href="/post/2016-07-09/mysql/installing-mysql-using-a-no-install-zip-archive.html" class="post-title-link" itemprop="url">解压版MySQL 安装</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2774,18 +3429,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-09T21:59:59+08:00">
-                2016-07-09
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-07-09 21:59:59" itemprop="dateCreated datePublished" datetime="2016-07-09T21:59:59+08:00">2016-07-09</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-02 01:43:02" itemprop="dateModified" datetime="2018-09-02T01:43:02+08:00">2018-09-02</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -2796,11 +3468,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL/" itemprop="url" rel="index">
-                    <span itemprop="name">MySQL</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
 
                 
                 
@@ -2810,14 +3478,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-07-09/mysql/installing-mysql-using-a-no-install-zip-archive.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-07-09/mysql/installing-mysql-using-a-no-install-zip-archive.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-07-09/mysql/installing-mysql-using-a-no-install-zip-archive.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2850,21 +3521,29 @@
 <p>下载版本: Windows (x86, 64-bit), ZIP Archive, 5.7.13, 310.0M    </p>
 <p>具体下载链接： <a href="http://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.13-winx64.zip" target="_blank" rel="noopener">http://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.13-winx64.zip</a></p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-07-09/mysql/installing-mysql-using-a-no-install-zip-archive.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-07-09/mysql/installing-mysql-using-a-no-install-zip-archive.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2897,21 +3576,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-06-25/nginx-install-in-linux.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-06-25/nginx-install-in-linux.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2921,11 +3602,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-06-25/nginx-install-in-linux.html" itemprop="url">Nginx 编译 安装笔记</a></h2>
+                
+                <a href="/post/2016-06-25/nginx-install-in-linux.html" class="post-title-link" itemprop="url">Nginx 编译 安装笔记</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2933,13 +3623,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-25T00:00:00+08:00">
-                2016-06-25
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2016-06-25T00:00:00+08:00">2016-06-25</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
@@ -2947,14 +3654,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-06-25/nginx-install-in-linux.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-06-25/nginx-install-in-linux.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-06-25/nginx-install-in-linux.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2986,21 +3696,29 @@
           <h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><h5 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get install build-essential </span><br><span class="line">apt-get install libtool </span><br><span class="line">apt-get install openssl</span><br></pre></td></tr></table></figure>
 <h5 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc automake autoconf libtool make</span><br><span class="line">yum install gcc gcc-c++</span><br></pre></td></tr></table></figure>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-06-25/nginx-install-in-linux.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-06-25/nginx-install-in-linux.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -3033,21 +3751,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-06-11/linux/ssh-no-password.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-06-11/linux/ssh-no-password.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -3057,11 +3777,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-06-11/linux/ssh-no-password.html" itemprop="url">ssh 免密码登录</a></h2>
+                
+                <a href="/post/2016-06-11/linux/ssh-no-password.html" class="post-title-link" itemprop="url">ssh 免密码登录</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -3069,18 +3798,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-11T23:00:04+08:00">
-                2016-06-11
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-06-11 23:00:04" itemprop="dateCreated datePublished" datetime="2016-06-11T23:00:04+08:00">2016-06-11</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-07 23:30:45" itemprop="dateModified" datetime="2018-10-07T23:30:45+08:00">2018-10-07</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -3091,11 +3837,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -3105,14 +3847,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-06-11/linux/ssh-no-password.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-06-11/linux/ssh-no-password.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-06-11/linux/ssh-no-password.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -3143,21 +3888,29 @@
         
           <p>如果没有安装ssh，先进行安装<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install ssh</span><br></pre></td></tr></table></figure></p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-06-11/linux/ssh-no-password.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-06-11/linux/ssh-no-password.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -3190,21 +3943,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-06-10/git-make-simple.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-06-10/git-make-simple.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -3214,11 +3969,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-06-10/git-make-simple.html" itemprop="url">git 常用命令</a></h2>
+                
+                <a href="/post/2016-06-10/git-make-simple.html" class="post-title-link" itemprop="url">git 常用命令</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -3226,13 +3990,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-10T00:00:00+08:00">
-                2016-06-10
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-06-10 00:00:00" itemprop="dateCreated datePublished" datetime="2016-06-10T00:00:00+08:00">2016-06-10</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
@@ -3240,14 +4021,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-06-10/git-make-simple.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-06-10/git-make-simple.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-06-10/git-make-simple.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -3283,21 +4067,29 @@
 </li>
 </ul>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2016-06-10/git-make-simple.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2016-06-10/git-make-simple.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -3326,15 +4118,12 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
 
           </div>
-          
-
-
           
 
         </div>
@@ -3357,55 +4146,241 @@
 
       
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
                 src="/images/favicon.png"
-                alt="杨凯彬" />
+                alt="杨凯彬"/>
             
               <p class="site-author-name" itemprop="name">杨凯彬</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">菜鸟会飞</p>
           </div>
 
-          <nav class="site-state motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">83</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
 
-            
-              <div class="site-state-item site-state-posts">
               
-                <a href="/archives/">
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
               
-                  <span class="site-state-item-count">83</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
 
-            
               
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">65</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
               
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">17</span>
-                  <span class="site-state-item-name">分类</span>
-                </a>
-              </div>
-            
+            </nav>
+          
 
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">65</span>
-                  <span class="site-state-item-name">标签</span>
-                </a>
-              </div>
-            
+          
 
-          </nav>
-
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/kailbin" title="GitHub &rarr; https://github.com/kailbin" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:ykb553@163.com" title="E-Mail &rarr; mailto:ykb553@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+            </div>
           
 
           
@@ -3414,12 +4389,12 @@
           
 
           
+            
           
-
           
 
         </div>
-      </section>
+      </div>
 
       
 
@@ -3435,17 +4410,19 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">杨凯彬</span>
 
   
+
+  
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动</div>
 
 
 
@@ -3453,7 +4430,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a></div>
 
 
 
@@ -3465,9 +4442,8 @@
 
 
 
-
   <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109"></script>
   </div>
 
 
@@ -3485,11 +4461,14 @@
 
     
 
+    
+
+    
   </div>
 
   
 
-<script type="text/javascript">
+<script>
   if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
     window.Promise = null;
   }
@@ -3503,7 +4482,6 @@
 
 
 
-  
 
 
 
@@ -3516,43 +4494,27 @@
 
 
 
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
+
+
+
+
 
   
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
 
   
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+  <script src="/js/src/utils.js?v=7.0.0"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+  <script src="/js/src/motion.js?v=7.0.0"></script>
 
 
 <script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
@@ -3561,45 +4523,24 @@
   
   
 
-  
 
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-    
-      <script id="dsq-count-scr" src="https://kailbin.disqus.com/count.js" async></script>
-    
-
-    
-
-  
-
-
-
-
-	
-
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
 
 
 
 
   
 
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
 
 
 
-
-
-
+  
+  
+  <script id="dsq-count-scr" src="https://kailbin.disqus.com/count.js" async></script>
 
 
 
@@ -3612,29 +4553,24 @@
 
 
 
+  
+
+  
+
+  
 
   
 
   
 
   
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
-</script>
-
 
   
+
+  
+
+  
+
   
 
   

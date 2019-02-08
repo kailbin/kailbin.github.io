@@ -3,23 +3,21 @@
 
 
 
+
+
+
+
+
+
+
+
+
 <html class="theme-next mist" lang="zh-CN">
 <head>
   <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
 
 
 
@@ -34,50 +32,69 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
 
 
   
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
 
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
-
-
-  <link rel="mask-icon" href="/favicon.ico?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="kail, MrKail, kail blog, 杨凯彬" />
-
-
-
-
-
-
-
-
-
-
-<meta name="description" content="菜鸟会飞">
+  <meta name="description" content="菜鸟会飞">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mr.Kail&#39;s Blog">
 <meta property="og:url" content="http://blog.kail.xyz/page/3/index.html">
@@ -90,29 +107,6 @@
 
 
 
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
 
 
 
@@ -120,7 +114,11 @@
 
 
 
-
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
 
   <title>Mr.Kail's Blog</title>
   
@@ -132,6 +130,35 @@
 
 
 
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -141,29 +168,28 @@
     
   
 
-  <div class="container sidebar-position-left 
+  <div class="container sidebar-position-right 
   page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
+  <div class="site-meta">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Mr.Kail's Blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <h1 class="site-subtitle" itemprop="description"></h1>
-      
+    
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -171,55 +197,89 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th-large"></i> <br />
-            
-            标签
-          </a>
-        </li>
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
         
-        <li class="menu-item menu-item-gitbooks">
-          <a href="//blog.kail.xyz/docsify" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
-            
-            Docs
-          </a>
-        </li>
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-docs">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="http://blog.kail.xyz/docsify" rel="section"><i class="menu-item-icon fa fa-fw fa-github"></i> <br/>Docs</a>
+
+  </li>
 
       
+      
     </ul>
+  
+
+  
+    
+
   
 
   
@@ -227,12 +287,20 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
@@ -245,21 +313,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-04-15/spring/spring-profile-and-conditional-annotation.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-04-15/spring/spring-profile-and-conditional-annotation.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -269,11 +339,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-04-15/spring/spring-profile-and-conditional-annotation.html" itemprop="url">Spring @Profile 和 @Conditional 注解</a></h2>
+                
+                <a href="/post/2017-04-15/spring/spring-profile-and-conditional-annotation.html" class="post-title-link" itemprop="url">Spring @Profile 和 @Conditional 注解</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -281,18 +360,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-15T00:00:00+08:00">
-                2017-04-15
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-04-15 00:00:00" itemprop="dateCreated datePublished" datetime="2017-04-15T00:00:00+08:00">2017-04-15</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -303,11 +399,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a></span>
 
                 
                 
@@ -317,14 +409,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-04-15/spring/spring-profile-and-conditional-annotation.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-04-15/spring/spring-profile-and-conditional-annotation.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-04-15/spring/spring-profile-and-conditional-annotation.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -355,21 +450,29 @@
         
           <p><code>@Profile</code> 和 <code>@Conditional</code> 都可以根据条件加载指定的Bean。<code>@Profile</code>主要使用场景是用来跟环境绑定，不同的环境加载不同的Bean；<code>@Conditional</code>可用定时更详细的加载条件。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-04-15/spring/spring-profile-and-conditional-annotation.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-04-15/spring/spring-profile-and-conditional-annotation.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -402,21 +505,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-03-17/java/java-json-path.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-03-17/java/java-json-path.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -426,11 +531,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-03-17/java/java-json-path.html" itemprop="url">使用 json-path 解析 json 数据</a></h2>
+                
+                <a href="/post/2017-03-17/java/java-json-path.html" class="post-title-link" itemprop="url">使用 json-path 解析 json 数据</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -438,18 +552,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-17T00:00:00+08:00">
-                2017-03-17
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-03-17 00:00:00" itemprop="dateCreated datePublished" datetime="2017-03-17T00:00:00+08:00">2017-03-17</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -460,11 +591,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -474,14 +601,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-03-17/java/java-json-path.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-03-17/java/java-json-path.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-03-17/java/java-json-path.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -515,21 +645,29 @@
 <p>JsonPath expressions always refer to a JSON structure in the same way as XPath expression are used in combination with an XML document</p>
 </blockquote>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-03-17/java/java-json-path.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-03-17/java/java-json-path.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -562,21 +700,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-03-16/spring/spring-boot-rose-multi-datasource.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-03-16/spring/spring-boot-rose-multi-datasource.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -586,11 +726,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-03-16/spring/spring-boot-rose-multi-datasource.html" itemprop="url">Spring Boot 下 paoding-rose-jade 的多数据源配置</a></h2>
+                
+                <a href="/post/2017-03-16/spring/spring-boot-rose-multi-datasource.html" class="post-title-link" itemprop="url">Spring Boot 下 paoding-rose-jade 的多数据源配置</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -598,18 +747,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-16T00:00:00+08:00">
-                2017-03-16
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-03-16 00:00:00" itemprop="dateCreated datePublished" datetime="2017-03-16T00:00:00+08:00">2017-03-16</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -620,11 +786,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a></span>
 
                 
                 
@@ -634,14 +796,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-03-16/spring/spring-boot-rose-multi-datasource.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-03-16/spring/spring-boot-rose-multi-datasource.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-03-16/spring/spring-boot-rose-multi-datasource.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -679,21 +844,29 @@
 </ul>
 <p>以上默认数据源的寻找步骤摘录自 <code>JadeBeanFactoryPostProcessor.java</code> 的 类注释，<a href="https://github.com/paoding-code/paoding-rose/blob/master/paoding-rose-jade/src/main/java/net/paoding/rose/jade/context/spring/JadeBeanFactoryPostProcessor.java" target="_blank" rel="noopener">点击查看</a>。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-03-16/spring/spring-boot-rose-multi-datasource.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-03-16/spring/spring-boot-rose-multi-datasource.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -726,21 +899,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-03-14/spring/spring-boot-rose.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-03-14/spring/spring-boot-rose.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -750,11 +925,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-03-14/spring/spring-boot-rose.html" itemprop="url">Spring Boot 集成 paoding-rose-jade</a></h2>
+                
+                <a href="/post/2017-03-14/spring/spring-boot-rose.html" class="post-title-link" itemprop="url">Spring Boot 集成 paoding-rose-jade</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -762,18 +946,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-14T00:00:00+08:00">
-                2017-03-14
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-03-14 00:00:00" itemprop="dateCreated datePublished" datetime="2017-03-14T00:00:00+08:00">2017-03-14</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -784,11 +985,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a></span>
 
                 
                 
@@ -798,14 +995,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-03-14/spring/spring-boot-rose.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-03-14/spring/spring-boot-rose.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-03-14/spring/spring-boot-rose.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -842,21 +1042,29 @@
 <p>paoding-rose 跟其他主流框架如此类似，为什么还会选择它呢？<br>个人感觉可能是跟它的很多“强制限制”有关，paoding-rose 规定 Controller 层 类必须以<code>Controller</code>结尾，必须写在 <code>controller</code>包下面；<br>DAO 层都是接口，命名必须以 <code>DAO</code> 结尾，必须写在 <code>dao</code> 包下面等等一些强制的要求，否者项目就跑不起来。<br>跟<code>约定大于配置</code>这个概念有点类似，但是其又不提供配置，必须按照要求来，这些强制的编码要求使开发相对来说规范起来，对后期维护是有益的。</p>
 <p>这里在 Spring Boot 中引入 paoding-rose-jade(DAO支持)模块，本文作为记录。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-03-14/spring/spring-boot-rose.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-03-14/spring/spring-boot-rose.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -889,21 +1097,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-03-05/java/java-self-decompile-command.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-03-05/java/java-self-decompile-command.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -913,11 +1123,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-03-05/java/java-self-decompile-command.html" itemprop="url">Java 内建反编译工具 — javap</a></h2>
+                
+                <a href="/post/2017-03-05/java/java-self-decompile-command.html" class="post-title-link" itemprop="url">Java 内建反编译工具 — javap</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -925,18 +1144,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-05T00:00:00+08:00">
-                2017-03-05
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-03-05 00:00:00" itemprop="dateCreated datePublished" datetime="2017-03-05T00:00:00+08:00">2017-03-05</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -947,11 +1183,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -961,14 +1193,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-03-05/java/java-self-decompile-command.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-03-05/java/java-self-decompile-command.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-03-05/java/java-self-decompile-command.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -999,21 +1234,29 @@
         
           <p><code>javap</code> 是Java内建的一个反编译(反汇编)工具，可以拆解一个或者多个<code>.class</code>文件(disassembles one or more class files)。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-03-05/java/java-self-decompile-command.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-03-05/java/java-self-decompile-command.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1046,21 +1289,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-20/linux/shell-read-parameter.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-20/linux/shell-read-parameter.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1070,11 +1315,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-02-20/linux/shell-read-parameter.html" itemprop="url">Shell 获取命令行参数</a></h2>
+                
+                <a href="/post/2017-02-20/linux/shell-read-parameter.html" class="post-title-link" itemprop="url">Shell 获取命令行参数</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1082,18 +1336,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-20T00:00:00+08:00">
-                2017-02-20
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-20 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-20T00:00:00+08:00">2017-02-20</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -1104,11 +1375,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -1118,14 +1385,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-02-20/linux/shell-read-parameter.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-02-20/linux/shell-read-parameter.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-02-20/linux/shell-read-parameter.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1157,21 +1427,29 @@
           <p>前一段时间使用 Server 端 Git Hooks 的时候，需要获取 Git 提交的信息，这里对如何获取 Git 传递的参数 进行简单记录总结。</p>
 <p>git 通过<code>传递参数</code> 或者 <code>标准输入流</code>的形式传递提交的信息。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-02-20/linux/shell-read-parameter.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-02-20/linux/shell-read-parameter.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1204,21 +1482,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-19/java/java5-jmx-remote-monitor-and-mbean.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-19/java/java5-jmx-remote-monitor-and-mbean.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1228,11 +1508,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-02-19/java/java5-jmx-remote-monitor-and-mbean.html" itemprop="url">JMX 远程监控 与 MBean</a></h2>
+                
+                <a href="/post/2017-02-19/java/java5-jmx-remote-monitor-and-mbean.html" class="post-title-link" itemprop="url">JMX 远程监控 与 MBean</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1240,18 +1529,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-19T00:00:00+08:00">
-                2017-02-19
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-19 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-19T00:00:00+08:00">2017-02-19</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-07 23:29:59" itemprop="dateModified" datetime="2018-10-07T23:29:59+08:00">2018-10-07</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -1262,11 +1568,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -1276,14 +1578,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-02-19/java/java5-jmx-remote-monitor-and-mbean.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-02-19/java/java5-jmx-remote-monitor-and-mbean.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-02-19/java/java5-jmx-remote-monitor-and-mbean.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1317,21 +1622,29 @@
 <p>一个MBean是一个被管理的Java对象，有点类似于JavaBean，一个设备、一个应用或者任何资源都可以被表示为MBean，MBean会对外暴露一个接口，这个接口可以读取或者写入一些对象中的属性。</p>
 </blockquote>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-02-19/java/java5-jmx-remote-monitor-and-mbean.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-02-19/java/java5-jmx-remote-monitor-and-mbean.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1364,21 +1677,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-18/java/java7-watch-file-change.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-18/java/java7-watch-file-change.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1388,11 +1703,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-02-18/java/java7-watch-file-change.html" itemprop="url">JDK7 WatchService 监控文件变化</a></h2>
+                
+                <a href="/post/2017-02-18/java/java7-watch-file-change.html" class="post-title-link" itemprop="url">JDK7 WatchService 监控文件变化</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1400,18 +1724,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T00:00:00+08:00">
-                2017-02-18
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-18 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-18T00:00:00+08:00">2017-02-18</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -1422,11 +1763,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -1436,14 +1773,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-02-18/java/java7-watch-file-change.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-02-18/java/java7-watch-file-change.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-02-18/java/java7-watch-file-change.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1479,21 +1819,29 @@
 <p>因为 WatchService 本身并不支持递归 Watch，Watch一个文件夹只能Watch一层，子文件夹里面变动并不能Watch到，所有这里使用 <a href="/post/2017-01-07-java7-walkFileTree-fileVisitor.html">FileVisitor</a> 遍历所有目录注册 Watch。</p>
 <p>文本在Mac下测试，如果监控<code>/</code>根目录的话(包含可访问的所有子目录)，遍历完成大概花了5分钟左右，因为是采用轮训的方式，监控效率并不高，创建一个文件半天看不到效果。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-02-18/java/java7-watch-file-change.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-02-18/java/java7-watch-file-change.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1526,21 +1874,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-17/java/java-use-jpda-remote-debug.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-17/java/java-use-jpda-remote-debug.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1550,11 +1900,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-02-17/java/java-use-jpda-remote-debug.html" itemprop="url">Java JPDA 远程调试</a></h2>
+                
+                <a href="/post/2017-02-17/java/java-use-jpda-remote-debug.html" class="post-title-link" itemprop="url">Java JPDA 远程调试</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1562,18 +1921,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-17T00:00:00+08:00">
-                2017-02-17
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-17 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-17T00:00:00+08:00">2017-02-17</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -1584,11 +1960,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -1598,14 +1970,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-02-17/java/java-use-jpda-remote-debug.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-02-17/java/java-use-jpda-remote-debug.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-02-17/java/java-use-jpda-remote-debug.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1637,21 +2012,29 @@
           <p>代码调试最简单的办法就是输出日志的方式，但是如果代码发布在远程机器上，通过输出日志的方式可能不太高效，需要频繁的发布代码。本文会通过简单的配置实现<strong>远程代码断点调试</strong>。</p>
 <p>JPDA（Java Platform Debugger Architecture）是 Java 平台调试体系结构的缩写，通过 JPDA 提供的 API，开发人员可以方便灵活的搭建 Java 调试应用程序。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-02-17/java/java-use-jpda-remote-debug.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-02-17/java/java-use-jpda-remote-debug.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1684,21 +2067,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-16/mac-single-user-mode.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-16/mac-single-user-mode.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1708,11 +2093,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-02-16/mac-single-user-mode.html" itemprop="url">Mac 单用户模式(Single User Mode)获得root权限</a></h2>
+                
+                <a href="/post/2017-02-16/mac-single-user-mode.html" class="post-title-link" itemprop="url">Mac 单用户模式(Single User Mode)获得root权限</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1720,13 +2114,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-16T00:00:00+08:00">
-                2017-02-16
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-16 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-16T00:00:00+08:00">2017-02-16</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
@@ -1734,14 +2145,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-02-16/mac-single-user-mode.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-02-16/mac-single-user-mode.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-02-16/mac-single-user-mode.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1773,21 +2187,29 @@
           <p>最近在用 CleanMyMac 的时候把一些系统文件给删掉了，主要还是用 Windows 上的软件管理工具用习惯了，卸载软件有了洁癖。</p>
 <p>CleanMyMac 是收费，我就只通过它找到软件关联的文件，不小心把 <code>/etc/pam.d/</code> 文件夹给删了（没真正删除，放进回收站了），结果系统登陆不进去，提示密码输入错误，这里记录了恢复的过程。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-02-16/mac-single-user-mode.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-02-16/mac-single-user-mode.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1820,21 +2242,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-11/spring/spring-schema-ext.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-11/spring/spring-schema-ext.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -1844,11 +2268,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-02-11/spring/spring-schema-ext.html" itemprop="url">Spring Schema 扩展</a></h2>
+                
+                <a href="/post/2017-02-11/spring/spring-schema-ext.html" class="post-title-link" itemprop="url">Spring Schema 扩展</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -1856,18 +2289,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T00:00:00+08:00">
-                2017-02-11
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-11 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-11T00:00:00+08:00">2017-02-11</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -1878,11 +2328,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a></span>
 
                 
                 
@@ -1892,14 +2338,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-02-11/spring/spring-schema-ext.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-02-11/spring/spring-schema-ext.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-02-11/spring/spring-schema-ext.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1932,21 +2381,29 @@
 <p>首先就是有了语义，再者配置起来也相对方便，会减少一定的配置项。</p>
 <p>常见的 Spring 的事物管理(<code>tx:</code>)、AOP(<code>aop:</code>)，还有淘宝的 Dubbo(<code>dubbo:</code>) 都有自己的标签库。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-02-11/spring/spring-schema-ext.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-02-11/spring/spring-schema-ext.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -1979,21 +2436,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-10/java/java-self-troubleshooting-command.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-10/java/java-self-troubleshooting-command.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2003,11 +2462,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-02-10/java/java-self-troubleshooting-command.html" itemprop="url">Java 内建"故障排除"工具 — jcmd、jinfo、jmap、jhat、jstack、jsadebugd</a></h2>
+                
+                <a href="/post/2017-02-10/java/java-self-troubleshooting-command.html" class="post-title-link" itemprop="url">Java 内建"故障排除"工具 — jcmd、jinfo、jmap、jhat、jstack、jsadebugd</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2015,18 +2483,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-10T00:00:00+08:00">
-                2017-02-10
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-10 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-10T00:00:00+08:00">2017-02-10</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-08-14 23:17:26" itemprop="dateModified" datetime="2018-08-14T23:17:26+08:00">2018-08-14</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -2037,11 +2522,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -2051,14 +2532,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-02-10/java/java-self-troubleshooting-command.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-02-10/java/java-self-troubleshooting-command.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-02-10/java/java-self-troubleshooting-command.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2090,21 +2574,29 @@
           <p>jcmd: 向 JVM 发送诊断命令<br>jinfo: 获得 JVM 配置信息<br>jmap: 主要用于打印Java进程的 堆 信息<br>jhat: 方便析 Java 堆 的工具<br>jstack: 主要用于打印Java进程的 栈 信息<br>jsadebugd: 依附到一个Java进程或核心文件，担当一个调试服务器的作用</p>
 <p>以上几个只有 <code>jcmd</code> 没有被官方说明为 <code>Experimental</code>(实验性的)。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-02-10/java/java-self-troubleshooting-command.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-02-10/java/java-self-troubleshooting-command.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2137,21 +2629,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-07/java/java-self-monitor-command.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-07/java/java-self-monitor-command.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2161,11 +2655,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-02-07/java/java-self-monitor-command.html" itemprop="url">Java 内建"监控"工具 — jps、jstat、jstatd</a></h2>
+                
+                <a href="/post/2017-02-07/java/java-self-monitor-command.html" class="post-title-link" itemprop="url">Java 内建"监控"工具 — jps、jstat、jstatd</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2173,18 +2676,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-07T00:00:00+08:00">
-                2017-02-07
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-07 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-07T00:00:00+08:00">2017-02-07</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-07 23:29:50" itemprop="dateModified" datetime="2018-10-07T23:29:50+08:00">2018-10-07</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -2195,11 +2715,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -2209,14 +2725,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-02-07/java/java-self-monitor-command.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-02-07/java/java-self-monitor-command.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-02-07/java/java-self-monitor-command.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2247,21 +2766,29 @@
         
           <p>jps: 列出当前系统的Java进程<br>jstat: 显示 JVM 统计信息<br>jstatd: 可以远程监控 JVM 统计信息<br>jmc: 启动 Java Mission Controla 工具， 监控和管理正在运行的Java应用或者JVMs。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-02-07/java/java-self-monitor-command.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-02-07/java/java-self-monitor-command.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2294,21 +2821,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2318,11 +2847,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html" itemprop="url">使用 MySQL Connector/MXJ 在 Java 中嵌入 MySQL 进行测试</a></h2>
+                
+                <a href="/post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html" class="post-title-link" itemprop="url">使用 MySQL Connector/MXJ 在 Java 中嵌入 MySQL 进行测试</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2330,18 +2868,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-05T00:00:00+08:00">
-                2017-02-05
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-05 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-05T00:00:00+08:00">2017-02-05</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-08-14 23:19:17" itemprop="dateModified" datetime="2018-08-14T23:19:17+08:00">2018-08-14</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -2352,11 +2907,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL/" itemprop="url" rel="index">
-                    <span itemprop="name">MySQL</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
 
                 
                 
@@ -2366,14 +2917,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2404,21 +2958,29 @@
         
           <p>MySQL Connector/MXJ 是一个可以通过 Java API 启动或者关闭嵌入式MySQL的工具。<br>可以通过 MySQL JDBC driver 连接，通过 JDBC url 或者 使用<code>MysqldResource</code>编程的方式 控制MySQL 服务。<br>如果需要测试SQL对MySQL语法或者特性依赖性比较强，可以尝试使用该方式进行测试，并不建议使用在生产环境中。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2451,21 +3013,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-15/tools/apache-httpd-ab.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-15/tools/apache-httpd-ab.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2475,11 +3039,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-01-15/tools/apache-httpd-ab.html" itemprop="url">apache httpd ab</a></h2>
+                
+                <a href="/post/2017-01-15/tools/apache-httpd-ab.html" class="post-title-link" itemprop="url">apache httpd ab</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2487,18 +3060,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-15T00:00:00+08:00">
-                2017-01-15
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-01-15 00:00:00" itemprop="dateCreated datePublished" datetime="2017-01-15T00:00:00+08:00">2017-01-15</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-08-14 23:19:17" itemprop="dateModified" datetime="2018-08-14T23:19:17+08:00">2018-08-14</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -2509,11 +3099,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Tools/" itemprop="url" rel="index">
-                    <span itemprop="name">Tools</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a></span>
 
                 
                 
@@ -2523,14 +3109,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-01-15/tools/apache-httpd-ab.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-01-15/tools/apache-httpd-ab.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-01-15/tools/apache-httpd-ab.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2561,21 +3150,29 @@
         
           <p>ab 是 <strong>Apache HTTP 服务器性能基准工具(Apache HTTP server benchmarking tool)</strong>，可以进行简单的压力测试。 </p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-01-15/tools/apache-httpd-ab.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-01-15/tools/apache-httpd-ab.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2608,21 +3205,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-07/java/java7-walkFileTree-fileVisitor.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-07/java/java7-walkFileTree-fileVisitor.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2632,11 +3231,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-01-07/java/java7-walkFileTree-fileVisitor.html" itemprop="url">JDK7 遍历文件的API</a></h2>
+                
+                <a href="/post/2017-01-07/java/java7-walkFileTree-fileVisitor.html" class="post-title-link" itemprop="url">JDK7 遍历文件的API</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2644,18 +3252,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-07T00:00:00+08:00">
-                2017-01-07
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-01-07 00:00:00" itemprop="dateCreated datePublished" datetime="2017-01-07T00:00:00+08:00">2017-01-07</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -2666,11 +3291,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -2680,14 +3301,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-01-07/java/java7-walkFileTree-fileVisitor.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-01-07/java/java7-walkFileTree-fileVisitor.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-01-07/java/java7-walkFileTree-fileVisitor.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2718,21 +3342,29 @@
         
           <p>JDK7 遍历文件系统，需要通过递归的方式，JDK7+ 直接提供了遍历文件的API。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Path <span class="title">walkFileTree</span><span class="params">(Path start, FileVisitor&lt;? <span class="keyword">super</span> Path&gt; visitor)</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Path <span class="title">walkFileTree</span><span class="params">(Path start, Set&lt;FileVisitOption&gt; options, <span class="keyword">int</span> maxDepth, FileVisitor&lt;? <span class="keyword">super</span> Path&gt; visitor)</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure></p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-01-07/java/java7-walkFileTree-fileVisitor.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-01-07/java/java7-walkFileTree-fileVisitor.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2765,21 +3397,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-04/zookeeper-acl.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-04/zookeeper-acl.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2789,11 +3423,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-01-04/zookeeper-acl.html" itemprop="url">ZooKeeper ACL 权限控制</a></h2>
+                
+                <a href="/post/2017-01-04/zookeeper-acl.html" class="post-title-link" itemprop="url">ZooKeeper ACL 权限控制</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2801,13 +3444,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-04T00:00:00+08:00">
-                2017-01-04
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-01-04 00:00:00" itemprop="dateCreated datePublished" datetime="2017-01-04T00:00:00+08:00">2017-01-04</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
@@ -2815,14 +3475,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-01-04/zookeeper-acl.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-01-04/zookeeper-acl.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-01-04/zookeeper-acl.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2853,21 +3516,29 @@
         
           <p>ZooKeeper ACL 的权限控制信息由三部分组成：<code>scheme:id:permission</code>， 分别是 <strong>权限模式</strong>、<strong>权限对象</strong> 和 <strong>权限</strong>。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-01-04/zookeeper-acl.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-01-04/zookeeper-acl.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -2900,21 +3571,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-02/java/guava-cache.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-02/java/guava-cache.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -2924,11 +3597,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-01-02/java/guava-cache.html" itemprop="url">Guava Cache</a></h2>
+                
+                <a href="/post/2017-01-02/java/guava-cache.html" class="post-title-link" itemprop="url">Guava Cache</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -2936,18 +3618,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-02T00:00:00+08:00">
-                2017-01-02
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-01-02 00:00:00" itemprop="dateCreated datePublished" datetime="2017-01-02T00:00:00+08:00">2017-01-02</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -2958,11 +3657,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -2972,14 +3667,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-01-02/java/guava-cache.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-01-02/java/guava-cache.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-01-02/java/guava-cache.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -3020,21 +3718,29 @@
 <li>其他</li>
 </ul>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-01-02/java/guava-cache.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-01-02/java/guava-cache.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -3067,21 +3773,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-01/theory-blocking_non-synch_async-concurrent_parallel.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2017-01-01/theory-blocking_non-synch_async-concurrent_parallel.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -3091,11 +3799,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2017-01-01/theory-blocking_non-synch_async-concurrent_parallel.html" itemprop="url">阻塞/非阻塞、同步/异步、并发/并行 概念</a></h2>
+                
+                <a href="/post/2017-01-01/theory-blocking_non-synch_async-concurrent_parallel.html" class="post-title-link" itemprop="url">阻塞/非阻塞、同步/异步、并发/并行 概念</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -3103,13 +3820,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-01T00:00:00+08:00">
-                2017-01-01
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-01-01 00:00:00" itemprop="dateCreated datePublished" datetime="2017-01-01T00:00:00+08:00">2017-01-01</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
@@ -3117,14 +3851,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2017-01-01/theory-blocking_non-synch_async-concurrent_parallel.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2017-01-01/theory-blocking_non-synch_async-concurrent_parallel.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2017-01-01/theory-blocking_non-synch_async-concurrent_parallel.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -3159,21 +3896,29 @@
 <li><code>并发/并行</code> ：关键词<code>时间</code>、<code>时刻</code>，用于描述 多个程序是否会在同一<strong>时刻</strong>执行</li>
 </ul>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/post/2017-01-01/theory-blocking_non-synch_async-concurrent_parallel.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/post/2017-01-01/theory-blocking_non-synch_async-concurrent_parallel.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -3206,21 +3951,23 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-20/java/java5-method-time.html">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2016-12-20/java/java5-method-time.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杨凯彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/favicon.png">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mr.Kail's Blog">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
     </span>
 
     
@@ -3230,11 +3977,20 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/post/2016-12-20/java/java5-method-time.html" itemprop="url">Java 方法执行超时时间</a></h2>
+                
+                <a href="/post/2016-12-20/java/java5-method-time.html" class="post-title-link" itemprop="url">Java 方法执行超时时间</a>
+              
+            
+          </h2>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -3242,18 +3998,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-20T00:00:00+08:00">
-                2016-12-20
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2016-12-20 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-20T00:00:00+08:00">2016-12-20</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 21:21:39" itemprop="dateModified" datetime="2018-06-16T21:21:39+08:00">2018-06-16</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -3264,11 +4037,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -3278,14 +4047,17 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
                 <a href="/post/2016-12-20/java/java5-method-time.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="post/2016-12-20/java/java5-method-time.html" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2016-12-20/java/java5-method-time.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -3330,12 +4102,18 @@ over !!!!!
         
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
@@ -3364,15 +4142,12 @@ over !!!!!
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
 
           </div>
-          
-
-
           
 
         </div>
@@ -3395,55 +4170,241 @@ over !!!!!
 
       
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
                 src="/images/favicon.png"
-                alt="杨凯彬" />
+                alt="杨凯彬"/>
             
               <p class="site-author-name" itemprop="name">杨凯彬</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">菜鸟会飞</p>
           </div>
 
-          <nav class="site-state motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">83</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
 
-            
-              <div class="site-state-item site-state-posts">
               
-                <a href="/archives/">
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
               
-                  <span class="site-state-item-count">83</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
 
-            
               
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">65</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
               
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">17</span>
-                  <span class="site-state-item-name">分类</span>
-                </a>
-              </div>
-            
+            </nav>
+          
 
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">65</span>
-                  <span class="site-state-item-name">标签</span>
-                </a>
-              </div>
-            
+          
 
-          </nav>
-
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/kailbin" title="GitHub &rarr; https://github.com/kailbin" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:ykb553@163.com" title="E-Mail &rarr; mailto:ykb553@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+            </div>
           
 
           
@@ -3452,12 +4413,12 @@ over !!!!!
           
 
           
+            
           
-
           
 
         </div>
-      </section>
+      </div>
 
       
 
@@ -3473,17 +4434,19 @@ over !!!!!
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">杨凯彬</span>
 
   
+
+  
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动</div>
 
 
 
@@ -3491,7 +4454,7 @@ over !!!!!
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a></div>
 
 
 
@@ -3503,9 +4466,8 @@ over !!!!!
 
 
 
-
   <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109" language="JavaScript"></script>
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109"></script>
   </div>
 
 
@@ -3523,11 +4485,14 @@ over !!!!!
 
     
 
+    
+
+    
   </div>
 
   
 
-<script type="text/javascript">
+<script>
   if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
     window.Promise = null;
   }
@@ -3541,7 +4506,6 @@ over !!!!!
 
 
 
-  
 
 
 
@@ -3554,43 +4518,27 @@ over !!!!!
 
 
 
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
+
+
+
+
 
   
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
 
   
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+  <script src="/js/src/utils.js?v=7.0.0"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+  <script src="/js/src/motion.js?v=7.0.0"></script>
 
 
 <script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
@@ -3599,45 +4547,24 @@ over !!!!!
   
   
 
-  
 
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-    
-      <script id="dsq-count-scr" src="https://kailbin.disqus.com/count.js" async></script>
-    
-
-    
-
-  
-
-
-
-
-	
-
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
 
 
 
 
   
 
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
 
 
 
-
-
-
+  
+  
+  <script id="dsq-count-scr" src="https://kailbin.disqus.com/count.js" async></script>
 
 
 
@@ -3650,29 +4577,24 @@ over !!!!!
 
 
 
+  
+
+  
+
+  
 
   
 
   
 
   
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
-</script>
-
 
   
+
+  
+
+  
+
   
 
   
