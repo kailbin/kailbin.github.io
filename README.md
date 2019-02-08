@@ -15,18 +15,30 @@
 
 
 
-# [搜索功能](https://github.com/PaicHyperionDev/hexo-generator-search)
+# [集成豆瓣](https://github.com/mythsman/hexo-douban)
+```
+# 安装
+$ npm install hexo-douban --save
 
+# 配置
+douban:
+  user: mythsman
+  builtin: false
+  book:
+    title: 'This is my book title'
+    quote: 'This is my book quote'
+  movie:
+    title: 'This is my movie title'
+    quote: 'This is my movie quote'
+  game:
+    title: 'This is my game title'
+    quote: 'This is my game quote'
+  timeout: 10000 
 
-	$ npm install hexo-generator-search --save
-	$ npm install hexo-generator-searchdb --save
-	
-	# _config.yml 文件新增
-	search:
-	  path: search.xml
-	  field: post  	  
-	  format: html	  
-	  limit: 10000
+# 生成
+$ hexo douban
+```
+
 
 # 自定义的地方
 

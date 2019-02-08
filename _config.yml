@@ -77,8 +77,16 @@ deploy:
   branch: master
   message:
 
-search:
-  path: search.xml
-  field: all
-  format: html
-  limit: 10000
+douban:
+  user: 67431785
+  book:
+    title: ''
+    quote: ''
+  # movie:
+  #   title: 'This is my movie title'
+  #   quote: 'This is my movie quote'
+  # game:
+  #   title: 'This is my game title'
+  #   quote: 'This is my game quote'
+  timeout: 10000 #optional
+
