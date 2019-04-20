@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.kail.xyz/post/2019-04-20/manage/no-lazy.html</loc>
+    
+    <lastmod>2019-04-20T07:59:26.446Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.kail.xyz/post/2019-01-26/manage/su-shu.html</loc>
     
     <lastmod>2019-01-26T12:41:32.345Z</lastmod>
@@ -163,13 +170,6 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html</loc>
-    
-    <lastmod>2018-08-14T15:19:17.540Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.kail.xyz/post/2018-08-13/mysql/mysql-explain.html</loc>
     
     <lastmod>2018-08-14T15:19:17.540Z</lastmod>
@@ -177,14 +177,21 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2018-07-25/java/java8-stream-quick-start.html</loc>
+    <loc>http://blog.kail.xyz/post/2017-02-05/mysql/embedded-mysql-in-java-with-connector-mxj.html</loc>
+    
+    <lastmod>2018-08-14T15:19:17.540Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2018-08-01/java/java-object-header_and_lock.html</loc>
     
     <lastmod>2018-08-14T15:19:17.539Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2018-08-01/java/java-object-header_and_lock.html</loc>
+    <loc>http://blog.kail.xyz/post/2018-07-25/java/java8-stream-quick-start.html</loc>
     
     <lastmod>2018-08-14T15:19:17.539Z</lastmod>
     
@@ -247,21 +254,7 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/hidden/design-pattern/20-state.html</loc>
-    
-    <lastmod>2018-06-16T13:21:39.499Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.kail.xyz/hidden/design-pattern/22-mediator.html</loc>
-    
-    <lastmod>2018-06-16T13:21:39.499Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.kail.xyz/hidden/design-pattern/23-interpreter.html</loc>
     
     <lastmod>2018-06-16T13:21:39.499Z</lastmod>
     
@@ -275,14 +268,21 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/hidden/design-pattern/19-memento.html</loc>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/20-state.html</loc>
     
-    <lastmod>2018-06-16T13:21:39.498Z</lastmod>
+    <lastmod>2018-06-16T13:21:39.499Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/hidden/design-pattern/17-chain-of-responsibility.html</loc>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/23-interpreter.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.499Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/19-memento.html</loc>
     
     <lastmod>2018-06-16T13:21:39.498Z</lastmod>
     
@@ -296,9 +296,9 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/hidden/design-pattern/16-iterator.html</loc>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/17-chain-of-responsibility.html</loc>
     
-    <lastmod>2018-06-16T13:21:39.497Z</lastmod>
+    <lastmod>2018-06-16T13:21:39.498Z</lastmod>
     
   </url>
   
@@ -310,16 +310,9 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/hidden/design-pattern/12-flyweight.html</loc>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/16-iterator.html</loc>
     
-    <lastmod>2018-06-16T13:21:39.496Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.kail.xyz/hidden/design-pattern/14-template-method.html</loc>
-    
-    <lastmod>2018-06-16T13:21:39.496Z</lastmod>
+    <lastmod>2018-06-16T13:21:39.497Z</lastmod>
     
   </url>
   
@@ -338,7 +331,21 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/hidden/design-pattern/10-bridge.html</loc>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/14-template-method.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.496Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/12-flyweight.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.496Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/08-proxy.html</loc>
     
     <lastmod>2018-06-16T13:21:39.495Z</lastmod>
     
@@ -352,7 +359,7 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/hidden/design-pattern/08-proxy.html</loc>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/10-bridge.html</loc>
     
     <lastmod>2018-06-16T13:21:39.495Z</lastmod>
     
@@ -373,6 +380,13 @@
   </url>
   
   <url>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/06-adapter.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.494Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.kail.xyz/hidden/design-pattern/04-builder.html</loc>
     
     <lastmod>2018-06-16T13:21:39.494Z</lastmod>
@@ -380,9 +394,9 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/hidden/design-pattern/06-adapter.html</loc>
+    <loc>http://blog.kail.xyz/hidden/design-pattern/02-abstract-factory.html</loc>
     
-    <lastmod>2018-06-16T13:21:39.494Z</lastmod>
+    <lastmod>2018-06-16T13:21:39.493Z</lastmod>
     
   </url>
   
@@ -395,13 +409,6 @@
   
   <url>
     <loc>http://blog.kail.xyz/hidden/design-pattern/01-factory-method.html</loc>
-    
-    <lastmod>2018-06-16T13:21:39.493Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.kail.xyz/hidden/design-pattern/02-abstract-factory.html</loc>
     
     <lastmod>2018-06-16T13:21:39.493Z</lastmod>
     
@@ -478,14 +485,14 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2017-06-07/spring/resttemplate-message-converters.html</loc>
+    <loc>http://blog.kail.xyz/post/2017-03-16/spring/spring-boot-rose-multi-datasource.html</loc>
     
     <lastmod>2018-06-16T13:21:39.488Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2017-03-16/spring/spring-boot-rose-multi-datasource.html</loc>
+    <loc>http://blog.kail.xyz/post/2017-06-07/spring/resttemplate-message-converters.html</loc>
     
     <lastmod>2018-06-16T13:21:39.488Z</lastmod>
     
@@ -499,14 +506,14 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2017-05-14/other/use-cloud-tie.html</loc>
+    <loc>http://blog.kail.xyz/post/2018-05-06/other/e.164.html</loc>
     
     <lastmod>2018-06-16T13:21:39.486Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2018-05-06/other/e.164.html</loc>
+    <loc>http://blog.kail.xyz/post/2017-05-14/other/use-cloud-tie.html</loc>
     
     <lastmod>2018-06-16T13:21:39.486Z</lastmod>
     
@@ -576,13 +583,6 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2016-12-01/linux/linux-source-install.html</loc>
-    
-    <lastmod>2018-06-16T13:21:39.482Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.kail.xyz/post/2017-02-20/linux/shell-read-parameter.html</loc>
     
     <lastmod>2018-06-16T13:21:39.482Z</lastmod>
@@ -591,6 +591,13 @@
   
   <url>
     <loc>http://blog.kail.xyz/post/2016-12-04/linux/linux-dpkg-and-apt-get.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.482Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.kail.xyz/post/2016-12-01/linux/linux-source-install.html</loc>
     
     <lastmod>2018-06-16T13:21:39.482Z</lastmod>
     
@@ -618,6 +625,13 @@
   </url>
   
   <url>
+    <loc>http://blog.kail.xyz/post/2017-02-18/java/java7-watch-file-change.html</loc>
+    
+    <lastmod>2018-06-16T13:21:39.480Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.kail.xyz/post/2017-05-28/java/make-javassist-simple.html</loc>
     
     <lastmod>2018-06-16T13:21:39.480Z</lastmod>
@@ -632,21 +646,14 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2017-02-18/java/java7-watch-file-change.html</loc>
-    
-    <lastmod>2018-06-16T13:21:39.480Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.kail.xyz/post/2016-12-20/java/java5-method-time.html</loc>
+    <loc>http://blog.kail.xyz/post/2017-01-07/java/java7-walkFileTree-fileVisitor.html</loc>
     
     <lastmod>2018-06-16T13:21:39.479Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2017-01-07/java/java7-walkFileTree-fileVisitor.html</loc>
+    <loc>http://blog.kail.xyz/post/2016-12-20/java/java5-method-time.html</loc>
     
     <lastmod>2018-06-16T13:21:39.479Z</lastmod>
     
@@ -667,14 +674,14 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2017-03-17/java/java-json-path.html</loc>
+    <loc>http://blog.kail.xyz/post/2017-03-05/java/java-self-decompile-command.html</loc>
     
     <lastmod>2018-06-16T13:21:39.477Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2017-03-05/java/java-self-decompile-command.html</loc>
+    <loc>http://blog.kail.xyz/post/2017-03-17/java/java-json-path.html</loc>
     
     <lastmod>2018-06-16T13:21:39.477Z</lastmod>
     
@@ -716,14 +723,14 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2018-03-17/hbase/properties.html</loc>
+    <loc>http://blog.kail.xyz/post/2018-03-12/hbase/how-to-use-hbase-bulk-loading-and-why.html</loc>
     
     <lastmod>2018-06-16T13:21:39.474Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2018-03-12/hbase/how-to-use-hbase-bulk-loading-and-why.html</loc>
+    <loc>http://blog.kail.xyz/post/2018-03-17/hbase/properties.html</loc>
     
     <lastmod>2018-06-16T13:21:39.474Z</lastmod>
     
@@ -751,14 +758,14 @@
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2017-05-13/groovy-monitor-kaoqin-send-mail.html</loc>
+    <loc>http://blog.kail.xyz/post/2016-09-15/git-source-install.html</loc>
     
     <lastmod>2018-06-16T13:21:39.472Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.kail.xyz/post/2016-09-15/git-source-install.html</loc>
+    <loc>http://blog.kail.xyz/post/2017-05-13/groovy-monitor-kaoqin-send-mail.html</loc>
     
     <lastmod>2018-06-16T13:21:39.472Z</lastmod>
     
