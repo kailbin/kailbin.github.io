@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="最近遇到一个使用 Apache HttpClient 过程中的问题，具体场景是  通过 Spring @Scheduled(cron = &amp;quot;..&amp;quot;) 方式执行定时任务 定时任务中并发使用 HttpClient 拉取数据 但是定时任务只会执行一次 因为 Spring 基于注解的定时任务，在非异步的情况的，上一次任务执行完之前不会执行下一个任务 所以怀疑是第一次执行的任务一直没有执">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次 HttpClient 死锁问题">
+<meta property="og:url" content="http://blog.kail.xyz/post/2019-04-21/tools/httpclient-lock.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="最近遇到一个使用 Apache HttpClient 过程中的问题，具体场景是  通过 Spring @Scheduled(cron = &amp;quot;..&amp;quot;) 方式执行定时任务 定时任务中并发使用 HttpClient 拉取数据 但是定时任务只会执行一次 因为 Spring 基于注解的定时任务，在非异步的情况的，上一次任务执行完之前不会执行下一个任务 所以怀疑是第一次执行的任务一直没有执">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-21T11:40:17.511Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记一次 HttpClient 死锁问题">
+<meta name="twitter:description" content="最近遇到一个使用 Apache HttpClient 过程中的问题，具体场景是  通过 Spring @Scheduled(cron = &amp;quot;..&amp;quot;) 方式执行定时任务 定时任务中并发使用 HttpClient 拉取数据 但是定时任务只会执行一次 因为 Spring 基于注解的定时任务，在非异步的情况的，上一次任务执行完之前不会执行下一个任务 所以怀疑是第一次执行的任务一直没有执">
+
+
+
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2019-04-21/tools/httpclient-lock.html"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>记一次 HttpClient 死锁问题 | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-docs">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="http://blog.kail.xyz/docsify" rel="section"><i class="menu-item-icon fa fa-fw fa-github"></i> <br/>Docs</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2019-04-21/tools/httpclient-lock.html"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">记一次 HttpClient 死锁问题
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-21 00:00:00 / 修改时间：19:40:17" itemprop="dateCreated datePublished" datetime="2019-04-21T00:00:00+08:00">2019-04-21</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/post/2019-04-21/tools/httpclient-lock.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2019-04-21/tools/httpclient-lock.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近遇到一个使用 Apache HttpClient 过程中的问题，具体场景是</p>
+<ul>
+<li>通过 Spring <code>@Scheduled(cron = &quot;..&quot;)</code> 方式执行定时任务</li>
+<li>定时任务中并发使用 HttpClient 拉取数据</li>
+<li>但是定时任务只会执行一次</li>
+<li>因为 Spring 基于注解的定时任务，在非异步的情况的，上一次任务执行完之前不会执行下一个任务</li>
+<li>所以怀疑是第一次执行的任务一直没有执行完，卡在了某个地方</li>
+</ul>
+<a id="more"></a>
+<h2 id="还原场景"><a href="#还原场景" class="headerlink" title="还原场景"></a>还原场景</h2><p>maven 依赖</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.httpcomponents<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>httpcore<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.4.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.httpcomponents<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>httpclient<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.5.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>程序简化后，代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> xyz.kail.demo.java.se.temp;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.config.RequestConfig;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.methods.CloseableHttpResponse;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.methods.HttpGet;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.client.CloseableHttpClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.client.HttpClients;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.util.EntityUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.StandardCharsets;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpClientMain</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">        CountDownLatch countDownLatch = <span class="keyword">new</span> CountDownLatch(count);</span><br><span class="line"></span><br><span class="line">        CloseableHttpClient httpClient = HttpClients.createDefault();</span><br><span class="line"></span><br><span class="line">        ExecutorService executorService = Executors.newFixedThreadPool(count);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line"></span><br><span class="line">            executorService.submit(() -&gt; &#123;</span><br><span class="line">                countDownLatch.countDown(); <span class="comment">// line num: 32</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    request(httpClient);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException | InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        countDownLatch.await();  <span class="comment">// line num: 42</span></span><br><span class="line">        System.out.println(<span class="string">"countDownLatch.await();"</span>);</span><br><span class="line"></span><br><span class="line">        httpClient.close();  <span class="comment">// line num: 45</span></span><br><span class="line">        System.out.println(<span class="string">"httpClient.close();"</span>);</span><br><span class="line"></span><br><span class="line">        executorService.shutdown();</span><br><span class="line">        System.out.println(<span class="string">"executorService.shutdown();"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">(CloseableHttpClient client)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        HttpGet request = <span class="keyword">new</span> HttpGet(<span class="string">"http://blog.kail.xyz"</span>);</span><br><span class="line">        RequestConfig requestConfig = RequestConfig.custom()</span><br><span class="line">                .setConnectTimeout(<span class="number">1_000</span>)</span><br><span class="line">                .setSocketTimeout(<span class="number">5_000</span>)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        request.setConfig(requestConfig);</span><br><span class="line">        <span class="keyword">try</span> (CloseableHttpResponse response = client.execute(request)) &#123; <span class="comment">// line num: 63</span></span><br><span class="line">            String data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            request.releaseConnection();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>正常情况下，以上程序会输出</p>
+<blockquote>
+<p>countDownLatch.await();<br>httpClient.close();<br>executorService.shutdown();</p>
+</blockquote>
+<p>但是多运行几次，会发现有时候会只输出 <code>countDownLatch.await();</code>，程序会卡在 <code>httpClient.close();</code></p>
+<h2 id="查看线程信息"><a href="#查看线程信息" class="headerlink" title="查看线程信息"></a>查看线程信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">$ jcmd</span><br><span class="line">...</span><br><span class="line">51051 xyz.kail.demo.java.se.temp.HttpClientMain</span><br><span class="line"></span><br><span class="line">$ jcmd 51051 Thread.print</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="string">"pool-1-thread-20"</span> <span class="comment">#30 prio=5 os_prio=31 tid=0x00007fbb5b22c000 nid=0x6803 waiting on condition [0x0000700005997000]</span></span><br><span class="line">   java.lang.Thread.State: WAITING (parking) <span class="comment"># ❤❤❤❤ 关注 WAITING</span></span><br><span class="line">	at sun.misc.Unsafe.park(Native Method)</span><br><span class="line">	- parking to <span class="built_in">wait</span> <span class="keyword">for</span>  &lt;0x000000076c0e7488&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer<span class="variable">$ConditionObject</span>)</span><br><span class="line">	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)</span><br><span class="line">	at java.util.concurrent.locks.AbstractQueuedSynchronizer<span class="variable">$ConditionObject</span>.await(AbstractQueuedSynchronizer.java:2039)</span><br><span class="line">	<span class="comment"># ❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤ 关注</span></span><br><span class="line">	at org.apache.http.pool.AbstractConnPool.getPoolEntryBlocking(AbstractConnPool.java:377)</span><br><span class="line">	at org.apache.http.pool.AbstractConnPool.access<span class="variable">$200</span>(AbstractConnPool.java:67)</span><br><span class="line">	at org.apache.http.pool.AbstractConnPool<span class="variable">$2</span>.get(AbstractConnPool.java:243)</span><br><span class="line">	- locked &lt;0x000000076de511b8&gt; (a org.apache.http.pool.AbstractConnPool<span class="variable">$2</span>)</span><br><span class="line">	at org.apache.http.pool.AbstractConnPool<span class="variable">$2</span>.get(AbstractConnPool.java:191)</span><br><span class="line">	at org.apache.http.impl.conn.PoolingHttpClientConnectionManager.leaseConnection(PoolingHttpClientConnectionManager.java:282)</span><br><span class="line">	at org.apache.http.impl.conn.PoolingHttpClientConnectionManager<span class="variable">$1</span>.get(PoolingHttpClientConnectionManager.java:269)</span><br><span class="line">	at org.apache.http.impl.execchain.MainClientExec.execute(MainClientExec.java:191)</span><br><span class="line">	at org.apache.http.impl.execchain.ProtocolExec.execute(ProtocolExec.java:185)</span><br><span class="line">	at org.apache.http.impl.execchain.RetryExec.execute(RetryExec.java:89)</span><br><span class="line">	at org.apache.http.impl.execchain.RedirectExec.execute(RedirectExec.java:111)</span><br><span class="line">	at org.apache.http.impl.client.InternalHttpClient.doExecute(InternalHttpClient.java:185)</span><br><span class="line">	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)</span><br><span class="line">	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:108)</span><br><span class="line">	<span class="comment"># ❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤ 关注</span></span><br><span class="line">	at xyz.kail.demo.java.se.temp.HttpClientMain.request(HttpClientMain.java:63)</span><br><span class="line">	at xyz.kail.demo.java.se.temp.HttpClientMain.lambda<span class="variable">$main</span><span class="variable">$0</span>(HttpClientMain.java:34)</span><br><span class="line">	at xyz.kail.demo.java.se.temp.HttpClientMain$<span class="variable">$Lambda</span><span class="variable">$2</span>/2137589296.run(Unknown Source)</span><br><span class="line">	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)</span><br><span class="line">	at java.util.concurrent.ThreadPoolExecutor<span class="variable">$Worker</span>.run(ThreadPoolExecutor.java:624)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:748)</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="string">"main"</span> <span class="comment">#1 prio=5 os_prio=31 tid=0x00007fbb5a802000 nid=0x1903 waiting for monitor entry [0x0000700003732000]</span></span><br><span class="line">   java.lang.Thread.State: BLOCKED (on object monitor) <span class="comment"># ❤❤❤❤ 关注 BLOCKED</span></span><br><span class="line">	<span class="comment"># ❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤ 关注</span></span><br><span class="line">	at org.apache.http.pool.AbstractConnPool<span class="variable">$2</span>.cancel(AbstractConnPool.java:207)</span><br><span class="line">	- waiting to lock &lt;0x000000076c88eb20&gt; (a org.apache.http.pool.AbstractConnPool<span class="variable">$2</span>)</span><br><span class="line">	at org.apache.http.pool.RouteSpecificPool.shutdown(RouteSpecificPool.java:155)</span><br><span class="line">	at org.apache.http.pool.AbstractConnPool.shutdown(AbstractConnPool.java:152)</span><br><span class="line">	at org.apache.http.impl.conn.PoolingHttpClientConnectionManager.shutdown(PoolingHttpClientConnectionManager.java:396)</span><br><span class="line">	at org.apache.http.impl.client.HttpClientBuilder<span class="variable">$2</span>.close(HttpClientBuilder.java:1225)</span><br><span class="line">	at org.apache.http.impl.client.InternalHttpClient.close(InternalHttpClient.java:201)</span><br><span class="line">	<span class="comment"># ❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤ 关注</span></span><br><span class="line">	at xyz.kail.demo.java.se.temp.HttpClientMain.main(HttpClientMain.java:45)</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h2 id="回忆一下线程状态"><a href="#回忆一下线程状态" class="headerlink" title="回忆一下线程状态"></a>回忆一下线程状态</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> java.lang;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"> ...</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">enum</span> State &#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 新创建了一个线程对象，但还没有调用start()方法</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        NEW,</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Thead.start</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        RUNNABLE,</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 等待/阻塞 获取 synchronized 锁</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        BLOCKED,</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Object.wait / Thread.join / LockSupport.park 未设置超时时间</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        WAITING,</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 以下的几种情况</span></span><br><span class="line"><span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> #sleep Thread.sleep&#125;&lt;/li&gt;</span></span><br><span class="line"><span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> Object#wait(long) Object.wait&#125; with timeout&lt;/li&gt;</span></span><br><span class="line"><span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> #join(long) Thread.join&#125; with timeout&lt;/li&gt;</span></span><br><span class="line"><span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> LockSupport#parkNanos LockSupport.parkNanos&#125;&lt;/li&gt;</span></span><br><span class="line"><span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> LockSupport#parkUntil LockSupport.parkUntil&#125;&lt;/li&gt;</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        TIMED_WAITING,</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 线程已经执行完成</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        TERMINATED;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="https://blog.csdn.net/pange1991/article/details/53860651" target="_blank" rel="noopener">Java线程的6种状态及切换</a></p>
+</blockquote>
+<h2 id="根据-Thread-print-信息找到源码位置"><a href="#根据-Thread-print-信息找到源码位置" class="headerlink" title="根据 Thread.print 信息找到源码位置"></a>根据 Thread.print 信息找到源码位置</h2><h3 id="AbstractConnPool-java-377"><a href="#AbstractConnPool-java-377" class="headerlink" title="AbstractConnPool.java:377"></a>AbstractConnPool.java:377</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 入口</span></span><br><span class="line"><span class="comment">// xyz.kail.demo.java.se.temp.HttpClientMain.request(HttpClientMain.java:63)</span></span><br><span class="line"><span class="comment">// at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:108)</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> E <span class="title">getPoolEntryBlocking</span><span class="params">(...)</span></span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">this</span>.lock.lock();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ...</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">...                     <span class="comment">// 5️⃣ 线程2 wait，但是这时候线程1已经 BLOCKED</span></span><br><span class="line">                        <span class="keyword">this</span>.condition.await(); <span class="comment">// line num: 377 [WAITING (parking)]</span></span><br><span class="line">                        success = <span class="keyword">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">            ...</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="AbstractConnPool-java-207"><a href="#AbstractConnPool-java-207" class="headerlink" title="AbstractConnPool.java:207"></a>AbstractConnPool.java:207</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Future&lt;E&gt; <span class="title">lease</span><span class="params">(<span class="keyword">final</span> T route, <span class="keyword">final</span> Object state, <span class="keyword">final</span> FutureCallback&lt;E&gt; callback)</span> </span>&#123;</span><br><span class="line">   </span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Future&lt;E&gt;() &#123;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">        <span class="comment">// 入口</span></span><br><span class="line">        <span class="comment">// at xyz.kail.demo.java.se.temp.HttpClientMain.main(HttpClientMain.java:45)</span></span><br><span class="line">        <span class="comment">// at org.apache.http.impl.client.InternalHttpClient.close(InternalHttpClient.java:201)</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">cancel</span><span class="params">(<span class="keyword">final</span> <span class="keyword">boolean</span> mayInterruptIfRunning)</span> </span>&#123;</span><br><span class="line">            cancelled = <span class="keyword">true</span>;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                condition.signalAll(); <span class="comment">// 1️⃣ 线程1</span></span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 3️⃣ 线程1 这时候线程2已经获取到锁，这里 BLOCKED</span></span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123; <span class="comment">// line num 207 BLOCKED (on object monitor)</span></span><br><span class="line">...</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> E <span class="title">get</span><span class="params">(<span class="keyword">final</span> <span class="keyword">long</span> timeout, <span class="keyword">final</span> TimeUnit tunit)</span> <span class="keyword">throws</span> InterruptedException, ExecutionException, TimeoutException </span>&#123;</span><br><span class="line">...</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123; <span class="comment">// 2️⃣ 线程2 获取锁</span></span><br><span class="line">...                     <span class="comment">// 4️⃣ 线程2 执行 getPoolEntryBlocking 方法</span></span><br><span class="line">                        <span class="keyword">final</span> E leasedEntry = getPoolEntryBlocking(...); <span class="comment">// 调用 377 行的代码</span></span><br><span class="line">...</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="可能原因分析"><a href="#可能原因分析" class="headerlink" title="可能原因分析"></a>可能原因分析</h3><p>根据调用入口 大致可以确定 是 <strong>close 释放 HttpClient 资源的时候</strong> 和 <strong>execute 请求获取资源的时候</strong> 产生了死锁。</p>
+<p>模拟可能的执行流程如下：</p>
+<ul>
+<li>线程1：condition.signalAll() </li>
+<li>线程2： 获取 this 锁</li>
+<li><strong>线程1：获取 this 锁 失败，BLOCKED</strong></li>
+<li>线程2：执行 getPoolEntryBlocking 方法<ul>
+<li><strong>线程2：condition.wait (WAITING (parking))</strong></li>
+</ul>
+</li>
+<li>最终两个线程 在互相等待对方释放锁/唤醒，产生死锁</li>
+</ul>
+<p>分析到这基本上可以确定 应该是 httpcore 中 <code>org.apache.http.pool.AbstractConnPool</code> 这个类的Bug</p>
+<h2 id="如何解决"><a href="#如何解决" class="headerlink" title="如何解决"></a>如何解决</h2><p>如果是 HttpClient (httpcore 模块) 的 Bug，可以看一下官方有没有修复，到 Github 官方仓库 httpcomponents-core 找到指定的文件 <a href="https://github.com/apache/httpcomponents-core/blob/4.4.x/httpcore/src/main/java/org/apache/http/pool/AbstractConnPool.java" target="_blank" rel="noopener">org/apache/http/pool/AbstractConnPool.java</a> 查看 <a href="https://github.com/apache/httpcomponents-core/commits/4.4.x/httpcore/src/main/java/org/apache/http/pool/AbstractConnPool.java" target="_blank" rel="noopener">提交历史</a>， Ctrl + F 搜索 关键字 <code>fix</code>，最终找到了这次提交 <a href="https://github.com/apache/httpcomponents-core/commit/92de9e01ad59e1ddeaa250623bb8e42129036c45#diff-9db2ef2f1b94de8de5d1df36b2e44a03" target="_blank" rel="noopener">HTTPCORE-446: fixed deadlock in AbstractConnPool shutdown code</a></p>
+<p>点击这次提交 右侧的 <code>&lt;&gt;</code> 按钮(Browse the repository at this point in the history) 查看这次提交后的 git 仓库，发现修复之后 httpcore 的版本是 <code>4.4.7-SNAPSHOT</code> 。</p>
+<p>升级到 httpcore maven 版本到 <code>4.4.7+</code> 后重试最初的代码，发现死锁问题已经解决，但是会抛出以下异常：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">org.apache.http.impl.execchain.RequestAbortedException: Request aborted</span><br><span class="line">	at org.apache.http.impl.execchain.MainClientExec.execute(MainClientExec.java:194)</span><br><span class="line">	at org.apache.http.impl.execchain.ProtocolExec.execute(ProtocolExec.java:185)</span><br><span class="line">	at org.apache.http.impl.execchain.RetryExec.execute(RetryExec.java:89)</span><br><span class="line">	at org.apache.http.impl.execchain.RedirectExec.execute(RedirectExec.java:111)</span><br><span class="line">	at org.apache.http.impl.client.InternalHttpClient.doExecute(InternalHttpClient.java:185)</span><br><span class="line">	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)</span><br><span class="line">	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:108)</span><br><span class="line">...</span><br><span class="line">Caused by: java.lang.InterruptedException: Operation interrupted</span><br><span class="line">	at org.apache.http.pool.AbstractConnPool.getPoolEntryBlocking(AbstractConnPool.java:384)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h2 id="如何避免"><a href="#如何避免" class="headerlink" title="如何避免"></a>如何避免</h2><ul>
+<li>多线程并发使用共享资源的时候，如果不了解共享资源的内部机制，不了解是否存在并发问题的时候，一定要小心，如果不分析源码，最好也上网查一下相关的问题，如：”httpclient 并发问题” 等</li>
+<li>CountDownLatch 的使用方式也存在问题，比如这个示例程序中，countDownLatch.countDown() 写在了线程执行逻辑的第一行，真正的逻辑还没开始执行，就已经 countDown，实际上并没有起到相应的作用</li>
+<li>如果确定共享资源存在并发问题，并且不确定官方有没有提供相应的解决方案的话，最快但不是最好的方式是：把共享资源放到线程内作为线程内部的资源，避免并发问题</li>
+<li>…</li>
+</ul>
+<h2 id="其它收获"><a href="#其它收获" class="headerlink" title="其它收获"></a>其它收获</h2><ul>
+<li>http-core 与 httpclient/httpmime 是分开两个仓库维护的，所以 maven 版本号不一定一致，但是 httpclient/httpmime 是同一个仓库下的两个模块，理论上版本号应该是一致的</li>
+<li><a href="https://jinnianshilongnian.iteye.com/blog/2089792" target="_blank" rel="noopener">使用httpclient必须知道的参数设置及代码写法、存在的风险</a><ul>
+<li>必须设置超时时间，否则可能在 网络 IO 上 卡死</li>
+<li>默认重试3次机制</li>
+<li>连接池管理</li>
+</ul>
+</li>
+<li><a href="https://www.cnblogs.com/kingszelda/p/8886403.html" target="_blank" rel="noopener">关于HttpClient重试策略的研究</a></li>
+<li><a href="https://blog.csdn.net/ClementAD/article/details/75649625" target="_blank" rel="noopener">Apache HttpClient 资源释放、请求超时，导致线程池用光、内存不足</a></li>
+<li><a href="https://blog.csdn.net/kobejayandy/article/details/16921265" target="_blank" rel="noopener">HttpClient多线程并发问题</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2019-04-20/manage/no-lazy.html" rel="next" title="《我从未见过懒惰的人》">
+                <i class="fa fa-chevron-left"></i> 《我从未见过懒惰的人》
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬"/>
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description">菜鸟会飞</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">85</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">65</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/kailbin" title="GitHub &rarr; https://github.com/kailbin" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:ykb553@163.com" title="E-Mail &rarr; mailto:ykb553@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#还原场景"><span class="nav-text"><a href="#&#x8FD8;&#x539F;&#x573A;&#x666F;" class="headerlink" title="&#x8FD8;&#x539F;&#x573A;&#x666F;"></a>&#x8FD8;&#x539F;&#x573A;&#x666F;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看线程信息"><span class="nav-text"><a href="#&#x67E5;&#x770B;&#x7EBF;&#x7A0B;&#x4FE1;&#x606F;" class="headerlink" title="&#x67E5;&#x770B;&#x7EBF;&#x7A0B;&#x4FE1;&#x606F;"></a>&#x67E5;&#x770B;&#x7EBF;&#x7A0B;&#x4FE1;&#x606F;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回忆一下线程状态"><span class="nav-text"><a href="#&#x56DE;&#x5FC6;&#x4E00;&#x4E0B;&#x7EBF;&#x7A0B;&#x72B6;&#x6001;" class="headerlink" title="&#x56DE;&#x5FC6;&#x4E00;&#x4E0B;&#x7EBF;&#x7A0B;&#x72B6;&#x6001;"></a>&#x56DE;&#x5FC6;&#x4E00;&#x4E0B;&#x7EBF;&#x7A0B;&#x72B6;&#x6001;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据-Thread-print-信息找到源码位置"><span class="nav-text"><a href="#&#x6839;&#x636E;-Thread-print-&#x4FE1;&#x606F;&#x627E;&#x5230;&#x6E90;&#x7801;&#x4F4D;&#x7F6E;" class="headerlink" title="&#x6839;&#x636E; Thread.print &#x4FE1;&#x606F;&#x627E;&#x5230;&#x6E90;&#x7801;&#x4F4D;&#x7F6E;"></a>&#x6839;&#x636E; Thread.print &#x4FE1;&#x606F;&#x627E;&#x5230;&#x6E90;&#x7801;&#x4F4D;&#x7F6E;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractConnPool-java-377"><span class="nav-text"><a href="#AbstractConnPool-java-377" class="headerlink" title="AbstractConnPool.java:377"></a>AbstractConnPool.java:377</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractConnPool-java-207"><span class="nav-text"><a href="#AbstractConnPool-java-207" class="headerlink" title="AbstractConnPool.java:207"></a>AbstractConnPool.java:207</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可能原因分析"><span class="nav-text"><a href="#&#x53EF;&#x80FD;&#x539F;&#x56E0;&#x5206;&#x6790;" class="headerlink" title="&#x53EF;&#x80FD;&#x539F;&#x56E0;&#x5206;&#x6790;"></a>&#x53EF;&#x80FD;&#x539F;&#x56E0;&#x5206;&#x6790;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何解决"><span class="nav-text"><a href="#&#x5982;&#x4F55;&#x89E3;&#x51B3;" class="headerlink" title="&#x5982;&#x4F55;&#x89E3;&#x51B3;"></a>&#x5982;&#x4F55;&#x89E3;&#x51B3;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何避免"><span class="nav-text"><a href="#&#x5982;&#x4F55;&#x907F;&#x514D;" class="headerlink" title="&#x5982;&#x4F55;&#x907F;&#x514D;"></a>&#x5982;&#x4F55;&#x907F;&#x514D;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它收获"><span class="nav-text"><a href="#&#x5176;&#x5B83;&#x6536;&#x83B7;" class="headerlink" title="&#x5176;&#x5B83;&#x6536;&#x83B7;"></a>&#x5176;&#x5B83;&#x6536;&#x83B7;</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+  <script id="dsq-count-scr" src="https://kailbin.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://blog.kail.xyz/post/2019-04-21/tools/httpclient-lock.html";
+    this.page.identifier = "post/2019-04-21/tools/httpclient-lock.html";
+    this.page.title = '记一次 HttpClient 死锁问题';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://kailbin.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    $(function() {
+      var offsetTop = $('#comments').offset().top - $(window).height();
+      if (offsetTop <= 0) {
+        // load directly when there's no a scrollbar
+        loadComments();
+      } else {
+        $(window).on('scroll.disqus_scroll', function() {
+          // offsetTop may changes because of manually resizing browser window or lazy loading images.
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          var scrollTop = $(window).scrollTop();
+
+          // pre-load comments a bit? (margin or anything else)
+          if (offsetTop - scrollTop < 60) {
+            $(window).off('.disqus_scroll');
+            loadComments();
+          }
+        });
+      }
+    });
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
