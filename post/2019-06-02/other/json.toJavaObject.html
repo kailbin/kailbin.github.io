@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="通过本文可以大致了解一下 fastjson JSON.toJavaObject() 方法的几个坑、限制 和 避免方式。">
+<meta name="keywords" content="Bug">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fastjson 慎用 JSON.toJavaObject()">
+<meta property="og:url" content="http://blog.kail.xyz/post/2019-06-02/other/json.toJavaObject.html">
+<meta property="og:site_name" content="Mr.Kail&#39;s Blog">
+<meta property="og:description" content="通过本文可以大致了解一下 fastjson JSON.toJavaObject() 方法的几个坑、限制 和 避免方式。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-02T10:24:44.238Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="fastjson 慎用 JSON.toJavaObject()">
+<meta name="twitter:description" content="通过本文可以大致了解一下 fastjson JSON.toJavaObject() 方法的几个坑、限制 和 避免方式。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://blog.kail.xyz/post/2019-06-02/other/json.toJavaObject.html"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>fastjson 慎用 JSON.toJavaObject() | Mr.Kail's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mr.Kail's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-docs">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="http://blog.kail.xyz/docsify" rel="section"><i class="menu-item-icon fa fa-fw fa-github"></i> <br/>Docs</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.kail.xyz/post/2019-06-02/other/json.toJavaObject.html"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨凯彬"/>
+      <meta itemprop="description" content="菜鸟会飞"/>
+      <meta itemprop="image" content="/images/favicon.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mr.Kail's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">fastjson 慎用 JSON.toJavaObject()
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-02 00:00:00 / 修改时间：18:24:44" itemprop="dateCreated datePublished" datetime="2019-06-02T00:00:00+08:00">2019-06-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Other/" itemprop="url" rel="index"><span itemprop="name">Other</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/post/2019-06-02/other/json.toJavaObject.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/2019-06-02/other/json.toJavaObject.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>通过本文可以大致了解一下 fastjson JSON.toJavaObject() 方法的几个坑、限制 和 避免方式。</p>
+<a id="more"></a>
+<p>JSON 类 大致提供了三类方法</p>
+<ul>
+<li>toJSON… 对象转 json</li>
+<li>parse… json 转 对象</li>
+<li><strong>toJavaObject JSON 类转 POJO</strong></li>
+</ul>
+<h2 id="toJavaObject-的实现"><a href="#toJavaObject-的实现" class="headerlink" title="toJavaObject 的实现"></a>toJavaObject 的实现</h2><p><code>toJavaObject(JSON, Class&lt;T&gt;)</code> 实际调用 <code>TypeUtils.cast(Object, Class&lt;T&gt;, ParserConfig)</code>，</p>
+<p>参数是 Object 类型，理论上可以传任何参数，但是根据方法实现，只能传以下几类，否则会报 <code>can not cast to ...</code></p>
+<ul>
+<li>Map 的实现</li>
+<li>Map 的实现集合</li>
+<li>基本数据类型</li>
+<li>…</li>
+</ul>
+<p>所以不建议直接使用 <code>TypeUtils</code> 类，通过 <code>JSON.toJavaObject(JSON, Class&lt;T&gt;)</code> 调用的话，由于 <code>JSON</code> 类实现了 <code>Map</code> 接口，所以是符合 <code>TypeUtils.cast</code> 第一个参数的限制的</p>
+<h2 id="toJavaObject-第二个-Class-参数处理"><a href="#toJavaObject-第二个-Class-参数处理" class="headerlink" title="toJavaObject 第二个 Class 参数处理"></a>toJavaObject 第二个 Class<t> 参数处理</t></h2><p>如果通过 使用 <code>JSON.toJavaObject</code>，基本上会走到 <code>TypeUtils.cast(Object, Class&lt;T&gt;, ParserConfig)</code> 的以代码片段</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="comment">// JSON obj, 实现 Map</span></span><br><span class="line"><span class="comment">// clazz 要转换成的类型</span></span><br><span class="line"><span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Map) &#123;</span><br><span class="line">    <span class="keyword">if</span> (clazz == Map.class) &#123;</span><br><span class="line">        <span class="comment">// 如果被转换的类型是 Map.class，直接返回，因为 JSON 本身就是 Map 的实现</span></span><br><span class="line">        <span class="comment">// 如果要转换成 纯正的 Map，可以通过 new HashMap&lt;&gt;(...) 进行包装</span></span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Map map = (Map)obj;</span><br><span class="line">        <span class="keyword">return</span> clazz == Object.class &amp;&amp; !map.containsKey(JSON.DEFAULT_TYPE_KEY) ? </span><br><span class="line">                obj : </span><br><span class="line">                <span class="comment">// 大部分场景最终会调用这个方法</span></span><br><span class="line">                castToJavaBean((Map)obj, clazz, mapping);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h2 id="TypeUtils-castToJavaBean-Map-lt-String-Object-gt-Class-ParserConfig"><a href="#TypeUtils-castToJavaBean-Map-lt-String-Object-gt-Class-ParserConfig" class="headerlink" title="TypeUtils.castToJavaBean(Map&lt;String, Object&gt;, Class, ParserConfig)"></a>TypeUtils.castToJavaBean(Map&lt;String, Object&gt;, Class<t>, ParserConfig)</t></h2><p>该方法在 <code>1.2.9 之前</code> 和 <code>1.2.9 及其之后</code> 的实现上有所区别，对外表现的行为也不同，相同的代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; singletonMap = Collections.singletonMap(<span class="string">"asd"</span>, <span class="number">123</span>);</span><br><span class="line">System.out.println(singletonMap);</span><br><span class="line">System.out.println(</span><br><span class="line">        TypeUtils.castToJavaBean(</span><br><span class="line">                singletonMap,</span><br><span class="line">                HashMap.class,</span><br><span class="line">                ParserConfig.getGlobalInstance()</span><br><span class="line">        )</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-9-之前"><a href="#1-2-9-之前" class="headerlink" title="1.2.9 之前"></a>1.2.9 之前</h3><p>输出空 HashMap<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;asd=123&#125;</span><br><span class="line">&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>大致逻辑是实例化 <code>Class&lt;T&gt;</code> 后，找到其中的 get/set 方法，因为 HashMap 并没有相应 get/set 的方法，实例化之后并没有设置值。</p>
+<h3 id="1-2-9-及其以后"><a href="#1-2-9-及其以后" class="headerlink" title="1.2.9 及其以后"></a>1.2.9 及其以后</h3><p>报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;asd=123&#125;</span><br><span class="line">Exception in thread &quot;main&quot; com.alibaba.fastjson.JSONException: can not get javaBeanDeserializer</span><br><span class="line">	at com.alibaba.fastjson.util.TypeUtils.castToJavaBean(TypeUtils.java:917)</span><br><span class="line">	at .....</span><br><span class="line">Caused by: com.alibaba.fastjson.JSONException: can not get javaBeanDeserializer</span><br><span class="line">	at com.alibaba.fastjson.util.TypeUtils.castToJavaBean(TypeUtils.java:912)</span><br><span class="line">	... 1 more</span><br></pre></td></tr></table></figure></p>
+<p>大致逻辑是 根据 <code>Class&lt;T&gt;</code> 找到对应的 <code>ObjectDeserializer</code> 实现，之后只针对 <code>JavaBeanDeserializer</code> 和 <code>ASMJavaBeanDeserializer</code> 实现进行处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">JavaBeanDeserializer javaBeanDeser = <span class="keyword">null</span>;</span><br><span class="line">ObjectDeserializer deserizer = config.getDeserializer(clazz);</span><br><span class="line"><span class="keyword">if</span> (deserizer <span class="keyword">instanceof</span> JavaBeanDeserializer) &#123;</span><br><span class="line">    javaBeanDeser = (JavaBeanDeserializer) deserizer;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (deserizer <span class="keyword">instanceof</span> ASMJavaBeanDeserializer) &#123;</span><br><span class="line">    javaBeanDeser = ((ASMJavaBeanDeserializer) deserizer).getInnterSerializer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (javaBeanDeser == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> JSONException(<span class="string">"can not get javaBeanDeserializer"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> (T) javaBeanDeser.createInstance(map, config);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>个人感觉报错比 1.2.9 之前 的返回空对象要好，原因在于</p>
+<ul>
+<li>1.2.9 之前，返回值与预期想要的值是不一致的，如果不仔细测试，可能某些场景下很难发现这个问题，容易把问题带到生产环境</li>
+<li>1.2.9 及其以后，fastjson 提前把问题暴露出来，在开发节点即可发现，提早发现提早解决</li>
+<li>不过在升级 fastjson 的时候需要注意，由于行为上的不一致，可能原来隐藏的一个问题，通过异常的形式暴露的出来，有一定的风险</li>
+</ul>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><code>toJavaObject(JSON, Class&lt;T&gt;)</code> 的第二个参数只能是<ul>
+<li>Map.class | 集合 （不能是 HashMap / JSONObject … ）</li>
+<li>简单 Java 对象(POJO)类型 | 集合</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+<h3 id="一个错误示例"><a href="#一个错误示例" class="headerlink" title="一个错误示例"></a>一个错误示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSON;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String json = <span class="string">"&#123;\"asd\":123&#125;"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// &#123;"asd":123&#125;</span></span><br><span class="line">        System.out.println(JSON.toJavaObject(JSON.parseObject(json), Map.class));</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Pojo&#123;asd=123&#125;</span></span><br><span class="line">        System.out.println(JSON.toJavaObject(JSON.parseObject(json), Pojo.class));</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Exception in thread "main" com.alibaba.fastjson.JSONException: can not get javaBeanDeserializer</span></span><br><span class="line">        System.out.println(JSON.toJavaObject(JSON.parseObject(json), HashMap.class));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Pojo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Integer asd;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 省略 get、set、toString</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="错误示例拆解"><a href="#错误示例拆解" class="headerlink" title="错误示例拆解"></a>错误示例拆解</h3><p><code>JSON.toJavaObject(JSON.parseObject(json), HashMap.class)</code> 拆解后</p>
+<ul>
+<li><code>JSONObject jsonObject = JSON.parseObject(jsonStr);</code></li>
+<li><code>JSON json = jsonObject;</code></li>
+<li><code>JSON.toJavaObject(json, HashMap.class);</code><ul>
+<li><code>TypeUtils.cast(json, HashMap.class, ParserConfig)</code><ul>
+<li><code>TypeUtils.castToJavaBean(Map&lt;String, Object&gt;, HashMap.class, ParserConfig)</code><ul>
+<li><code>throw new JSONException(&quot;can not get javaBeanDeserializer&quot;);</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="建议方式"><a href="#建议方式" class="headerlink" title="建议方式"></a>建议方式</h3><p>实际上 先把 json 字符串穿换成  <code>JSON</code> 对象，再 case <code>JSON</code> 对象成 指定的 class，步骤稍微有点多余</p>
+<p>建议直接使用以下两种方式</p>
+<ul>
+<li><code>JSON.parseObject(jsonStr, HashMap.class)</code>;</li>
+<li><code>JSON.parseObject(jsonStr, new TypeReference&lt;HashMap&lt;String, Integer&gt;&gt;() {})</code> 支持泛型</li>
+</ul>
+<h2 id="Read-More"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</h2><ul>
+<li><a href="/post/2018-09-02/other/fastjson-bug-1.2.11.html">记一次 fastjson 泛型反序列化的 Bug</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Bug/" rel="tag"># Bug</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/2019-05-02/tools/druid-print-sql.html" rel="next" title="Druid 打印可执行 SQL">
+                <i class="fa fa-chevron-left"></i> Druid 打印可执行 SQL
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/favicon.png"
+                alt="杨凯彬"/>
+            
+              <p class="site-author-name" itemprop="name">杨凯彬</p>
+              <p class="site-description motion-element" itemprop="description">菜鸟会飞</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">84</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">62</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/kailbin" title="GitHub &rarr; https://github.com/kailbin" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:ykb553@163.com" title="E-Mail &rarr; mailto:ykb553@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#toJavaObject-的实现"><span class="nav-text"><a href="#toJavaObject-&#x7684;&#x5B9E;&#x73B0;" class="headerlink" title="toJavaObject &#x7684;&#x5B9E;&#x73B0;"></a>toJavaObject &#x7684;&#x5B9E;&#x73B0;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toJavaObject-第二个-Class-参数处理"><span class="nav-text"><a href="#toJavaObject-&#x7B2C;&#x4E8C;&#x4E2A;-Class-&#x53C2;&#x6570;&#x5904;&#x7406;" class="headerlink" title="toJavaObject &#x7B2C;&#x4E8C;&#x4E2A; Class &#x53C2;&#x6570;&#x5904;&#x7406;"></a>toJavaObject &#x7B2C;&#x4E8C;&#x4E2A; Class<t> &#x53C2;&#x6570;&#x5904;&#x7406;</t></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TypeUtils-castToJavaBean-Map-lt-String-Object-gt-Class-ParserConfig"><span class="nav-text"><a href="#TypeUtils-castToJavaBean-Map-lt-String-Object-gt-Class-ParserConfig" class="headerlink" title="TypeUtils.castToJavaBean(Map&lt;String, Object&gt;, Class, ParserConfig)"></a>TypeUtils.castToJavaBean(Map&lt;String, Object&gt;, Class<t>, ParserConfig)</t></span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-9-之前"><span class="nav-text"><a href="#1-2-9-&#x4E4B;&#x524D;" class="headerlink" title="1.2.9 &#x4E4B;&#x524D;"></a>1.2.9 &#x4E4B;&#x524D;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-9-及其以后"><span class="nav-text"><a href="#1-2-9-&#x53CA;&#x5176;&#x4EE5;&#x540E;" class="headerlink" title="1.2.9 &#x53CA;&#x5176;&#x4EE5;&#x540E;"></a>1.2.9 &#x53CA;&#x5176;&#x4EE5;&#x540E;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一个错误示例"><span class="nav-text"><a href="#&#x4E00;&#x4E2A;&#x9519;&#x8BEF;&#x793A;&#x4F8B;" class="headerlink" title="&#x4E00;&#x4E2A;&#x9519;&#x8BEF;&#x793A;&#x4F8B;"></a>&#x4E00;&#x4E2A;&#x9519;&#x8BEF;&#x793A;&#x4F8B;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误示例拆解"><span class="nav-text"><a href="#&#x9519;&#x8BEF;&#x793A;&#x4F8B;&#x62C6;&#x89E3;" class="headerlink" title="&#x9519;&#x8BEF;&#x793A;&#x4F8B;&#x62C6;&#x89E3;"></a>&#x9519;&#x8BEF;&#x793A;&#x4F8B;&#x62C6;&#x89E3;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建议方式"><span class="nav-text"><a href="#&#x5EFA;&#x8BAE;&#x65B9;&#x5F0F;" class="headerlink" title="&#x5EFA;&#x8BAE;&#x65B9;&#x5F0F;"></a>&#x5EFA;&#x8BAE;&#x65B9;&#x5F0F;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Read-More"><span class="nav-text"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨凯彬</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259496109&web_id=1259496109"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+<script type="text/javascript" color="68,68,68" opacity='0.2' zIndex="-1" count="68" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+  <script id="dsq-count-scr" src="https://kailbin.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://blog.kail.xyz/post/2019-06-02/other/json.toJavaObject.html";
+    this.page.identifier = "post/2019-06-02/other/json.toJavaObject.html";
+    this.page.title = 'fastjson 慎用 JSON.toJavaObject()';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://kailbin.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    $(function() {
+      var offsetTop = $('#comments').offset().top - $(window).height();
+      if (offsetTop <= 0) {
+        // load directly when there's no a scrollbar
+        loadComments();
+      } else {
+        $(window).on('scroll.disqus_scroll', function() {
+          // offsetTop may changes because of manually resizing browser window or lazy loading images.
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          var scrollTop = $(window).scrollTop();
+
+          // pre-load comments a bit? (margin or anything else)
+          if (offsetTop - scrollTop < 60) {
+            $(window).off('.disqus_scroll');
+            loadComments();
+          }
+        });
+      }
+    });
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
