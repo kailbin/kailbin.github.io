@@ -1,10 +1,12 @@
----------------
+---
+
 title: Groovy 监控考勤 发邮件提醒
 date: 2017-05-13
 desc: Groovy 监控考勤 发邮件提醒
 tags: [Groovy,mail]
 categories: Groovy
----------------
+
+---
 
 刚开始了解 Groovy，本文纯属练手，可以看出来，虽然是Groovy，但是基本上没有用到Groovy的任何语法特性，写的过程基本上是我先用Java 写好，然后全部拷贝到一个 `monitor.KaoQin.groovy` 文件中，o(╯□╰)o
 
