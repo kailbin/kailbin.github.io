@@ -73,7 +73,6 @@ deploy:
   type: git
   repo: 
     github: https://ykb553%40163.com@github.com/kailbin/kailbin.github.io.git
-    coding: https://ykb553%40163.com@git.coding.net/yokoboy/yokoboy.git
   branch: master
   message:
 
